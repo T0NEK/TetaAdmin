@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-1 text-center">
+    <button type="button" class="btn btn-outline-success" (click)="collapse.toggle()">
+      Start larpa
+    </button>
+  </div>
+  <div class="col-9" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+    <div>
+        Uruchamia zegar, ustawia wszystkie wartości startowe.
+    <button type="button" class="btn btn-outline-danger" (click)="start_larpa()">
+      Start
+    </button>
+  </div>
+  </div>
+</div>

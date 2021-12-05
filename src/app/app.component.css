@@ -1,0 +1,17 @@
+.informacje
+{
+    display: block;
+    height: calc(5%);
+    max-height: calc(5%);
+    overflow-y: hidden;
+    overflow-x: hidden; 
+    border-bottom: 2px solid silver;
+}
+.dialogall
+{
+    display: block;
+    height: calc(95% - var(--stopka));
+    max-height: calc(95% - var(--stopka));
+    overflow-y: auto;
+    overflow-x: hidden;   
+}

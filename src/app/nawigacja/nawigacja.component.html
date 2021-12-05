@@ -1,0 +1,45 @@
+{{raport}}
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills">
+  <li [ngbNavItem]="1" >
+    <a ngbNavLink >Komunikaty</a>
+    <ng-template ngbNavContent>
+      <app-dialog [linia] = 'liniadodialog' (raport)='setAktywne($event)'>
+      
+      </app-dialog>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2" >
+    <a ngbNavLink >Ustawienia</a>
+    <ng-template ngbNavContent>
+      <app-ustawienia>
+
+      </app-ustawienia>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3">
+    <a ngbNavLink>Użytkownicy</a>
+    <ng-template ngbNavContent>
+      <app-uzytkownicy>
+
+      </app-uzytkownicy>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="4">
+    <a ngbNavLink>Wiadomości</a>
+    <ng-template ngbNavContent>
+      <app-wiadomosci>
+
+      </app-wiadomosci>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="5">
+    <a ngbNavLink>Notatki</a>
+    <ng-template ngbNavContent>
+      <app-notatki>
+        
+      </app-notatki>
+    </ng-template>
+  </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-1"></div>

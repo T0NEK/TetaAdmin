@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StaleService } from './stale.service';
 
 @Component({
   selector: 'app-root',

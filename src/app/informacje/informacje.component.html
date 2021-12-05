@@ -1,9 +1,7 @@
 <div class="row">
-  <div class="col-1 text-right text-white">Czas:</div>
-  <div class="col-1 text-left text-white">{{czas_rzeczywisty}}</div>
-  <div class="col-1 text-right text-white">(Upłyneło:</div>
-  <div class="col-1 text-left text-white">{{czas_rzeczywisty_uplyw}})</div>
-  <div class="col-2 text-right"></div>
+  <div class="col-2 text-left text-white">Jest: {{czas_rzeczywisty | date:'yyyy.MM.dd  hh:mm:ss' }}</div>
+  <div class="col-2 text-right text-white">(Upłyneło:</div>
+  <div class="col-2 text-left text-white">{{czas_rzeczywisty_uplyw}})</div>
   <div class="col-1 text-right">Czas na Dedalu:</div>
   <div class="col-2 text-left">{{czas_na_dedalu}}</div>
   <div class="col-1 text-right">(Od startu:</div>
