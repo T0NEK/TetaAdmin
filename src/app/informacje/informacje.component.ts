@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { StaleService } from '../stale.service';
-
-
+import { Observable, Subscription } from 'rxjs';
+import { KomunikacjaService } from '../komunikacja.service';
 
 //import * as $ from 'jquery';
 
@@ -21,16 +21,33 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   czas_rzeczywisty_id: any;
   
 
-  @Output() bufor = new EventEmitter<string>();
+  name = 'jeszcze nie';
+  //subscription : Subscription;
+  
 
-  constructor(private stale: StaleService) {
-    
+  constructor(private stale: StaleService,private komunikacja: KomunikacjaService) 
+  {
+    //this.subscription = 
+    komunikacja.stringSubject$.subscribe(
+      data => 
+      {
+        this.name = data;
+        console.log('next subscribed value: ' + data);
+      }
+    );  
+    komunikacja.czasRzeczywisty$.subscribe(
+      data => 
+      {
+        this.czas_rzeczywisty = data;
+      }
+    );  
+    this.komunikacja.taktujCzas();
   }
 
   ngOnInit() 
   {
   console.log(this.stale.getCzasStartu());    
-  this.czas_rzeczywisty_id = setInterval(() => { this.czas_rzeczywisty_zmien()  }, 1000);
+//  this.czas_rzeczywisty_id = setInterval(() => { this.czas_rzeczywisty_zmien()  }, 1000);
   }
 
   ngOnDestroy() 
@@ -40,12 +57,10 @@ export class InformacjeComponent implements OnInit, OnDestroy {
 
   czas_rzeczywisty_zmien()
   { 
-    this.czas_rzeczywisty = Date.now();  
-    this.czas_na_dedalu = this.stale.getCzasStartu()
+//    this.czas_rzeczywisty = Date.now();  
+//    this.czas_na_dedalu = this.stale.getCzasStartu()
   }
-
-
+  
   
 
-  
 }

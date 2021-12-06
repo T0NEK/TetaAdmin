@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { KomunikacjaService } from "../komunikacja.service";
 
 @Component({
   selector: 'app-wiadomosci',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WiadomosciComponent implements OnInit {
 
-  constructor() { }
+  czas_rzeczywisty: any;
 
-  ngOnInit() {
+  constructor(private komunikacja: KomunikacjaService) 
+  { 
+    komunikacja.czasRzeczywisty$.subscribe(
+      data => 
+      {
+        this.czas_rzeczywisty = data;
+      }
+    );  
+    this.komunikacja.taktujCzas();  
+  }
+
+  ngOnInit() 
+  {
+    
   }
 
 }
