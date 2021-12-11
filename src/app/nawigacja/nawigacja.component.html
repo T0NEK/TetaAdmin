@@ -1,9 +1,9 @@
-{{raport}}
+<div>
 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills">
   <li [ngbNavItem]="1" >
     <a ngbNavLink >Komunikaty</a>
     <ng-template ngbNavContent>
-      <app-dialog [linia] = 'liniadodialog' (raport)='setAktywne($event)'>
+      <app-dialog>
       
       </app-dialog>
     </ng-template>
@@ -43,3 +43,4 @@
 </ul>
 
 <div [ngbNavOutlet]="nav" class="mt-1"></div>
+</div>

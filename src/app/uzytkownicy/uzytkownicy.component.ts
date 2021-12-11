@@ -15,15 +15,13 @@ export class UzytkownicyComponent implements OnInit {
     
    }
 
-   sendTextValue(){
-    this.komunikacja.passValue('cześć');
+   sendKomunikat(){
+    this.komunikacja.addLiniaKomunikatu('linia komunikatu U','');
   }
 
-  sendTaktujCzas(){
-    this.komunikacja.taktujCzas();
-  }
-
-  ngOnInit() {
+  ngOnInit() 
+  {
+  
   }
 
 }

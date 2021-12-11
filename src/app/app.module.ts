@@ -12,6 +12,9 @@ import { UzytkownicyComponent } from './uzytkownicy/uzytkownicy.component';
 import { WiadomosciComponent } from './wiadomosci/wiadomosci.component';
 import { NotatkiComponent } from './notatki/notatki.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 
 @NgModule({
   declarations: [								
@@ -28,7 +31,9 @@ import { DialogComponent } from './dialog/dialog.component';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

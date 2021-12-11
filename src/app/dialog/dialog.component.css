@@ -3,3 +3,13 @@
     color: lightgreen;
     cursor: crosshair;
 }
+.example-viewport-dialog 
+  {
+    height: var(--dialogmax);
+    width: 100%;
+    max-width: 100%;
+  }
+.example-item-dialog
+  {
+    height: 24px;
+  }

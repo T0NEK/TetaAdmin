@@ -1,3 +1,4 @@
+<div class="ustawienia">
 <div class="row">
   <div class="col-1 text-center">
     <button type="button" class="btn btn-outline-success" (click)="collapse.toggle()">
@@ -12,4 +13,10 @@
     </button>
   </div>
   </div>
+</div>
+</div>
+<div class="dialog">
+  <cdk-virtual-scroll-viewport #scrollViewportustawienia appendOnly itemSize="24" class="example-viewport-ustawienia" >
+    <div *cdkVirtualFor="let item of tablicazawartosci" class="example-item-ustawienia"  >{{item.data}}<span>,&nbsp;{{item.name}} ></span><span [style.color]="item.kolor">&nbsp;{{item.tekst}}</span></div>
+  </cdk-virtual-scroll-viewport>
 </div>

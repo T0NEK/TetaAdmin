@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
-import { StaleService } from '../stale.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 
 //import * as $ from 'jquery';
@@ -13,7 +12,10 @@ import { KomunikacjaService } from '../komunikacja.service';
 })
 export class InformacjeComponent implements OnInit, OnDestroy {
 
+  //private ngUnsubscribe = new Subject();
   czas_rzeczywisty: any;
+  private czas_rzeczywisty_subscribe = new Subscription();
+
   czas_rzeczywisty_uplyw = '1:15';
   czas_na_dedalu = '2043.03.11 02:16:00';
   czas_od_startu_uplyw = '1:15';
@@ -22,37 +24,32 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   
 
   name = 'jeszcze nie';
-  //subscription : Subscription;
   
-
-  constructor(private stale: StaleService,private komunikacja: KomunikacjaService) 
+  constructor(private komunikacja: KomunikacjaService) 
   {
-    //this.subscription = 
-    komunikacja.stringSubject$.subscribe(
-      data => 
-      {
-        this.name = data;
-        console.log('next subscribed value: ' + data);
+    this.czas_rzeczywisty_subscribe = komunikacja.czasRzeczywisty$.subscribe
+    ( data => 
+      { this.czas_rzeczywisty = data; 
       }
     );  
-    komunikacja.czasRzeczywisty$.subscribe(
-      data => 
-      {
-        this.czas_rzeczywisty = data;
-      }
-    );  
-    this.komunikacja.taktujCzas();
+    this.komunikacja.addLiniaKomunikatu('uruchomiono moduł Administratora','');
+    this.komunikacja.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
   }
 
-  ngOnInit() 
+    ngOnInit() 
   {
-  console.log(this.stale.getCzasStartu());    
-//  this.czas_rzeczywisty_id = setInterval(() => { this.czas_rzeczywisty_zmien()  }, 1000);
+  //console.log(this.stale.getCzasStartu());   
+  console.log('informacje')
   }
 
   ngOnDestroy() 
   {
-    if (this.czas_rzeczywisty_id) { clearInterval(this.czas_rzeczywisty_id); }
+    this.czas_rzeczywisty_subscribe.unsubscribe();
+  }
+
+  sendKomunikat()
+  {
+    this.komunikacja.addLiniaKomunikatu('linia komunikatu I+','red')
   }
 
   czas_rzeczywisty_zmien()

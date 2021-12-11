@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { KomunikacjaService } from '../komunikacja.service';
+
 
 @Component({
   selector: 'app-nawigacja',
@@ -8,16 +10,13 @@ import { Component, OnInit } from '@angular/core';
 export class NawigacjaComponent implements OnInit {
 
   active: any;
-  liniadodialog = 'pierwsza linia';
-  raport = 'raport';
-  constructor() { }
+  
+  constructor(private komunikacja: KomunikacjaService) { }
 
-  ngOnInit() {
-  }
-
-
-  setAktywne(akt: string)
+  ngOnInit() 
   {
-  this.raport = akt;  
+    console.log('nawigacja')
   }
+ 
+  
 }

@@ -1,3 +1,5 @@
-<li *ngFor="let item of tablicazawartosci">{{item}}</li>
-<li>{{linia}}</li>
-<li></li>
+<div>
+  <cdk-virtual-scroll-viewport #scrollViewportdialog appendOnly itemSize="24" class="example-viewport-dialog" >
+    <div *cdkVirtualFor="let item of tablicazawartosci"  class="example-item-dialog"  >{{item.data}}<span>,&nbsp;{{item.name}} ></span><span [style.color]="item.kolor">&nbsp;{{item.tekst}}</span></div>
+  </cdk-virtual-scroll-viewport>
+</div>

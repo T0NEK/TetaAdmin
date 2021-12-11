@@ -10,6 +10,14 @@ html, body
     max-width: 100%;  
     overflow-y: hidden;
     overflow-x: hidden;
-
-    --stopka: 50px;
+    
+    --informacje: 100px;
+    --dialogmax: 900px;
+    --ustawienia: 700px;
+    --dialogmin: 200px;
+    --stopka: 20px;
+}
+body 
+{ 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
