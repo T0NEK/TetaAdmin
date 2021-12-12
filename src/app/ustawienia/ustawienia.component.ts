@@ -14,7 +14,7 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public isCollapsed = true;
   private tablicazawartoscisubscribe = new Subscription();
-  tablicazawartosci: Array<Wiersze> = [];  
+  tablicazawartosci: Wiersze [] = [];  
   @ViewChild('scrollViewportUstawienia')
   VSVUstawienia!: CdkVirtualScrollViewport;
   private zakladkasubscribe = new Subscription();
@@ -26,11 +26,10 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
-        this.tablicazawartosci = data;
+        this.tablicazawartosci = [...this.tablicazawartosci, data]; 
         let count = this.VSVUstawienia.getDataLength()
         changeDetectorRef.detectChanges();
         this.VSVUstawienia.scrollToIndex((count), 'smooth')
-        //console.log('LiniaKomunikatu$')
       }
     );  
     
@@ -38,12 +37,10 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
     ( data =>
       {
         if (data == 2) {
-               console.log('to ja ' + data);
                let count = this.VSVUstawienia.getDataLength();
                changeDetectorRef.detectChanges();
                this.VSVUstawienia.scrollToIndex((count), 'smooth')
               }
-            
       }
     );
   }

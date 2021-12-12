@@ -13,7 +13,7 @@ import { Wiersze } from '../wiersze';
 export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private tablicazawartoscisubscribe = new Subscription();
-  tablicazawartosci: Array<Wiersze> = [];  
+  tablicazawartosci: Wiersze[] = [];  
   @ViewChild('scrollViewportDialog')
   VSVDialog!: CdkVirtualScrollViewport;
   private zakladkasubscribe = new Subscription();
@@ -28,18 +28,16 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
-        this.tablicazawartosci = data;
+        this.tablicazawartosci = [...this.tablicazawartosci, data]; 
         let count = this.VSVDialog.getDataLength()
         changeDetectorRef.detectChanges();
         this.VSVDialog.scrollToIndex((count), 'smooth')
-        //console.log('LiniaKomunikatu$')
       }
     );    
     this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
     ( data =>
       {
         if (data == 1) {
-               console.log('to ja ' + data);
                let count = this.VSVDialog.getDataLength();
                changeDetectorRef.detectChanges();
                this.VSVDialog.scrollToIndex((count), 'smooth')
@@ -53,18 +51,13 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   {
     console.log('onInit dialog') 
   }
-
   
   ngAfterViewInit()
   {
     console.log('AV dialog')
     this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
-    //let count = this.VSVDialog.getDataLength()
     this.changeDetectorRef.detectChanges();
-    //this.VSVDialog.scrollToIndex((count), 'smooth');
-    //console.log(count)
   } 
-  
 
   ngOnDestroy()
   {

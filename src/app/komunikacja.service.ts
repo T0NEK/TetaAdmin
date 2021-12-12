@@ -35,8 +35,8 @@ export class KomunikacjaService implements OnDestroy
   getLinieDialogu() { return this.linieDialogu }
   addLinieDialogu(linia: any) 
     {
-     this.linieDialogu.push(linia); 
-     this.linieDialogu = [...this.linieDialogu];   
+     //this.linieDialogu.push(linia); 
+     this.linieDialogu = [...this.linieDialogu, linia];   
     }
   getWysokoscNawigacji() { return this.wysokosc_nawigacja};
   setWysokoscNawigacji(wysokosc: number) { this.wysokosc_nawigacja = wysokosc};
@@ -65,8 +65,9 @@ export class KomunikacjaService implements OnDestroy
   LiniaKomunikatu$ = this.LiniaKomunikatu.asObservable();
   addLiniaKomunikatu(linia: string, kolor: string)
   {
-    this.addLinieDialogu({'data':this.getCzasRzeczywisty(), 'name': 'dedal', 'kolor': kolor, 'tekst': linia})
-    this.LiniaKomunikatu.next(this.getLinieDialogu());
+    let wiersz = {'data':this.getCzasRzeczywisty(), 'name': 'dedal', 'kolor': kolor, 'tekst': linia}
+    this.addLinieDialogu(wiersz)
+    this.LiniaKomunikatu.next(wiersz);
   }
 
   private PrzelaczZakladka = new Subject<any>();

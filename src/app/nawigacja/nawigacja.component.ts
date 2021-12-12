@@ -24,7 +24,6 @@ export class NawigacjaComponent implements OnInit {
  
   Changed(event: any)
   {
-    console.log(event)
     this.komunikacja.changePrzelaczZakladka(event)
   }
 }
