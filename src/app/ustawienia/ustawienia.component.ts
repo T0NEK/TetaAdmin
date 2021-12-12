@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { Wiersze } from '../wiersze';
@@ -9,46 +9,71 @@ import { Wiersze } from '../wiersze';
   templateUrl: './ustawienia.component.html',
   styleUrls: ['./ustawienia.component.css'],
   changeDetection : ChangeDetectionStrategy.OnPush
-})
-export class UstawieniaComponent implements OnInit {
+  })
+export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public isCollapsed = true;
-
-  
   private tablicazawartoscisubscribe = new Subscription();
   tablicazawartosci: Array<Wiersze> = [];  
-  @ViewChild('scrollViewportustawienia')
-  VSVustawienia!: CdkVirtualScrollViewport;
-  
-  constructor(private komunikacja: KomunikacjaService,changeDetectorRef: ChangeDetectorRef) 
+  @ViewChild('scrollViewportUstawienia')
+  VSVUstawienia!: CdkVirtualScrollViewport;
+  private zakladkasubscribe = new Subscription();
+
+   
+  constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
   {
+    console.log('konstruktor ustawienia')
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
         this.tablicazawartosci = data;
-        let count = this.VSVustawienia.getDataLength()
+        let count = this.VSVUstawienia.getDataLength()
         changeDetectorRef.detectChanges();
-        this.VSVustawienia.scrollToIndex((count), 'smooth')
+        this.VSVUstawienia.scrollToIndex((count), 'smooth')
         //console.log('LiniaKomunikatu$')
       }
-    );    
+    );  
+    
+    this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
+    ( data =>
+      {
+        if (data == 2) {
+               console.log('to ja ' + data);
+               let count = this.VSVUstawienia.getDataLength();
+               changeDetectorRef.detectChanges();
+               this.VSVUstawienia.scrollToIndex((count), 'smooth')
+              }
+            
+      }
+    );
   }
+
   
   ngOnInit() 
   {
-    console.log('ustawienia')
-    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
-    
+    console.log('onInit ustawienia');
   }
+
+  ngAfterViewInit()
+  {
+    console.log('AV dialog')
+    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
+    //let count = this.VSVUstawienia.getDataLength()
+    this.changeDetectorRef.detectChanges();
+    //this.VSVUstawienia.scrollToIndex((count), 'smooth');
+    //console.log(count)
+  } 
 
   ngOnDestroy()
   {
+    console.log('dest ustawienia')
     this.tablicazawartoscisubscribe.unsubscribe();
-    //this.VSVustawienia.detach
+    this.zakladkasubscribe.unsubscribe();
   }
 
   start_larpa()
   {
     this.komunikacja.addLiniaKomunikatu('start_larpa','')
   }
+  
 }

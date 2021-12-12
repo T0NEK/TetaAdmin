@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { KomunikacjaService } from '../komunikacja.service';
 
 
+
 @Component({
   selector: 'app-nawigacja',
   templateUrl: './nawigacja.component.html',
@@ -11,12 +12,19 @@ export class NawigacjaComponent implements OnInit {
 
   active: any;
   
-  constructor(private komunikacja: KomunikacjaService) { }
+  constructor(private komunikacja: KomunikacjaService) 
+  {
+    
+  }
 
   ngOnInit() 
   {
     console.log('nawigacja')
   }
  
-  
+  Changed(event: any)
+  {
+    console.log(event)
+    this.komunikacja.changePrzelaczZakladka(event)
+  }
 }

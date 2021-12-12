@@ -11,7 +11,7 @@ html, body
     overflow-y: hidden;
     overflow-x: hidden;
     
-    --informacje: 100px;
+    --informacje: 70px;
     --dialogmax: 900px;
     --ustawienia: 700px;
     --dialogmin: 200px;

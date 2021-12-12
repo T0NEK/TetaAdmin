@@ -69,5 +69,11 @@ export class KomunikacjaService implements OnDestroy
     this.LiniaKomunikatu.next(this.getLinieDialogu());
   }
 
-   
+  private PrzelaczZakladka = new Subject<any>();
+  PrzelaczZakladka$ = this.PrzelaczZakladka.asObservable()
+  changePrzelaczZakladka(numer: number)
+  {
+    this.PrzelaczZakladka.next(numer)
+  }
+  
 }

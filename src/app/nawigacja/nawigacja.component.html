@@ -1,5 +1,5 @@
 <div>
-<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills">
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" [destroyOnHide]="false" class="nav-pills" (shown)="Changed($event)">
   <li [ngbNavItem]="1" >
     <a ngbNavLink >Komunikaty</a>
     <ng-template ngbNavContent>

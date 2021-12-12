@@ -27,6 +27,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   
   constructor(private komunikacja: KomunikacjaService) 
   {
+    console.log(' constr informacje')
     this.czas_rzeczywisty_subscribe = komunikacja.czasRzeczywisty$.subscribe
     ( data => 
       { this.czas_rzeczywisty = data; 
@@ -39,7 +40,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
     ngOnInit() 
   {
   //console.log(this.stale.getCzasStartu());   
-  console.log('informacje')
+  console.log(' OnInit informacje')
   }
 
   ngOnDestroy() 

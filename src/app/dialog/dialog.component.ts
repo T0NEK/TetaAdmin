@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component,  OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { Wiersze } from '../wiersze';
@@ -10,45 +10,66 @@ import { Wiersze } from '../wiersze';
   styleUrls: ['./dialog.component.css'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class DialogComponent implements OnInit, AfterViewInit {
+export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private tablicazawartoscisubscribe = new Subscription();
   tablicazawartosci: Array<Wiersze> = [];  
-  @ViewChild('scrollViewportdialog')
-  VSVdialog!: CdkVirtualScrollViewport;
+  @ViewChild('scrollViewportDialog')
+  VSVDialog!: CdkVirtualScrollViewport;
+  private zakladkasubscribe = new Subscription();
     
-  //@Input() wysokosc: any;
+  //@Input() : any;
   //@Output() raport = new EventEmitter<string>();
   
-  constructor(private komunikacja: KomunikacjaService,changeDetectorRef: ChangeDetectorRef) 
+  constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
   {
+
+    console.log('konstruktor dialog')
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
         this.tablicazawartosci = data;
-        let count = this.VSVdialog.getDataLength()
+        let count = this.VSVDialog.getDataLength()
         changeDetectorRef.detectChanges();
-        this.VSVdialog.scrollToIndex((count), 'smooth')
+        this.VSVDialog.scrollToIndex((count), 'smooth')
         //console.log('LiniaKomunikatu$')
       }
     );    
+    this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
+    ( data =>
+      {
+        if (data == 1) {
+               console.log('to ja ' + data);
+               let count = this.VSVDialog.getDataLength();
+               changeDetectorRef.detectChanges();
+               this.VSVDialog.scrollToIndex((count), 'smooth')
+              }
+      }
+    );
   }
   
+
   ngOnInit() 
   {
-    //console.log('dialog');
-    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
-    
+    console.log('onInit dialog') 
   }
+
   
   ngAfterViewInit()
   {
-    
+    console.log('AV dialog')
+    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
+    //let count = this.VSVDialog.getDataLength()
+    this.changeDetectorRef.detectChanges();
+    //this.VSVDialog.scrollToIndex((count), 'smooth');
+    //console.log(count)
   } 
   
+
   ngOnDestroy()
   {
+    console.log('dest dialog')
     this.tablicazawartoscisubscribe.unsubscribe();
-    //this.VSVdialog.detach();
+    this.zakladkasubscribe.unsubscribe();
   }
 }
