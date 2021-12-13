@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, O
 import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { Wiersze } from '../wiersze';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-ustawienia',
@@ -12,17 +13,25 @@ import { Wiersze } from '../wiersze';
   })
 export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public isCollapsed = true;
+  public isCollapsedData = true;
+  public isCollapsedStart = true;
   private tablicazawartoscisubscribe = new Subscription();
   tablicazawartosci: Wiersze [] = [];  
   @ViewChild('scrollViewportUstawienia')
   VSVUstawienia!: CdkVirtualScrollViewport;
   private zakladkasubscribe = new Subscription();
+  events: string = 'null';
+  
 
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.events = (`${event.value}`);
+  }
    
   constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
   {
     console.log('konstruktor ustawienia')
+    
+    
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
@@ -68,6 +77,11 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.zakladkasubscribe.unsubscribe();
   }
 
+  data_startu()
+  {
+    console.log(this.events)
+    if (this.events == 'null') {console.log(this.events)}
+  }
   start_larpa()
   {
     this.komunikacja.addLiniaKomunikatu('start_larpa','')

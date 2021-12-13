@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { Wiersze } from '../wiersze';
 
+
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -17,6 +18,8 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scrollViewportDialog')
   VSVDialog!: CdkVirtualScrollViewport;
   private zakladkasubscribe = new Subscription();
+  checked = true;
+
     
   //@Input() : any;
   //@Output() raport = new EventEmitter<string>();
@@ -31,7 +34,8 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tablicazawartosci = [...this.tablicazawartosci, data]; 
         let count = this.VSVDialog.getDataLength()
         changeDetectorRef.detectChanges();
-        this.VSVDialog.scrollToIndex((count), 'smooth')
+        console.log(this.checked)
+        if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
       }
     );    
     this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
@@ -40,12 +44,18 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
         if (data == 1) {
                let count = this.VSVDialog.getDataLength();
                changeDetectorRef.detectChanges();
-               this.VSVDialog.scrollToIndex((count), 'smooth')
+               console.log(this.checked)
+               if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
               }
       }
     );
   }
   
+  Przewijaj()
+  {
+    let count = this.VSVDialog.getDataLength();
+    if (!this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
+  }
 
   ngOnInit() 
   {

@@ -41,17 +41,6 @@ export class KomunikacjaService implements OnDestroy
   getWysokoscNawigacji() { return this.wysokosc_nawigacja};
   setWysokoscNawigacji(wysokosc: number) { this.wysokosc_nawigacja = wysokosc};
   
-  private odczytaj_czas_startu()
-  {
-    this.czas_startu = '2045.03.03';    
-    this.http.get(this.httpURL + 'czas_startu_data.php').subscribe( data => {
-        this.czas_startu = data;
-        }, error => console.error(error));
-  
-  }
-
-
-
   private czasRzeczywisty = new Subject<any>();
   czasRzeczywisty$ = this.czasRzeczywisty.asObservable();
   taktujCzas() { 
@@ -77,4 +66,24 @@ export class KomunikacjaService implements OnDestroy
     this.PrzelaczZakladka.next(numer)
   }
   
+  private OdczytajCzasStartu = new Subject<any>();
+  OdczytajCzasStartu$ = this.OdczytajCzasStartu.asObservable()
+  private odczytaj_czas_startu()
+  {
+    this.http.get(this.httpURL + 'czas_startu_data.php').subscribe( 
+      data =>  {
+                this.czas_startu = data;
+                this.OdczytajCzasStartu.next(data);
+                this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + data ,'')
+               },
+      error => {
+                this.czas_startu = 'nieznany';
+                this.OdczytajCzasStartu.next('nieznany');
+                this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam','red');
+                setTimeout(() => {this.odczytaj_czas_startu()}, 1000)
+               }
+               )
+  
+  }
+
 }

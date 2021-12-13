@@ -14,6 +14,12 @@ import { NotatkiComponent } from './notatki/notatki.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatCheckboxModule} from '@angular/material/checkbox'
+import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 
 @NgModule({
@@ -33,7 +39,12 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     NgbModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ScrollingModule
+    ScrollingModule,
+    MatCheckboxModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,4 +2,7 @@
   <cdk-virtual-scroll-viewport #scrollViewportDialog appendOnly itemSize="24" minBufferPx="200" maxBufferPx="400" class="example-viewport" autosize>
     <div *cdkVirtualFor="let item of tablicazawartosci"  class="example-item"  >{{item.data}}<span>,&nbsp;{{item.name}} ></span><span [style.color]="item.kolor">&nbsp;{{item.tekst}}</span></div>
   </cdk-virtual-scroll-viewport>
+
+  <mat-checkbox class="example-margin" [(ngModel)]="checked" (click)="Przewijaj()">Przewijaj</mat-checkbox>
+
 </div>

@@ -21,6 +21,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   czas_od_startu_uplyw = '1:15';
 
   czas_rzeczywisty_id: any;
+  private czas_startu_org: string;
   
 
   name = 'jeszcze nie';
@@ -28,6 +29,9 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   constructor(private komunikacja: KomunikacjaService) 
   {
     console.log(' constr informacje')
+
+    this.czas_startu_org = komunikacja.getCzasStartu();
+    
     this.czas_rzeczywisty_subscribe = komunikacja.czasRzeczywisty$.subscribe
     ( data => 
       { this.czas_rzeczywisty = data; 
@@ -48,12 +52,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
     this.czas_rzeczywisty_subscribe.unsubscribe();
   }
 
-  sendKomunikat()
-  {
-    this.komunikacja.addLiniaKomunikatu('linia komunikatu I+','red')
-  }
-
-  czas_rzeczywisty_zmien()
+    czas_rzeczywisty_zmien()
   { 
 //    this.czas_rzeczywisty = Date.now();  
 //    this.czas_na_dedalu = this.stale.getCzasStartu()

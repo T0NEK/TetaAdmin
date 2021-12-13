@@ -10,7 +10,7 @@ import { KomunikacjaService } from '../komunikacja.service';
 })
 export class NawigacjaComponent implements OnInit {
 
-  active: any;
+  active: any = 2;
   
   constructor(private komunikacja: KomunikacjaService) 
   {

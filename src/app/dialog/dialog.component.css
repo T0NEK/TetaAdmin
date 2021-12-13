@@ -13,3 +13,13 @@
   {
     height: 24px;
   }
+.example-margin {
+    margin: 0 10px;
+  }
+::ng-deep .mat-checkbox-inner-container {
+    background-color: red !important;
+  }
+  
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: green !important;
+}

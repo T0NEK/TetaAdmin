@@ -22,3 +22,26 @@
     max-height: var(--dialogmin);
     border-bottom: 2px solid deeppink;     
   }  
+button
+  {
+    width: 120px;
+  }
+.row  
+  {
+  margin: 3px;  
+  }
+.example-events 
+  {
+    height: 200px;
+    border: 1px solid #555;
+    overflow: auto;
+  }
+  ::ng-deep .mat-form-field-autofill-control
+  {
+    background-color: green;
+    color: black;
+  }
+  ::ng-deep .mat-datepicker-toggle-default-icon
+  {
+    color: lightgreen;
+  }

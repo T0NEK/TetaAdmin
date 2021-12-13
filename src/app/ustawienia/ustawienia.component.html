@@ -1,11 +1,40 @@
 <div class="ustawienia">
-<div class="row">
+
+  <div class="row">
   <div class="col-1 text-center">
-    <button type="button" class="btn btn-outline-success" (click)="collapse.toggle()">
+    <button type="button" class="btn btn-outline-success" (click)="collapseData.toggle()">
+      Data Startu
+    </button>
+  </div>
+  <div class="col-4" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
+    <div>
+        Zmień datę startu Dedala.
+         <input matInput [matDatepicker]="picker"
+                 (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+    </div>
+  </div>
+  <div class="col-1" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
+    <button type="button" class="btn btn-outline-danger" (click)="data_startu()">
+    Zmień
+    </button>
+  </div>    
+  <div class="col-1" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
+    <button type="button" class="btn btn-outline-danger" (click)="data_startu()">
+    Przywróć
+  </button>
+</div>    
+</div>
+  
+
+<div class="row">
+  <div class="col-2 text-center">
+    <button type="button" class="btn btn-outline-success" (click)="collapseStart.toggle()">
       Start larpa
     </button>
   </div>
-  <div class="col-9" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+  <div class="col-9" #collapseStart="ngbCollapse" [(ngbCollapse)]="isCollapsedStart">
     <div>
         Uruchamia zegar, ustawia wszystkie wartości startowe.
     <button type="button" class="btn btn-outline-danger" (click)="start_larpa()">
@@ -14,6 +43,7 @@
   </div>
   </div>
 </div>
+
 </div>
 <div class="dialog">
   <cdk-virtual-scroll-viewport #scrollViewportUstawienia appendOnly itemSize="24" minBufferPx="200" maxBufferPx="400" class="example-viewport" autosize>
