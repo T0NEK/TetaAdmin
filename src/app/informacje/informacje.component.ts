@@ -12,31 +12,29 @@ import { KomunikacjaService } from '../komunikacja.service';
 })
 export class InformacjeComponent implements OnInit, OnDestroy {
 
-  //private ngUnsubscribe = new Subject();
   czas_rzeczywisty: any;
   private czas_rzeczywisty_subscribe = new Subscription();
-
-  czas_rzeczywisty_uplyw = '1:15';
-  czas_na_dedalu = '2043.03.11 02:16:00';
-  czas_od_startu_uplyw = '1:15';
-
-  czas_rzeczywisty_id: any;
-  private czas_startu_org: string;
+  private czas_startu_subscribe = new Subscription();
+  //czas_rzeczywisty_id: any;
+  
+  
+  czas_rzeczywisty_uplyw = 'upływ-R';
+  czas_na_dedalu = 'odczyt';
+  czas_od_startu_uplyw = 'upływ-S';
+  czas_startu: any;
   
 
-  name = 'jeszcze nie';
+  name = 'stop';
   
   constructor(private komunikacja: KomunikacjaService) 
   {
-    console.log(' constr informacje')
-
-    this.czas_startu_org = komunikacja.getCzasStartu();
+    //console.log(' constr informacje')
     
     this.czas_rzeczywisty_subscribe = komunikacja.czasRzeczywisty$.subscribe
-    ( data => 
-      { this.czas_rzeczywisty = data; 
-      }
-    );  
+           ( data => { this.czas_rzeczywisty = data; } );  
+    this.czas_startu_subscribe = komunikacja.GetCzasStartuNew$.subscribe
+           ( data => { this.czas_startu = data; } );
+    
     this.komunikacja.addLiniaKomunikatu('uruchomiono moduł Administratora','');
     this.komunikacja.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
   }
@@ -44,19 +42,15 @@ export class InformacjeComponent implements OnInit, OnDestroy {
     ngOnInit() 
   {
   //console.log(this.stale.getCzasStartu());   
-  console.log(' OnInit informacje')
+  //console.log(' OnInit informacje')
   }
 
   ngOnDestroy() 
   {
     this.czas_rzeczywisty_subscribe.unsubscribe();
+    this.czas_startu_subscribe.unsubscribe();    
   }
 
-    czas_rzeczywisty_zmien()
-  { 
-//    this.czas_rzeczywisty = Date.now();  
-//    this.czas_na_dedalu = this.stale.getCzasStartu()
-  }
   
   
 

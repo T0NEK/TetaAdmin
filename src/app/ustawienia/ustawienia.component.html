@@ -1,52 +1,69 @@
 <div class="ustawienia">
 
-  <div class="row">
-  <div class="col-1 text-center">
-    <button type="button" class="btn btn-outline-success" (click)="collapseData.toggle()">
-      Data Startu
-    </button>
-  </div>
-  <div class="col-4" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
-    <div>
-        Zmień datę startu Dedala.
-         <input matInput [matDatepicker]="picker"
-                 (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+  <cdk-accordion class="example-accordion">
+  <cdk-accordion-item #accordionItem0="cdkAccordionItem" class="example-accordion-item" role="button" [attr.id]="'accordion-header-0'" [attr.aria-expanded]="accordionItem0.expanded" [attr.aria-controls]="'accordion-body-0'">
+    <div class="example-accordion-item-header" (click)="accordionItem0.toggle()">
+      <strong>Czas startu Dedala</strong>
     </div>
-  </div>
-  <div class="col-1" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
-    <button type="button" class="btn btn-outline-danger" (click)="data_startu()">
-    Zmień
-    </button>
-  </div>    
-  <div class="col-1" #collapseData="ngbCollapse" [(ngbCollapse)]="isCollapsedData">
-    <button type="button" class="btn btn-outline-danger" (click)="data_startu()">
-    Przywróć
-  </button>
-</div>    
-</div>
+    <div class="example-accordion-item-body" role="region" [style.display]="accordionItem0.expanded ? '' : 'none'" [attr.id]="'accordion-body-0'" [attr.aria-labelledby]="'accordion-header-0'">
+      <mat-card class="mat-card">
+      <div class="obok">
+        <mat-label>Określ datę: </mat-label>
+        <input class="input-date" matInput [matDatepicker]="pickerDateStartu" (dateChange)="addEvent('change', $event)" [(ngModel)]="inputDSvalue" placeholder="yyyy.mm.dd" disabled="true">
+        <mat-datepicker-toggle matSuffix [for]="pickerDateStartu"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDateStartu disabled="false"></mat-datepicker>
+      </div>
+      <div class="obok" style="min-width: 30px;"></div>
+      <div class="obok">
+        <mat-label class="obok">Określ czas: </mat-label>  
+        <ngb-timepicker class="obok" [(ngModel)]="timeDataStartuNew" [seconds]="seconds"></ngb-timepicker>
+      </div>
+      
+      <mat-card-actions align="end">
+        <div class="example-button-row">
+        <button type="button" class="btn btn-outline-danger" (click)="data_startu_new()" [disabled]="buttonDSNdisabled" >Zmień datę startu na wybraną</button>  
+        <button type="button" class="btn btn-outline-danger" (click)="data_startu_org()" [disabled]="buttonDSOdisabled" >Pierwotna: {{czas_startu_org}}</button>
+      </div>
+      </mat-card-actions>
+    </mat-card>
+
+    </div>
+  </cdk-accordion-item>
+
+  <cdk-accordion-item #accordionItem1="cdkAccordionItem" class="example-accordion-item" role="button" [attr.id]="'accordion-header-1'" [attr.aria-expanded]="accordionItem1.expanded" [attr.aria-controls]="'accordion-body-1'">
+    <div class="example-accordion-item-header" (click)="accordionItem1.toggle()">
+    <strong>Czas na Dedalu</strong>
+    </div>
+    <div class="example-accordion-item-body" role="region" [style.display]="accordionItem1.expanded ? '' : 'none'" [attr.id]="'accordion-body-1'" [attr.aria-labelledby]="'accordion-header-1'">
+            
+      <mat-card class="mat-card">
+      <div class="obok">
+        <mat-label>Określ datę: </mat-label>
+        <input class="input-date" matInput [matDatepicker]="pickerDataObecna">
+        <mat-datepicker-toggle matSuffix [for]="pickerDataObecna"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDataObecna></mat-datepicker>
+      </div>
+      <div class="obok" style="min-width: 30px;"></div>
+      <div class="obok">
+        <mat-label>Określ czas: </mat-label>  
+        <ngb-timepicker [(ngModel)]="timeDataObecna" [seconds]="seconds"></ngb-timepicker>
+      </div>
+      
+      <mat-card-actions align = "end">
+        <button type="button" class="btn btn-outline-danger" (click)="data_startu_new()">Zmień</button>    
+      </mat-card-actions>
+    </mat-card>
+
+    </div>
+  </cdk-accordion-item>
+</cdk-accordion>
   
-
-<div class="row">
-  <div class="col-2 text-center">
-    <button type="button" class="btn btn-outline-success" (click)="collapseStart.toggle()">
-      Start larpa
-    </button>
-  </div>
-  <div class="col-9" #collapseStart="ngbCollapse" [(ngbCollapse)]="isCollapsedStart">
-    <div>
-        Uruchamia zegar, ustawia wszystkie wartości startowe.
-    <button type="button" class="btn btn-outline-danger" (click)="start_larpa()">
-      Start
-    </button>
-  </div>
-  </div>
 </div>
 
-</div>
 <div class="dialog">
   <cdk-virtual-scroll-viewport #scrollViewportUstawienia appendOnly itemSize="24" minBufferPx="200" maxBufferPx="400" class="example-viewport" autosize>
     <div *cdkVirtualFor="let item of tablicazawartosci"  class="example-item"  >{{item.data}}<span>,&nbsp;{{item.name}} ></span><span [style.color]="item.kolor">&nbsp;{{item.tekst}}</span></div>
   </cdk-virtual-scroll-viewport>
 </div>
+
+

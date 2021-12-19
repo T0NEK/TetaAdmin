@@ -12,15 +12,15 @@ export class KomunikacjaService implements OnDestroy
   private czas_rzeczywisty: any;
   private czas_rzeczywisty_id: any;
   private httpURL = 'http://localhost/TetaPhp/Admin/';
-  private czas_startu: any;
+  private czas_startu_org: any;
+  private czas_startu_new: any;
   private linieDialogu: Wiersze[] = [];
   private wysokosc_nawigacja = 0;
     
   constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string) 
   {
     this.taktujCzas();
-    this.odczytaj_czas_startu();
-    
+    this.odczytaj_czas_startu(10);
   }
  
   ngOnDestroy() 
@@ -31,7 +31,12 @@ export class KomunikacjaService implements OnDestroy
 
   getCzasRzeczywisty() { return formatDate(this.czas_rzeczywisty, 'yyyy.MM.dd  HH:mm:ss', this.locate) }
 
-  getCzasStartu() { return this.czas_startu }
+  getCzasStartuOrg() { return this.czas_startu_org }
+  setCzasStartuNew(czas: string) 
+          {
+           this.czas_startu_new = czas;
+           this.odczytaj_czas_startu(-1);
+          }
   getLinieDialogu() { return this.linieDialogu }
   addLinieDialogu(linia: any) 
     {
@@ -66,24 +71,44 @@ export class KomunikacjaService implements OnDestroy
     this.PrzelaczZakladka.next(numer)
   }
   
+  private GetCzasStartuNew = new Subject<any>();
+  GetCzasStartuNew$ = this.GetCzasStartuNew.asObservable()
+  changeGetCzasStartuNew(czas: any)
+  {
+    this.czas_startu_new = czas;
+    this.GetCzasStartuNew.next(this.czas_startu_new)
+  }
+
+
   private OdczytajCzasStartu = new Subject<any>();
   OdczytajCzasStartu$ = this.OdczytajCzasStartu.asObservable()
-  private odczytaj_czas_startu()
+  private odczytaj_czas_startu(licznik : number)
   {
+    if (licznik == 0) 
+    {
+      this.czas_startu_org = 'ERROR';
+      this.changeGetCzasStartuNew(this.czas_startu_org);
+      this.OdczytajCzasStartu.next(this.czas_startu_org)
+      this.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "czas startu Dedala" ','red');
+    }
+    else
+    {
     this.http.get(this.httpURL + 'czas_startu_data.php').subscribe( 
       data =>  {
-                this.czas_startu = data;
-                this.OdczytajCzasStartu.next(data);
-                this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + data ,'')
+                this.czas_startu_org = data;
+                this.changeGetCzasStartuNew(this.czas_startu_org);
+                this.OdczytajCzasStartu.next(this.czas_startu_org);
+                this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + this.czas_startu_org ,'')
                },
       error => {
-                this.czas_startu = 'nieznany';
-                this.OdczytajCzasStartu.next('nieznany');
-                this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam','red');
-                setTimeout(() => {this.odczytaj_czas_startu()}, 1000)
+                this.czas_startu_org = 'ponawiam';
+                this.changeGetCzasStartuNew(this.czas_startu_org);
+                this.OdczytajCzasStartu.next(this.czas_startu_org);
+                this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                }
                )
-  
+    }
   }
 
 }

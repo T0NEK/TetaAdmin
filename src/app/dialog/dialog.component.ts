@@ -27,14 +27,14 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
   {
 
-    console.log('konstruktor dialog')
+    //console.log('konstruktor dialog')
     this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
     ( data => 
       { 
         this.tablicazawartosci = [...this.tablicazawartosci, data]; 
         let count = this.VSVDialog.getDataLength()
         changeDetectorRef.detectChanges();
-        console.log(this.checked)
+        //console.log(this.checked)
         if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
       }
     );    
@@ -44,7 +44,7 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
         if (data == 1) {
                let count = this.VSVDialog.getDataLength();
                changeDetectorRef.detectChanges();
-               console.log(this.checked)
+               //console.log(this.checked)
                if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
               }
       }
@@ -59,19 +59,19 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() 
   {
-    console.log('onInit dialog') 
+   // console.log('onInit dialog') 
   }
   
   ngAfterViewInit()
   {
-    console.log('AV dialog')
+   // console.log('AV dialog')
     this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
     this.changeDetectorRef.detectChanges();
   } 
 
   ngOnDestroy()
   {
-    console.log('dest dialog')
+  //  console.log('dest dialog')
     this.tablicazawartoscisubscribe.unsubscribe();
     this.zakladkasubscribe.unsubscribe();
   }
