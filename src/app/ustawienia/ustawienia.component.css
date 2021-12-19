@@ -23,7 +23,7 @@
     border-bottom: 2px solid  deeppink;     
   }  
 
-  .example-accordion {
+.example-accordion {
     display: block;
     min-width: 100%;
     max-width: 500px;
@@ -61,28 +61,3 @@
     border-bottom-right-radius: 4px;
   }
 
-.input-date
-{
-  background: limegreen;
-}  
-.mat-card
-{
-  background: black;
-  color: limegreen;
-}
-::ng-deep .ngb-tp-input /* tło input */
-{
-  background: limegreen;
-}
-::ng-deep .ngb-tp-chevron /* strzałki time */
-{
-  color: red;
-}
-::ng-deep .mat-icon-button /* ikona date */
-{
-  color: red;
-}
-.obok
-{
-  display: inline-block;
-}

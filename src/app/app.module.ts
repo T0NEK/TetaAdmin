@@ -23,10 +23,11 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UstawieniaCzasStartuComponent } from './ustawienia-czas-startu/ustawienia-czas-startu.component';
 
 
 @NgModule({
-  declarations: [								
+  declarations: [									
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -34,7 +35,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       UzytkownicyComponent,
       WiadomosciComponent,
       NotatkiComponent,
-      DialogComponent
+      DialogComponent,
+      UstawieniaCzasStartuComponent
    ],
   imports: [
     BrowserModule,
