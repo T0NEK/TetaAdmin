@@ -1,8 +1,9 @@
 import { formatDate } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Wiersze } from './wiersze';
+import * as _moment from 'moment';
 
 @Injectable({ providedIn: 'root'})
 
@@ -16,11 +17,13 @@ export class KomunikacjaService implements OnDestroy
   private czas_startu_new: any;
   private linieDialogu: Wiersze[] = [];
   private wysokosc_nawigacja = 0;
+  private czas_startu_akcji: any;
     
   constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string) 
   {
     this.taktujCzas();
     this.odczytaj_czas_startu(10);
+    this.odczytaj_czas_poczatku_akcji(10);
   }
  
   ngOnDestroy() 
@@ -93,7 +96,7 @@ export class KomunikacjaService implements OnDestroy
     }
     else
     {
-    this.http.get(this.httpURL + 'czas_startu_data.php').subscribe( 
+    this.http.get(this.httpURL + 'get_data_startu.php').subscribe( 
       data =>  {
                 this.czas_startu_org = data;
                 this.changeGetCzasStartuNew(this.czas_startu_org);
@@ -107,7 +110,73 @@ export class KomunikacjaService implements OnDestroy
                 this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                }
-               )
+               )      
+    }
+  }
+
+  //private ZapiszDataStartu = new Subject<any>();
+  //ZapiszDataStartu$ = this.ZapiszDataStartu.asObservable()
+  zapisz_data_startu(licznik : number, yy: string, mm: string, dd: string, hh: string, mi: string, ss: string )
+  {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin':'*',
+        'content-type': 'application/json',
+        Authorization: 'my-auth-token'
+      })
+    };
+    
+    var data = JSON.stringify({ "yy": yy, "mm": mm, "dd": dd, "hh": hh, "mi": mi, "ss": ss })  
+
+   if (licznik == 0) 
+    { this.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "Nowa data startu Dedala" ','red'); }
+    else
+    {
+    this.http.post(this.httpURL + 'set_data_startu.php', data, httpOptions).subscribe( 
+      data =>  {
+                 let czasD = _moment(yy + ':' + mm + ':' + dd, 'YYYY.MM.DD');
+                 let czasT = _moment(hh + ':' + mi + ':' + ss, 'HH:mm:ss');
+                 let czas = czasD.format('YYYY.MM.DD ') + ' ' + czasT.format('HH:mm:ss')
+                 this.changeGetCzasStartuNew( czas);
+                 this.addLiniaKomunikatu('Zapisano "nowa data startu Dedala" - ' + this.czas_startu_new ,'') 
+               },
+      error => { 
+                this.addLiniaKomunikatu('Błąd zapisu "Nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.zapisz_data_startu(--licznik,yy,mm,dd,hh,mi,ss)}, 1000) 
+               }
+               )      
+    }
+  }
+
+  private OdczytajCzasPoczatkuAkcji = new Subject<any>();
+  OdczytajCzasPoczatkuAkcji$ = this.OdczytajCzasPoczatkuAkcji.asObservable()
+  private odczytaj_czas_poczatku_akcji(licznik : number)
+  {
+    if (licznik == 0) 
+    {
+      this.czas_startu_akcji = 'ERROR';
+      //this.changeGetCzasStartuNew(this.czas_startu_org);
+      this.OdczytajCzasPoczatkuAkcji.next(this.czas_startu_akcji)
+      this.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "czas startu akcji na Dedalu" ','red');
+    }
+    else
+    {
+    this.http.get(this.httpURL + 'get_data_dedala.php').subscribe( 
+      data =>  {
+                this.czas_startu_akcji = data;
+                console.log(data)
+                //this.changeGetCzasStartuNew(this.czas_startu_org);
+                this.OdczytajCzasPoczatkuAkcji.next(this.czas_startu_akcji);
+                this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu" - ' + this.czas_startu_akcji ,'')
+               },
+      error => {
+                this.czas_startu_akcji = 'ponawiam';
+                //this.changeGetCzasStartuNew(this.czas_startu_org);
+                this.OdczytajCzasPoczatkuAkcji.next(this.czas_startu_akcji);
+                this.addLiniaKomunikatu('Błąd odczytu "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                setTimeout(() => {this.odczytaj_czas_poczatku_akcji(--licznik)}, 1000)
+               }
+               )      
     }
   }
 

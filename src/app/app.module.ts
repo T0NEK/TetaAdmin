@@ -24,10 +24,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UstawieniaCzasStartuComponent } from './ustawienia-czas-startu/ustawienia-czas-startu.component';
+import { UstawieniaCzasNaDedaluComponent } from './ustawienia-czas-na-dedalu/ustawienia-czas-na-dedalu.component';
 
 
 @NgModule({
-  declarations: [									
+  declarations: [										
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -36,7 +37,8 @@ import { UstawieniaCzasStartuComponent } from './ustawienia-czas-startu/ustawien
       WiadomosciComponent,
       NotatkiComponent,
       DialogComponent,
-      UstawieniaCzasStartuComponent
+      UstawieniaCzasStartuComponent,
+      UstawieniaCzasNaDedaluComponent
    ],
   imports: [
     BrowserModule,

@@ -23,9 +23,9 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-ustawienia-czas-startu',
-  templateUrl: './ustawienia-czas-startu.component.html',
-  styleUrls: ['./ustawienia-czas-startu.component.css'],
+  selector: 'app-ustawienia-czas-na-dedalu',
+  templateUrl: './ustawienia-czas-na-dedalu.component.html',
+  styleUrls: ['./ustawienia-czas-na-dedalu.component.css'],
   providers: [
     {
       provide: DateAdapter,
@@ -36,8 +36,8 @@ export const MY_FORMATS = {
   ],changeDetection : ChangeDetectionStrategy.OnPush
   })
 
-export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnDestroy {
-  
+export class UstawieniaCzasNaDedaluComponent implements OnInit {
+
   events: any;
   buttonDSNdisabled: boolean;
   buttonDSOdisabled: boolean;
