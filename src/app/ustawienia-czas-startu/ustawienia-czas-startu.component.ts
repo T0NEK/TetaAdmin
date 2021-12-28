@@ -80,7 +80,7 @@ data_startu_new()
 
 data_startu_org()
 {
-  this.komunikacja.changeGetCzasStartuNew( this.czas_startu_org );
+  this.komunikacja.oryginalna_data_startu(10);
   this.buttonDSOdisabled = true;
 }
 

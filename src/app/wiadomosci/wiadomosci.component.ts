@@ -18,7 +18,7 @@ export class WiadomosciComponent implements OnInit {
         this.czas_rzeczywisty = data;
       }
     );  
-    this.komunikacja.taktujCzas();  
+   // this.komunikacja.taktujCzas();  
   }
 
   ngOnInit() 

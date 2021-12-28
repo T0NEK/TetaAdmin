@@ -13,30 +13,30 @@ import { KomunikacjaService } from '../komunikacja.service';
 export class InformacjeComponent implements OnInit, OnDestroy {
 
   czas_rzeczywisty: any;
-  private czas_rzeczywisty_subscribe = new Subscription();
-  private czas_startu_subscribe = new Subscription();
-  private czas_startu_akcji_subscribe = new Subscription();
-  //czas_rzeczywisty_id: any;
+  private czas_rzeczywisty_subscribe_i = new Subscription();
+  private czas_startu_subscribe_i = new Subscription();
+  private czas_startu_akcji_subscribe_i = new Subscription();
+  private czas_startstop_subscribe_i = new Subscription();
   
   
   czas_rzeczywisty_uplyw = 'upływ-R';
   czas_na_dedalu: any;
   czas_od_startu_uplyw = 'upływ-S';
   czas_startu: any;
-  
+  stan: any;
 
-  name = 'stop';
-  
   constructor(private komunikacja: KomunikacjaService) 
   {
     //console.log(' constr informacje')
     
-    this.czas_rzeczywisty_subscribe = komunikacja.czasRzeczywisty$.subscribe
-           ( data => { this.czas_rzeczywisty = data; } );  
-    this.czas_startu_subscribe = komunikacja.GetCzasStartuNew$.subscribe
+    this.czas_rzeczywisty_subscribe_i = komunikacja.czasRzeczywisty$.subscribe
+           ( data => { this.czas_rzeczywisty = data } );  
+    this.czas_startu_subscribe_i = komunikacja.GetCzasStartuNew$.subscribe
            ( data => { this.czas_startu = data; } );
-    this.czas_startu_akcji_subscribe = komunikacja.OdczytajCzasPoczatkuAkcji$.subscribe
+           this.czas_startu_akcji_subscribe_i = komunikacja.OdczytajCzasDedala$.subscribe
            ( data => { this.czas_na_dedalu = data; } );
+    this.czas_startstop_subscribe_i = komunikacja.OdczytajStartStop$.subscribe
+           ( data => { this.stan = data; } );
     this.komunikacja.addLiniaKomunikatu('uruchomiono moduł Administratora','');
     this.komunikacja.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
   }
@@ -49,9 +49,10 @@ export class InformacjeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() 
   {
-    this.czas_rzeczywisty_subscribe.unsubscribe();
-    this.czas_startu_subscribe.unsubscribe();    
-    this.czas_startu_akcji_subscribe.unsubscribe();
+    this.czas_rzeczywisty_subscribe_i.unsubscribe();
+    this.czas_startu_subscribe_i.unsubscribe();    
+    this.czas_startu_akcji_subscribe_i.unsubscribe();
+    this.czas_startstop_subscribe_i.unsubscribe();
   }
 
   

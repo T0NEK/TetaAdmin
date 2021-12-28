@@ -1,7 +1,7 @@
 <mat-card class="mat-card">
   <div class="obok">
     <mat-label>Określ obecną datę na Dedalu: </mat-label>
-    <input class="input-date" matInput [matDatepicker]="pickerDateStartu" (dateChange)="addEvent('change', $event)" [(ngModel)]="inputDSvalue" placeholder="yyyy.mm.dd" disabled="true">
+    <input class="input-date" matInput [matDatepicker]="pickerDateStartu" (dateChange)="addEvent('change', $event)" [(ngModel)]="inputDSvalue" placeholder="yyyy.mm.dd" >
     <mat-datepicker-toggle matSuffix [for]="pickerDateStartu"></mat-datepicker-toggle>
     <mat-datepicker #pickerDateStartu disabled="false"></mat-datepicker>
   </div>
@@ -13,8 +13,8 @@
   
   <mat-card-actions align="end">
     <div class="example-button-row">
-    <button type="button" class="btn btn-danger" (click)="data_startu_new()" [disabled]="buttonDSNdisabled">Zmień obecną date Dedalu</button>  
-    <button type="button" class="btn btn-info" (click)="data_startu_org()" [disabled]="buttonDSOdisabled">Pierwotna: {{czas_startu_org}}</button>
+    <button type="button" class="btn btn-danger" (click)="data_startu_new()" [disabled]="buttonDSANdisabled">Zmień obecną date Dedalu</button>  
+    <button type="button" class="btn btn-info" (click)="data_startu_org()" [disabled]="buttonDSAOdisabled">Pierwotna: {{czas_startu_org}}</button>
   </div>
   </mat-card-actions>
 </mat-card>

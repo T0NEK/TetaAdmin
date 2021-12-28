@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { MatDatepickerInputEvent} from '@angular/material/datepicker';
@@ -36,52 +36,61 @@ export const MY_FORMATS = {
   ],changeDetection : ChangeDetectionStrategy.OnPush
   })
 
-export class UstawieniaCzasNaDedaluComponent implements OnInit {
+export class UstawieniaCzasNaDedaluComponent implements OnInit, AfterViewInit, OnDestroy, DoCheck {
 
   events: any;
-  buttonDSNdisabled: boolean;
-  buttonDSOdisabled: boolean;
+  buttonDSANdisabled: boolean;
+  buttonDSAOdisabled: boolean;
   inputDSvalue : any;
   czas_startu_org!: string;
   czas_startu_new!: string;
-  private czas_startu_new_subscribe = new Subscription();
+  private czas_startu_akcji_subscribe = new Subscription();
   timeDataStartuNew: NgbTimeStruct  = { hour: 12, minute: 0, second: 0};
   seconds = true;
   
   constructor(private komunikacja: KomunikacjaService) 
   {
-   this.czas_startu_new_subscribe = komunikacja.OdczytajCzasStartu$.subscribe
-     ( data => { this.czas_startu_org = data; } )
-   this.buttonDSNdisabled = true;
-   this.buttonDSOdisabled = true;       
+   this.czas_startu_akcji_subscribe = komunikacja.OdczytajCzasDedala$.subscribe
+     ( data => {
+        this.czas_startu_org = data; 
+        } )
+   this.buttonDSANdisabled = true;
+   this.buttonDSAOdisabled = true;     
   }
 
 ngOnInit() 
-  { }
+  {
+  }
 
 ngAfterViewInit()
-  { } 
+  { 
+  } 
+
+ngDoCheck() 
+  {
+  
+  }
 
 ngOnDestroy()
   {
-    this.czas_startu_new_subscribe.unsubscribe();
+    this.czas_startu_akcji_subscribe.unsubscribe();
   }
 
 addEvent(type: string, event: MatDatepickerInputEvent<Date>) 
   {
-   this.buttonDSNdisabled = false;   
+   this.buttonDSANdisabled = false;   
   }
 
 data_startu_new()
   {
-    this.komunikacja.zapisz_data_startu(10, this.inputDSvalue._i.year.toString(), (this.inputDSvalue._i.month + 1).toString(), this.inputDSvalue._i.date.toString(), this.timeDataStartuNew.hour.toString(), (this.timeDataStartuNew.minute).toString(), this.timeDataStartuNew.second.toString());
-    this.buttonDSOdisabled = false;
+    this.komunikacja.zapisz_data_akcji(10, this.inputDSvalue._i.year.toString(), (this.inputDSvalue._i.month + 1).toString(), this.inputDSvalue._i.date.toString(), this.timeDataStartuNew.hour.toString(), (this.timeDataStartuNew.minute).toString(), this.timeDataStartuNew.second.toString());
+    this.buttonDSAOdisabled = false;
   }
 
 data_startu_org()
 {
-  this.komunikacja.changeGetCzasStartuNew( this.czas_startu_org );
-  this.buttonDSOdisabled = true;
+  this.komunikacja.changeCzasStartuNew( this.czas_startu_org );
+  this.buttonDSAOdisabled = true;
 }
 
 
