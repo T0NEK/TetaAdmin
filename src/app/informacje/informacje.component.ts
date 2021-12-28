@@ -16,7 +16,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   private czas_rzeczywisty_subscribe_i = new Subscription();
   private czas_startu_subscribe_i = new Subscription();
   private czas_startu_akcji_subscribe_i = new Subscription();
-  private czas_startstop_subscribe_i = new Subscription();
+  private startstop_subscribe_i = new Subscription();
   
   
   czas_rzeczywisty_uplyw = 'upływ-R';
@@ -35,7 +35,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
            ( data => { this.czas_startu = data; } );
            this.czas_startu_akcji_subscribe_i = komunikacja.OdczytajCzasDedala$.subscribe
            ( data => { this.czas_na_dedalu = data; } );
-    this.czas_startstop_subscribe_i = komunikacja.OdczytajStartStop$.subscribe
+    this.startstop_subscribe_i = komunikacja.GetStartStop$.subscribe
            ( data => { this.stan = data; } );
     this.komunikacja.addLiniaKomunikatu('uruchomiono moduł Administratora','');
     this.komunikacja.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
@@ -52,7 +52,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
     this.czas_rzeczywisty_subscribe_i.unsubscribe();
     this.czas_startu_subscribe_i.unsubscribe();    
     this.czas_startu_akcji_subscribe_i.unsubscribe();
-    this.czas_startstop_subscribe_i.unsubscribe();
+    this.startstop_subscribe_i.unsubscribe();
   }
 
   

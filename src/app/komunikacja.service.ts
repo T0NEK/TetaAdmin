@@ -197,23 +197,29 @@ export class KomunikacjaService implements OnDestroy
 /* (end) czas startu Dedala */
 
 /* (start) start/stop akcji na Dedalu */
-private startstop: string;
+private startstop: any;
 
-getStartStop(){ return this.startstop;}
+//getStartStop(){ return this.startstop;}
 setStart()
       { 
-      //this.startstop = true; 
       this.czas_rzeczywisty_start =  Date.now()
       this.addLiniaKomunikatu('Start czas','green');
-      this.taktujUplyw(); 
+      this.zapisz_startstop(5,'START'); 
       }
-setStop(){ this.startstop = false; this.addLiniaKomunikatu('Stop czas','red'); }
-private GetStartStop1 = new Subject();
-GetStartStop$ = this.GetStartStop1.asObservable()
-changeStartStop(stan: string)
+
+setStop()
+      { 
+      this.startstop = false; 
+      this.addLiniaKomunikatu('Stop czas','red'); 
+      this.zapisz_startstop(5,'STOP');
+      }
+
+private GetStartStop = new Subject();
+GetStartStop$ = this.GetStartStop.asObservable()
+changeStartStop(stan: any)
 {
   this.startstop = stan;
-  this.GetStartStop1.next(this.startstop)
+  this.GetStartStop.next(this.startstop)
 }
 
 private OdczytajStartStop = new Subject<any>();
@@ -222,24 +228,21 @@ private odczytaj_startstop(licznik : number)
   {
     if (licznik == 0) 
     {
-      this.startstop = false;
-      this.changeStartStop(this.startstop);
-      this.OdczytajStartStop.next(this.startstop)
+      this.changeStartStop('STOP');
+      this.OdczytajStartStop.next('STOP')
       this.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "stanu akcji = stop" ','red');
     }
     else
     {
     this.http.get(this.httpURL + 'get_stan.php').subscribe( 
       data =>  {
-                this.startstop = data;
-                this.changeStartStop(this.startstop);
-                this.OdczytajStartStop.next(this.startstop);
+                this.changeStartStop(data);
+                this.OdczytajStartStop.next(data);
                 this.addLiniaKomunikatu('Odczytano "stan akcji" - ' + data ,'')
                },
       error => {
-                this.startstop = false;
-                this.changeStartStop(this.startstop);
-                this.OdczytajStartStop.next(this.startstop);
+                this.changeStartStop('STOP');
+                this.OdczytajStartStop.next('STOP');
                 this.addLiniaKomunikatu('Błąd odczytu "stan akcji = stop" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)
                }
@@ -265,12 +268,19 @@ private odczytaj_startstop(licznik : number)
     {
     this.http.post(this.httpURL + 'set_stan.php', data, httpOptions).subscribe( 
       data =>  {
-                 this.changeStartStop(stan);
-                 this.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + this.czas_startu_new ,'') 
+                 if (data) {
+                          this.changeStartStop(stan);
+                          this.addLiniaKomunikatu('Zapisano "stan akcji"','') 
+                          } 
+                 else
+                 {
+                  this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 500)   
+                 }         
                },
       error => { 
-                this.addLiniaKomunikatu('Błąd zapisu "Nowa data na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.zapisz_data_akcji(--licznik,yy,mm,dd,hh,mi,ss)}, 1000) 
+                this.addLiniaKomunikatu('Błąd połączenia "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 500) 
                }
                )      
     }

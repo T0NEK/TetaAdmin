@@ -9,16 +9,14 @@ import { KomunikacjaService } from '../komunikacja.service';
 })
 export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
 
-  buttonSTARTdisabled: boolean;
-  buttonSTOPdisabled: boolean;
-  private czas_startstop_subscribe_sl = new Subscription();
+  buttonSTARTdisabled!: boolean;
+  buttonSTOPdisabled!: boolean;
+  private startstop_subscribe_sl = new Subscription();
 
 
   constructor(private komunikacja: KomunikacjaService) 
    {
-    this.buttonSTARTdisabled = komunikacja.getStartStop();
-    this.buttonSTOPdisabled = !komunikacja.getStartStop();
-    this.czas_startstop_subscribe_sl = komunikacja.OdczytajStartStop$.subscribe
+    this.startstop_subscribe_sl = komunikacja.GetStartStop$.subscribe
            ( data => {
                       this.buttonSTARTdisabled = ( data == 'STOP' ? false:true);
                       this.buttonSTOPdisabled = ( data == 'STOP' ? true:false);
@@ -31,19 +29,17 @@ ngOnInit()
 
 ngOnDestroy()
 {
-  this.czas_startstop_subscribe_sl.unsubscribe();
+  this.startstop_subscribe_sl.unsubscribe();
 }
 
 start()
   {
-    //this.komunikacja.zapisz_data_startu(10, this.inputDSvalue._i.year.toString(), (this.inputDSvalue._i.month + 1).toString(), this.inputDSvalue._i.date.toString(), this.timeDataStartuNew.hour.toString(), (this.timeDataStartuNew.minute).toString(), this.timeDataStartuNew.second.toString());
     this.komunikacja.setStart();
   }
 
 stop()
-{
-  //this.komunikacja.changeGetCzasStartuNew( this.czas_startu_org );
-  this.komunikacja.setStop()
-}
+  {
+    this.komunikacja.setStop()
+  }
 
 }
