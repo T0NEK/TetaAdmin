@@ -22,7 +22,7 @@ export class KomunikacjaService implements OnDestroy
       {
       this.odczytaj_startstop(10);
       this.taktujCzas();
-      this.taktujUplyw(); 
+      //this.taktujUplyw(); 
       this.odczytaj_czas_startu(10);
       this.odczytaj_czas_dedala(10);
       },500)
@@ -31,6 +31,10 @@ export class KomunikacjaService implements OnDestroy
   ngOnDestroy() 
   {
     if (this.czas_rzeczywisty_id) { clearInterval(this.czas_rzeczywisty_id); }
+    if (this.czas_rzeczywisty_Dedala_id) { clearInterval(this.czas_rzeczywisty_Dedala_id); }
+    if (this.czas_rzeczywisty_start_id) { clearInterval(this.czas_rzeczywisty_start_id); }
+    if (this.czas_uplyw_dedala_id) { clearInterval(this.czas_uplyw_dedala_id); }
+    
   }
 
 /* (start) port serwera sql */
@@ -60,34 +64,101 @@ private sprawdz_port()
   private czasRzeczywisty = new Subject<any>();
   czasRzeczywisty$ = this.czasRzeczywisty.asObservable();
   taktujCzas() { 
-      this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD HH:mm:ss');
+      this.czas_rzeczywisty = (moment()).format('YYYY-MM-DD HH:mm:ss');
       this.czas_rzeczywisty_id = setInterval(() => { 
-            this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD HH:mm:ss');
+            this.czas_rzeczywisty = (moment()).format('YYYY-MM-DD HH:mm:ss');
             this.czasRzeczywisty.next( this.czas_rzeczywisty ) }
             , 1000); 
       }
 /* (end) czas rzeczywisty */
 
+/* (start) czas rzeczywisty Dedala */
+  
+private czas_rzeczywisty_Dedala_id: any;
+
+
+private czasRzeczywistyDedala = new Subject<any>();
+czasRzeczywistyDedala$ = this.czasRzeczywistyDedala.asObservable();
+taktujCzasDedala() { 
+    this.czas_rzeczywisty = (moment()).format('YYYY-MM-DD HH:mm:ss');
+    this.czas_rzeczywisty_id = setInterval(() => { 
+          this.czas_rzeczywisty = (moment()).format('YYYY-MM-DD HH:mm:ss');
+          this.czasRzeczywisty.next( this.czas_rzeczywisty ) }
+          , 1000); 
+    }
+/* (end) czas rzeczywisty Dedala*/
+
+/* (start) formatowanie upływu */ 
+formatUplyw(poczatek: any, obecny: any)
+{
+  let czas_obecny = _moment(obecny);
+  let czas = _moment(poczatek)
+  let ms = _moment(czas_obecny,"DD-MM-YYYY HH:mm:ss").diff(_moment(czas,"DD-MM-YYYY HH:mm:ss"));
+  let d = _moment.duration(ms);
+  if (d.days() > 0) 
+    { return ( d.days().toString() + ' dni, ' + d.hours().toString() + ' godzin ' + d.minutes().toString() + ' minut ' + d.seconds().toString() + ' sekund'); }
+  else  if (d.hours() > 0) 
+    { return ( d.hours().toString() + ' godzin ' + d.minutes().toString() + ' minut ' + d.seconds().toString() + ' sekund'); }
+    else  if (d.minutes() > 0) 
+    { return ( d.minutes().toString() + ' minut ' + d.seconds().toString() + ' sekund'); }
+    else   
+    { return ( d.seconds().toString() + ' sekund'); }
+}
+/* (end) formatowanie upływu */ 
+
 /* (start) upływ czasu rzeczywistego */ 
-  private czas_rzeczywisty_start: any;
+  private czas_rzeczywisty_start = '';
+  private czas_rzeczywisty_end = '';
+  private czas_rzeczywisty_start_id: any;
+
+  getCzasRzeczywistyStart() { return this.czas_rzeczywisty_start;}
+  getCzasRzeczywistyEnd() { return this.czas_rzeczywisty_end;}
   
   private czasRzeczywistyUplyw = new Subject<any>();
   czasRzeczywistyUplyw$ = this.czasRzeczywistyUplyw.asObservable();
-  taktujUplyw() { 
-          let czas_obecny = moment();
-          let czas = moment(this.czas_rzeczywisty_start)
-          console.log(czas_obecny)
-          console.log(this.czas_rzeczywisty_start)
-          console.log(czas)
-          
-          
-          console.log('Difference1= ',  czas_obecny.diff(czas),'milliseconds');
-          console.log('Difference is ', czas_obecny.diff(czas,'seconds'),'sekund');
-          console.log('Difference is ', czas_obecny.diff(czas,'days'),'days');
-          //this.czasRzeczywistyUplyw.next(uplyw)
-          }
+  taktujUplyw() 
+    { 
+    this.czasRzeczywistyUplyw.next(this.formatUplyw(this.czas_rzeczywisty_start,(moment()).format('YYYY-MM-DD HH:mm:ss')))
+    this.czas_rzeczywisty_start_id = setInterval(() => 
+      {
+
+        this.czasRzeczywistyUplyw.next(this.formatUplyw(this.czas_rzeczywisty_start,(moment()).format('YYYY-MM-DD HH:mm:ss')))
+      },1000);
+    }
+
+  zatrzymajUplyw()
+    {
+      if (this.czas_rzeczywisty_start_id) { clearInterval(this.czas_rzeczywisty_start_id); }
+    }
+
 /* (end) upływ czasu rzeczywistego */ 
-          
+
+/* (start) upływ czasu Dedala */ 
+
+private czas_uplyw_dedala_id: any;
+
+
+private czasDedalaUplyw = new Subject<any>();
+czasDedalaUplyw$ = this.czasDedalaUplyw.asObservable();
+taktujDedalaUplyw() 
+  { 
+  this.czasDedalaUplyw.next(this.formatUplyw(this.czas_rzeczywisty_start,(moment()).format('YYYY-MM-DD HH:mm:ss')))
+  this.czas_uplyw_dedala_id = setInterval(() => 
+    {
+
+      this.czasRzeczywistyUplyw.next(this.formatUplyw(this.czas_rzeczywisty_start,(moment()).format('YYYY-MM-DD HH:mm:ss')))
+    },1000);
+  }
+
+zatrzymajDedalaUplyw()
+  {
+    if (this.czas_uplyw_dedala_id) { clearInterval(this.czas_rzeczywisty_start_id); }
+  }
+
+/* (end) upływ czasu Dedala */ 
+
+
+
 /* (start) dodanie lini komunikatu */
   private linieDialogu: Wiersze[] = [];
   
@@ -157,7 +228,7 @@ private sprawdz_port()
                   this.czas_startu_org = data;
                   this.changeCzasStartuNew(this.czas_startu_org);
                   this.OdczytajCzasStartu.next(this.czas_startu_org);
-                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + this.czas_startu_org ,'')
+                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + this.czas_startu_org ,'')
                 }
                },
       error => {
@@ -262,9 +333,11 @@ setStart()
 
 setStop()
       { 
-      this.startstop = false; 
+      this.czas_rzeczywisty_end =  (moment()).format('YYYY-MM-DD HH:mm:ss');
+   //     this.startstop = false; 
       this.addLiniaKomunikatu('Użyto [STOP] czas','red'); 
       this.zapisz_startstop(5,'STOP');
+      this.zatrzymajUplyw();
       }
 
 private GetStartStop = new Subject();
@@ -300,7 +373,7 @@ private odczytaj_startstop(licznik : number)
                 {
                   this.changeStartStop(data);
                   this.OdczytajStartStop.next(data);
-                  this.addLiniaKomunikatu('Odczytano "stan akcji" - ' + data ,'')
+                  this.addLiniaKomunikatu('Odczytano "stan akcji": ' + data ,'')
                 }
                },
       error => {
@@ -392,7 +465,7 @@ private odczytaj_czas_dedala(licznik : number)
                 this.czas_dedala = data;
                 this.changeCzasDedala(this.czas_dedala);
                 this.OdczytajCzasDedala.next(this.czas_dedala);
-                this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu" - ' + this.czas_dedala ,'')
+                this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + this.czas_dedala ,'')
         }                
                },
       error => {
