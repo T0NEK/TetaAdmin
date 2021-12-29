@@ -1,26 +1,31 @@
-import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Wiersze } from './wiersze';
 import * as _moment from 'moment';
 import * as moment from 'moment';
-import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({ providedIn: 'root'})
 
 
 export class KomunikacjaService implements OnDestroy
 {
-  private httpURL = 'http://localhost/TetaPhp/Admin/';
-    
+  private httpURL_80 = 'http://localhost:80/TetaPhp/Admin/';
+  private httpURL_8080 = 'http://localhost:8080/TetaPhp/Admin/';
+  private httpURL: any;
+  
   constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string) 
   {
-    this.odczytaj_startstop(10);
-    this.taktujCzas();
-    this.taktujUplyw(); 
-    this.odczytaj_czas_startu(10);
-    this.odczytaj_czas_dedala(10);
+    this.httpURL = this.httpURL_80;
+    this.sprawdz_port();
+    setTimeout(()=>
+      {
+      this.odczytaj_startstop(10);
+      this.taktujCzas();
+      this.taktujUplyw(); 
+      this.odczytaj_czas_startu(10);
+      this.odczytaj_czas_dedala(10);
+      },500)
   }
  
   ngOnDestroy() 
@@ -28,7 +33,23 @@ export class KomunikacjaService implements OnDestroy
     if (this.czas_rzeczywisty_id) { clearInterval(this.czas_rzeczywisty_id); }
   }
 
-  
+/* (start) port serwera sql */
+private sprawdz_port()
+{
+  this.http.get(this.httpURL_80 + 'get_conect.php').subscribe( 
+    data =>  {
+              this.httpURL = this.httpURL_80
+              this.addLiniaKomunikatu('Sprawdzono port - 80' ,'')
+             },
+    error => {
+              this.httpURL = this.httpURL_8080
+              this.addLiniaKomunikatu('Sprawdzono port - 8080','')
+             }
+             )      
+}
+/* (end) port serwera sql */
+
+
 /* (start) czas rzeczywisty */
   
   private czas_rzeczywisty: any;
@@ -39,11 +60,9 @@ export class KomunikacjaService implements OnDestroy
   private czasRzeczywisty = new Subject<any>();
   czasRzeczywisty$ = this.czasRzeczywisty.asObservable();
   taktujCzas() { 
-      //this.czas_rzeczywisty = formatDate(Date.now(), 'yyyy.MM.dd  HH:mm:ss', this.locate)
-      this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD  HH:mm:ss');
+      this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD HH:mm:ss');
       this.czas_rzeczywisty_id = setInterval(() => { 
-            //this.czas_rzeczywisty = formatDate(Date.now(), 'yyyy.MM.dd  HH:mm:ss', this.locate);
-            this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD  HH:mm:ss');
+            this.czas_rzeczywisty = (moment()).format('YYYY.MM.DD HH:mm:ss');
             this.czasRzeczywisty.next( this.czas_rzeczywisty ) }
             , 1000); 
       }
@@ -53,10 +72,19 @@ export class KomunikacjaService implements OnDestroy
   private czas_rzeczywisty_start: any;
   
   private czasRzeczywistyUplyw = new Subject<any>();
-      czasRzeczywistyUplyw$ = this.czasRzeczywistyUplyw.asObservable();
-      taktujUplyw() { 
-          let uplyw = this.czas_rzeczywisty_start - this.czas_rzeczywisty;
-          this.czasRzeczywistyUplyw.next(uplyw)
+  czasRzeczywistyUplyw$ = this.czasRzeczywistyUplyw.asObservable();
+  taktujUplyw() { 
+          let czas_obecny = moment();
+          let czas = moment(this.czas_rzeczywisty_start)
+          console.log(czas_obecny)
+          console.log(this.czas_rzeczywisty_start)
+          console.log(czas)
+          
+          
+          console.log('Difference1= ',  czas_obecny.diff(czas),'milliseconds');
+          console.log('Difference is ', czas_obecny.diff(czas,'seconds'),'sekund');
+          console.log('Difference is ', czas_obecny.diff(czas,'days'),'days');
+          //this.czasRzeczywistyUplyw.next(uplyw)
           }
 /* (end) upływ czasu rzeczywistego */ 
           
@@ -92,8 +120,6 @@ export class KomunikacjaService implements OnDestroy
   private czas_startu_org: any;
   private czas_startu_new: any;
 
-  //getCzasStartuOrg() { return this.czas_startu_org }
-
   private GetCzasStartuNew = new Subject<any>();
   GetCzasStartuNew$ = this.GetCzasStartuNew.asObservable()
   changeCzasStartuNew(czas: any)
@@ -118,16 +144,27 @@ export class KomunikacjaService implements OnDestroy
     {
     this.http.get(this.httpURL + 'get_data_startu.php').subscribe( 
       data =>  {
-                this.czas_startu_org = data;
-                this.changeCzasStartuNew(this.czas_startu_org);
-                this.OdczytajCzasStartu.next(this.czas_startu_org);
-                this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + this.czas_startu_org ,'')
+                if (data == 'false')
+                {
+                  this.czas_startu_org = 'ponawiam';
+                  this.changeCzasStartuNew(this.czas_startu_org);
+                  this.OdczytajCzasStartu.next(this.czas_startu_org);
+                  this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                  setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
+                }
+                else
+                {
+                  this.czas_startu_org = data;
+                  this.changeCzasStartuNew(this.czas_startu_org);
+                  this.OdczytajCzasStartu.next(this.czas_startu_org);
+                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala" - ' + this.czas_startu_org ,'')
+                }
                },
       error => {
                 this.czas_startu_org = 'ponawiam';
                 this.changeCzasStartuNew(this.czas_startu_org);
                 this.OdczytajCzasStartu.next(this.czas_startu_org);
-                this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.addLiniaKomunikatu('Błąd połączenia "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                }
                )      
@@ -152,15 +189,23 @@ export class KomunikacjaService implements OnDestroy
     {
     this.http.post(this.httpURL + 'set_data_startu.php', data, httpOptions).subscribe( 
       data =>  {
-                 let czasD = _moment(yy + '.' + mm + '.' + dd, 'YYYY.MM.DD');
-                 let czasT = _moment(hh + ':' + mi + ':' + ss, 'HH:mm:ss');
-                 let czas = czasD.format('YYYY.MM.DD ') + ' ' + czasT.format('HH:mm:ss')
-                 this.changeCzasStartuNew( czas );
-                 this.addLiniaKomunikatu('Zapisano "nowa data startu Dedala" - ' + this.czas_startu_new ,'') 
+                if (data == 'false')
+                {
+                  this.addLiniaKomunikatu('Błąd zapisu "Nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  setTimeout(() => {this.zapisz_data_startu(--licznik,yy,mm,dd,hh,mi,ss)}, 1500) 
+                }
+                else
+                {
+                  let czasD = _moment(yy + '-' + mm + '-' + dd, 'YYYY-MM-DD');
+                  let czasT = _moment(hh + ':' + mi + ':' + ss, 'HH:mm:ss');
+                  let czas = czasD.format('YYYY-MM-DD') + ' ' + czasT.format('HH:mm:ss')
+                  this.changeCzasStartuNew( czas );
+                  this.addLiniaKomunikatu('Zapisano "nowa data startu Dedala" - ' + this.czas_startu_new ,'') 
+                }
                },
       error => { 
-                this.addLiniaKomunikatu('Błąd zapisu "Nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.zapisz_data_startu(--licznik,yy,mm,dd,hh,mi,ss)}, 1000) 
+                this.addLiniaKomunikatu('Błąd połączenia "Nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.zapisz_data_startu(--licznik,yy,mm,dd,hh,mi,ss)}, 1500) 
                }
                )      
     }
@@ -184,12 +229,20 @@ export class KomunikacjaService implements OnDestroy
     {
     this.http.post(this.httpURL + 'set_data_startu_org.php', data, httpOptions).subscribe( 
       data =>  {
-                 this.changeCzasStartuNew( this.czas_startu_org );
-                 this.addLiniaKomunikatu('Zapisano "Oryginalna data startu Dedala" - ' + this.czas_startu_org ,'') 
+                if (data == 'false')
+                {
+                  this.addLiniaKomunikatu('Błąd zapisu "Oryginalna data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  setTimeout(() => {this.oryginalna_data_startu(--licznik)}, 1500) 
+                }
+                else
+                {
+                  this.changeCzasStartuNew( this.czas_startu_org );
+                  this.addLiniaKomunikatu('Zapisano "Oryginalna data startu Dedala" - ' + this.czas_startu_org ,'') 
+                }
                },
       error => { 
-                this.addLiniaKomunikatu('Błąd zapisu "Oryginalna data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.oryginalna_data_startu(--licznik)}, 1000) 
+                this.addLiniaKomunikatu('Błąd połączenia "Oryginalna data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.oryginalna_data_startu(--licznik)}, 1500) 
                }
                )      
     }
@@ -199,18 +252,18 @@ export class KomunikacjaService implements OnDestroy
 /* (start) start/stop akcji na Dedalu */
 private startstop: any;
 
-//getStartStop(){ return this.startstop;}
 setStart()
       { 
-      this.czas_rzeczywisty_start =  Date.now()
-      this.addLiniaKomunikatu('Start czas','green');
+      this.czas_rzeczywisty_start =  (moment()).format('YYYY-MM-DD HH:mm:ss');
+      this.addLiniaKomunikatu('Użyto [START] czas','green');
       this.zapisz_startstop(5,'START'); 
+      this.taktujUplyw();
       }
 
 setStop()
       { 
       this.startstop = false; 
-      this.addLiniaKomunikatu('Stop czas','red'); 
+      this.addLiniaKomunikatu('Użyto [STOP] czas','red'); 
       this.zapisz_startstop(5,'STOP');
       }
 
@@ -236,14 +289,24 @@ private odczytaj_startstop(licznik : number)
     {
     this.http.get(this.httpURL + 'get_stan.php').subscribe( 
       data =>  {
-                this.changeStartStop(data);
-                this.OdczytajStartStop.next(data);
-                this.addLiniaKomunikatu('Odczytano "stan akcji" - ' + data ,'')
+                if (data == 'false')
+                {
+                  this.changeStartStop('STOP');
+                  this.OdczytajStartStop.next('STOP');
+                  this.addLiniaKomunikatu('Błąd odczytu "stan akcji = stop" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                  setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)  
+                }
+                else
+                {
+                  this.changeStartStop(data);
+                  this.OdczytajStartStop.next(data);
+                  this.addLiniaKomunikatu('Odczytano "stan akcji" - ' + data ,'')
+                }
                },
       error => {
                 this.changeStartStop('STOP');
                 this.OdczytajStartStop.next('STOP');
-                this.addLiniaKomunikatu('Błąd odczytu "stan akcji = stop" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.addLiniaKomunikatu('Błąd połączenia "stan akcji = stop" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)
                }
                )      
@@ -268,19 +331,21 @@ private odczytaj_startstop(licznik : number)
     {
     this.http.post(this.httpURL + 'set_stan.php', data, httpOptions).subscribe( 
       data =>  {
-                 if (data) {
-                          this.changeStartStop(stan);
-                          this.addLiniaKomunikatu('Zapisano "stan akcji"','') 
-                          } 
+                 if (data == 'false') 
+                 {
+                   this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                   setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500)            
+                 } 
                  else
                  {
-                  this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                  setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 500)   
+                  this.changeStartStop(stan);
+                  this.addLiniaKomunikatu('Zapisano "stan akcji"','') 
                  }         
                },
       error => { 
                 this.addLiniaKomunikatu('Błąd połączenia "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 500) 
+                console.log(error)
+                setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500) 
                }
                )      
     }
@@ -290,10 +355,6 @@ private odczytaj_startstop(licznik : number)
 
 /* (start) czas rzeczywisty Dedala */
 private czas_dedala: any;
-
-
-//getCzasStartuAkcji() { return this.czas_dedala; }
-
 
 private GetCzasDedala = new Subject<any>();
 GetCzasDedala$ = this.GetCzasDedala.asObservable()
@@ -318,16 +379,27 @@ private odczytaj_czas_dedala(licznik : number)
     {
     this.http.get(this.httpURL + 'get_data_dedala.php').subscribe( 
       data =>  {
+        if (data == 'false') 
+        {
+          this.czas_dedala = 'ponawiam';
+          this.changeCzasDedala(this.czas_dedala);
+          this.OdczytajCzasDedala.next(this.czas_dedala);
+          this.addLiniaKomunikatu('Błąd odczytu "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+          setTimeout(() => {this.odczytaj_czas_dedala(--licznik)}, 1000)
+        }
+        else
+        {
                 this.czas_dedala = data;
                 this.changeCzasDedala(this.czas_dedala);
                 this.OdczytajCzasDedala.next(this.czas_dedala);
                 this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu" - ' + this.czas_dedala ,'')
+        }                
                },
       error => {
                 this.czas_dedala = 'ponawiam';
                 this.changeCzasDedala(this.czas_dedala);
                 this.OdczytajCzasDedala.next(this.czas_dedala);
-                this.addLiniaKomunikatu('Błąd odczytu "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.addLiniaKomunikatu('Błąd połączenia "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_czas_dedala(--licznik)}, 1000)
                }
                )      
@@ -352,14 +424,22 @@ private odczytaj_czas_dedala(licznik : number)
     {
     this.http.post(this.httpURL + 'set_data_akcji.php', data, httpOptions).subscribe( 
       data =>  {
-                 let czasD = _moment(yy + '.' + mm + '.' + dd, 'YYYY.MM.DD');
-                 let czasT = _moment(hh + ':' + mi + ':' + ss, 'HH:mm:ss');
-                 let czas = czasD.format('YYYY.MM.DD ') + ' ' + czasT.format('HH:mm:ss')
-                 this.changeCzasStartuNew( czas);
-                 this.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + this.czas_startu_new ,'') 
-               },
-      error => { 
+              if (data == 'false') 
+              {
                 this.addLiniaKomunikatu('Błąd zapisu "Nowa data na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.zapisz_data_akcji(--licznik,yy,mm,dd,hh,mi,ss)}, 1000) 
+              }
+              else
+              {
+                let czasD = _moment(yy + '-' + mm + '-' + dd, 'YYYY.MM.DD');
+                let czasT = _moment(hh + ':' + mi + ':' + ss, 'HH:mm:ss');
+                let czas = czasD.format('YYYY-MM-DD') + ' ' + czasT.format('HH:mm:ss')
+                this.changeCzasStartuNew( czas);
+                this.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + this.czas_startu_new ,'') 
+              }
+                },
+      error => { 
+                this.addLiniaKomunikatu('Błąd połączenia "Nowa data na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
                 setTimeout(() => {this.zapisz_data_akcji(--licznik,yy,mm,dd,hh,mi,ss)}, 1000) 
                }
                )      
