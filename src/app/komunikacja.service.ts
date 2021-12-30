@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { Wiersze } from './wiersze';
 import * as _moment from 'moment';
 import * as moment from 'moment';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { JsonPipe } from '@angular/common';
 
 @Injectable({ providedIn: 'root'})
 
@@ -40,17 +42,23 @@ export class KomunikacjaService implements OnDestroy
 /* (start) port serwera sql */
 private sprawdz_port()
 {
-  this.http.get(this.httpURL_80 + 'get_conect.php').subscribe( 
+  this.http.get(this.httpURL_8080 + 'conect/').subscribe( 
     data =>  {
-              this.httpURL = this.httpURL_80
-              this.addLiniaKomunikatu('Sprawdzono port - 80' ,'')
+              this.httpURL = this.httpURL_8080;
+              //let ww = JSON.parse(JSON.stringify(data));
+              //console.log(ww)
+              this.addLiniaKomunikatu('Sprawdzono, port :80', '')
+              
              },
     error => {
               this.httpURL = this.httpURL_8080
-              this.addLiniaKomunikatu('Sprawdzono port - 8080','')
+              this.addLiniaKomunikatu('Sprawdzono, port :8080', '')
+              //let ww = JSON.parse(JSON.stringify(error));
+              //console.log(ww)
              }
              )      
 }
+
 /* (end) port serwera sql */
 
 
@@ -213,9 +221,18 @@ zatrzymajDedalaUplyw()
     }
     else
     {
-    this.http.get(this.httpURL + 'get_data_startu.php').subscribe( 
+    this.http.get(this.httpURL + 'datastartu/get/').subscribe( 
       data =>  {
-                if (data == 'false')
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true)
+                {
+                  this.czas_startu_org = wynik.stan;
+                  this.changeCzasStartuNew(this.czas_startu_org);
+                  this.OdczytajCzasStartu.next(this.czas_startu_org);
+                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + this.czas_startu_org ,'')
+                
+                }
+                else
                 {
                   this.czas_startu_org = 'ponawiam';
                   this.changeCzasStartuNew(this.czas_startu_org);
@@ -223,14 +240,7 @@ zatrzymajDedalaUplyw()
                   this.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                   setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                 }
-                else
-                {
-                  this.czas_startu_org = data;
-                  this.changeCzasStartuNew(this.czas_startu_org);
-                  this.OdczytajCzasStartu.next(this.czas_startu_org);
-                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + this.czas_startu_org ,'')
-                }
-               },
+                },
       error => {
                 this.czas_startu_org = 'ponawiam';
                 this.changeCzasStartuNew(this.czas_startu_org);
@@ -360,20 +370,21 @@ private odczytaj_startstop(licznik : number)
     }
     else
     {
-    this.http.get(this.httpURL + 'get_stan.php').subscribe( 
+    this.http.get(this.httpURL + 'stan/get/').subscribe( 
       data =>  {
-                if (data == 'false')
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true)
+                {
+                  this.changeStartStop(wynik.stan);
+                  this.OdczytajStartStop.next(wynik.stan);
+                  this.addLiniaKomunikatu('Odczytano "stan akcji": ' + wynik.stan ,'')
+                }
+                else
                 {
                   this.changeStartStop('STOP');
                   this.OdczytajStartStop.next('STOP');
                   this.addLiniaKomunikatu('Błąd odczytu "stan akcji = stop" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
                   setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)  
-                }
-                else
-                {
-                  this.changeStartStop(data);
-                  this.OdczytajStartStop.next(data);
-                  this.addLiniaKomunikatu('Odczytano "stan akcji": ' + data ,'')
                 }
                },
       error => {
@@ -402,22 +413,22 @@ private odczytaj_startstop(licznik : number)
     { this.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "stan akcji" ','red'); }
     else
     {
-    this.http.post(this.httpURL + 'set_stan.php', data, httpOptions).subscribe( 
+    this.http.post(this.httpURL + 'stan/set/', data, httpOptions).subscribe( 
       data =>  {
-                 if (data == 'false') 
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true) 
                  {
-                   this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                   setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500)            
+                  this.changeStartStop(wynik.stan);
+                  this.addLiniaKomunikatu('Zapisano "stan akcji"','') 
                  } 
                  else
                  {
-                  this.changeStartStop(stan);
-                  this.addLiniaKomunikatu('Zapisano "stan akcji"','') 
+                  this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                   setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500)             
                  }         
                },
       error => { 
                 this.addLiniaKomunikatu('Błąd połączenia "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                console.log(error)
                 setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500) 
                }
                )      
