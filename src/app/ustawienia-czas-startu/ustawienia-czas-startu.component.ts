@@ -42,45 +42,54 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
   buttonDSNdisabled: boolean;
   buttonDSOdisabled: boolean;
   inputDSvalue : any;
-  czas_startu_org!: string;
-  czas_startu_new!: string;
+  czas_startu_org: any;
+  czas_startu_new: any;
   private czas_startu_new_subscribe = new Subscription();
   timeDataStartuNew: NgbTimeStruct  = { hour: 12, minute: 0, second: 0};
   seconds = true;
   
-  constructor(private komunikacja: KomunikacjaService) 
+  constructor(private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef ) 
   {
    this.czas_startu_new_subscribe = komunikacja.OdczytajCzasStartu$.subscribe
-     ( data => { this.czas_startu_org = data; } )
+     ( data => { this.czas_startu_org = data;
+    changeDetectorRef.detectChanges()
+    } )
    this.buttonDSNdisabled = true;
    this.buttonDSOdisabled = true;       
   }
 
 ngOnInit() 
-  { }
+  { 
+    
+  }
 
 ngAfterViewInit()
-  { } 
+  {
+
+  } 
 
 ngOnDestroy()
   {
     this.czas_startu_new_subscribe.unsubscribe();
   }
 
-addEvent(type: string, event: MatDatepickerInputEvent<Date>) 
+  DataChange(type: string, event: MatDatepickerInputEvent<Date>) 
   {
-   this.buttonDSNdisabled = false;   
-  }
+   this.buttonDSNdisabled = false;
+   this.czas_startu_new = _moment(event.value);
+     }
+
 
 data_startu_new()
   {
-    this.komunikacja.zapisz_data_startu(10, this.inputDSvalue._i.year.toString(), (this.inputDSvalue._i.month + 1).toString(), this.inputDSvalue._i.date.toString(), this.timeDataStartuNew.hour.toString(), (this.timeDataStartuNew.minute).toString(), this.timeDataStartuNew.second.toString());
+    this.czas_startu_new.hour(this.timeDataStartuNew.hour).minute(this.timeDataStartuNew.minute).seconds(this.timeDataStartuNew.second);
+    this.komunikacja.zapisz_data_startu(10, this.czas_startu_new.format('YYYY-MM-DD HH:mm:ss'));
     this.buttonDSOdisabled = false;
   }
 
 data_startu_org()
 {
-  this.komunikacja.oryginalna_data_startu(10);
+  this.komunikacja.oryginalna_data_startu(10, this.czas_startu_org);
   this.buttonDSOdisabled = true;
 }
 

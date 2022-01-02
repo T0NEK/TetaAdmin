@@ -1,17 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from "@angular/common/http";
-import { InformacjeComponent } from './informacje/informacje.component';
-import { NawigacjaComponent } from './nawigacja/nawigacja.component';
-import { UstawieniaComponent } from './ustawienia/ustawienia.component';
-import { UzytkownicyComponent } from './uzytkownicy/uzytkownicy.component';
-import { WiadomosciComponent } from './wiadomosci/wiadomosci.component';
-import { NotatkiComponent } from './notatki/notatki.component';
-import { DialogComponent } from './dialog/dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCheckboxModule} from '@angular/material/checkbox'
@@ -23,9 +15,16 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InformacjeComponent } from './informacje/informacje.component';
+import { NawigacjaComponent } from './nawigacja/nawigacja.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { UstawieniaComponent } from './ustawienia/ustawienia.component';
 import { UstawieniaCzasStartuComponent } from './ustawienia-czas-startu/ustawienia-czas-startu.component';
 import { UstawieniaCzasNaDedaluComponent } from './ustawienia-czas-na-dedalu/ustawienia-czas-na-dedalu.component';
 import { UstawieniaStartLarpaComponent } from './ustawienia-start-larpa/ustawienia-start-larpa.component';
+import { UzytkownicyComponent } from './uzytkownicy/uzytkownicy.component';
+import { WiadomosciComponent } from './wiadomosci/wiadomosci.component';
+import { NotatkiComponent } from './notatki/notatki.component';
 
 
 @NgModule({
@@ -34,13 +33,13 @@ import { UstawieniaStartLarpaComponent } from './ustawienia-start-larpa/ustawien
       InformacjeComponent,
       NawigacjaComponent,
       UstawieniaComponent,
+      UstawieniaCzasStartuComponent,
+      UstawieniaCzasNaDedaluComponent,
+      UstawieniaStartLarpaComponent,
       UzytkownicyComponent,
       WiadomosciComponent,
       NotatkiComponent,
-      DialogComponent,
-      UstawieniaCzasStartuComponent,
-      UstawieniaCzasNaDedaluComponent,
-      UstawieniaStartLarpaComponent
+      DialogComponent
    ],
   imports: [
     BrowserModule,

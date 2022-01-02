@@ -64,7 +64,7 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   
   ngAfterViewInit()
   {
-   // console.log('AV dialog')
+  //  console.log('AV dialog')
     this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
     this.changeDetectorRef.detectChanges();
   } 

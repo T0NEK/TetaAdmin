@@ -33,7 +33,7 @@ export class InformacjeComponent implements OnInit, OnDestroy {
            ( data => { this.czas_rzeczywisty = data } );  
     this.czas_startu_subscribe_i = komunikacja.GetCzasStartuNew$.subscribe
            ( data => { this.czas_startu = data; } );
-           this.czas_startu_akcji_subscribe_i = komunikacja.OdczytajCzasDedala$.subscribe
+           this.czas_startu_akcji_subscribe_i = komunikacja.czasRzeczywistyDedala$.subscribe
            ( data => { this.czas_na_dedalu = data; } );
     this.startstop_subscribe_i = komunikacja.GetStartStop$.subscribe
            ( data => { this.stan = data; } );

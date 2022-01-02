@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KomunikacjaService } from '../komunikacja.service';
 import { MatDatepickerInputEvent} from '@angular/material/datepicker';
@@ -33,65 +33,95 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ],changeDetection : ChangeDetectionStrategy.OnPush
+  ],
+  changeDetection : ChangeDetectionStrategy.OnPush
   })
 
-export class UstawieniaCzasNaDedaluComponent implements OnInit, AfterViewInit, OnDestroy, DoCheck {
+export class UstawieniaCzasNaDedaluComponent implements OnDestroy, AfterViewInit {
 
   events: any;
   buttonDSANdisabled: boolean;
   buttonDSAOdisabled: boolean;
+  buttonDSAPdisabled: boolean;
+  buttonDSAFdisabled: boolean;
   inputDSvalue : any;
-  czas_startu_org!: string;
-  czas_startu_new!: string;
-  private czas_startu_akcji_subscribe = new Subscription();
+  czas_startu_org: any;
+  czas_startu_new: any;
+  czas_startu_poprz: any;
+  czas_startu_pier: any;
+  private czas_startu_akcji_subscribe_cd = new Subscription();
+  private czas_startu_akcji_org_subscribe_cd = new Subscription();
   timeDataStartuNew: NgbTimeStruct  = { hour: 12, minute: 0, second: 0};
   seconds = true;
   
-  constructor(private komunikacja: KomunikacjaService) 
+  constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
   {
-   this.czas_startu_akcji_subscribe = komunikacja.OdczytajCzasDedala$.subscribe
-     ( data => {
-        this.czas_startu_org = data; 
-        } )
+   this.czas_startu_akcji_subscribe_cd = komunikacja.OdczytajCzasDedala$.subscribe
+    ( data => {
+       this.czas_startu_org = data; 
+       changeDetectorRef.detectChanges();
+       } );
+   this.czas_startu_akcji_org_subscribe_cd = komunikacja.czasOryginalnyDedala$.subscribe
+       ( data => {
+          this.czas_startu_pier = data; 
+          changeDetectorRef.detectChanges();
+          } );
    this.buttonDSANdisabled = true;
-   this.buttonDSAOdisabled = true;     
+   this.buttonDSAOdisabled = true;
+   this.buttonDSAPdisabled = true;
+   this.buttonDSAFdisabled = true;     
+  // console.log('this.czas_dedala_org_new')
   }
 
-ngOnInit() 
+ ngAfterViewInit()
   {
-  }
-
-ngAfterViewInit()
-  { 
+   // console.log('AV cnd')
   } 
-
-ngDoCheck() 
-  {
-  
-  }
-
 ngOnDestroy()
   {
-    this.czas_startu_akcji_subscribe.unsubscribe();
+    this.czas_startu_akcji_subscribe_cd.unsubscribe();
+    this.czas_startu_akcji_org_subscribe_cd.unsubscribe();
   }
 
 addEvent(type: string, event: MatDatepickerInputEvent<Date>) 
   {
-   this.buttonDSANdisabled = false;   
+   this.buttonDSANdisabled = false;  
+   this.czas_startu_new = _moment(event.value); 
   }
 
 data_startu_new()
   {
-    this.komunikacja.zapisz_data_akcji(10, this.inputDSvalue._i.year.toString(), (this.inputDSvalue._i.month + 1).toString(), this.inputDSvalue._i.date.toString(), this.timeDataStartuNew.hour.toString(), (this.timeDataStartuNew.minute).toString(), this.timeDataStartuNew.second.toString());
+    this.czas_startu_poprz = this.komunikacja.getCzasDedala();
+    this.czas_startu_new.hour(this.timeDataStartuNew.hour).minute(this.timeDataStartuNew.minute).seconds(this.timeDataStartuNew.second);
+    this.komunikacja.zapisz_data_akcji(10, this.czas_startu_new.format('YYYY-MM-DD HH:mm:ss'));
     this.buttonDSAOdisabled = false;
+    this.buttonDSAPdisabled = false;
+    this.buttonDSAFdisabled = false;
   }
+
+data_startu_poprz()
+  {
+    let czas = this.komunikacja.getCzasDedala() 
+    this.komunikacja.changeCzasDedala( this.czas_startu_poprz );
+    this.czas_startu_poprz = czas;
+  //this.buttonDSAPdisabled = true;
+  }
+
+data_startu_pier()
+  {
+    this.czas_startu_poprz = this.komunikacja.getCzasDedala();
+    this.komunikacja.changeCzasDedala( this.komunikacja.getCzasDedalaOryg() );
+    //this.buttonDSAOdisabled = true;
+  }
+    
 
 data_startu_org()
 {
-  this.komunikacja.changeCzasStartuNew( this.czas_startu_org );
-  this.buttonDSAOdisabled = true;
+  this.czas_startu_poprz = this.komunikacja.getCzasDedala();
+  this.komunikacja.changeCzasDedala( this.czas_startu_org );
+  //this.buttonDSAOdisabled = true;
 }
+
 
 
 }
