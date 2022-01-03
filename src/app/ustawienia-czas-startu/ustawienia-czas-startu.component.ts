@@ -42,9 +42,11 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
   events: any;
   buttonDSNdisabled: boolean;
   buttonDSOdisabled: boolean;
+  buttonDSAPdisabled: boolean;
   inputDSvalue : any;
   czas_startu_org: any;
   czas_startu_new: any;
+  czas_startu_poprz: any;
   private czas_startu_new_subscribe = new Subscription();
   timeDataStartuNew: NgbTimeStruct  = { hour: 12, minute: 0, second: 0};
   seconds = true;
@@ -56,7 +58,8 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
     //changeDetectorRef.detectChanges()
     } )
    this.buttonDSNdisabled = true;
-   this.buttonDSOdisabled = true;       
+   this.buttonDSOdisabled = true;  
+   this.buttonDSAPdisabled = true;     
   }
 
 ngOnInit() 
@@ -83,16 +86,26 @@ ngOnDestroy()
 
 data_startu_new()
   {
+    this.czas_startu_poprz = this.komunikacja.getCzasStartu();
     this.czas_startu_new.hour(this.timeDataStartuNew.hour).minute(this.timeDataStartuNew.minute).seconds(this.timeDataStartuNew.second);
     this.komunikacja.zapisz_data_startu(10, this.czas_startu_new.format('YYYY-MM-DD HH:mm:ss'));
     this.buttonDSOdisabled = false;
+    this.buttonDSAPdisabled = false;
+  }
+
+data_startu_poprz()
+  {
+    let czas = this.komunikacja.getCzasStartu() 
+    this.komunikacja.zapisz_data_startu(10, this.czas_startu_poprz);
+    this.czas_startu_poprz = czas;
+  //this.buttonDSAPdisabled = true;
   }
 
 data_startu_org()
-{
-  this.komunikacja.oryginalna_data_startu(10, this.czas_startu_org);
-  this.buttonDSOdisabled = true;
-}
-
+  {
+    this.czas_startu_poprz = this.komunikacja.getCzasStartu(); 
+    this.komunikacja.zapisz_data_startu(10, this.czas_startu_org);
+  // this.buttonDSOdisabled = true;
+  }
 
 }

@@ -225,6 +225,7 @@ zatrzymajDedalaUplyw()
   private czas_startu_org: any;
   private czas_startu_new: any;
 
+  getCzasStartu(){ return this.czas_startu_new}
   private GetCzasStartuNew = new Subject<any>();
   GetCzasStartuNew$ = this.GetCzasStartuNew.asObservable()
   changeCzasStartuNew(czas: any)
@@ -313,49 +314,13 @@ zatrzymajDedalaUplyw()
                }
                )      
     }
-  }
-
-  oryginalna_data_startu(licznik : number, czas: string)
-  {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin':'*',
-        'content-type': 'application/json',
-        Authorization: 'my-auth-token'
-      })
-    };
-    
-    var data = JSON.stringify({"czas": czas })  
-
-   if (licznik == 0) 
-    { this.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "oryginalna data startu Dedala" ','red'); }
-    else
-    {
-    this.http.post(this.httpURL + 'datastartu/', data, httpOptions).subscribe( 
-      data =>  {
-                let wynik = JSON.parse(JSON.stringify(data));
-                if (wynik.wynik == true)
-                {
-                  this.changeCzasStartuNew( wynik.stan );
-                  this.addLiniaKomunikatu('Zapisano "oryginalna data startu Dedala": ' + wynik.stan ,'') 
-                }
-                else
-                {
-                  this.addLiniaKomunikatu('Błąd zapisu "oryginalna data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                  setTimeout(() => {this.oryginalna_data_startu(--licznik, czas)}, 1500) 
-                }
-               },
-      error => { 
-                this.addLiniaKomunikatu('Błąd połączenia "oryginalna data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.oryginalna_data_startu(--licznik, czas)}, 1500) 
-               }
-               )      
-    }
   }  
 /* (end) czas startu Dedala */
 
 /* (start) start/stop akcji na Dedalu */
 private startstop: any;
+
+getStartStop() {return this.startstop}
 
 setStart()
       { 
@@ -407,11 +372,11 @@ private odczytaj_startstop(licznik : number)
                 {
                   if (wynik.stan == 'START')
                   {
-                    this.addLiniaKomunikatu('Uruchomienie po restarcie aplikacji: ' + wynik.stan ,'red')
-                    this.addLiniaKomunikatu('Ustawiam parametry: ','')
-                    this.addLiniaKomunikatu('"stan akcji": ' + wynik.stan ,'')
+                    this.addLiniaKomunikatu('Uruchomienie po Restarcie Aplikacji','red')
+                    this.addLiniaKomunikatu('Ustawiam parametry: ','rgb(199, 100, 43)')
+                    this.addLiniaKomunikatu('"stan akcji": START','rgb(199, 100, 43)')
                     this.czas_rzeczywisty_start = wynik.czas;
-                    this.addLiniaKomunikatu('"czas startu": ' + wynik.czas ,'')
+                    this.addLiniaKomunikatu('"czas startu akcji": ' + wynik.czas ,'rgb(199, 100, 43)')
                     this.changeStartStop(wynik.stan);
                     this.OdczytajStartStop.next(wynik.stan);
                   }
@@ -419,7 +384,7 @@ private odczytaj_startstop(licznik : number)
                   {
                     this.changeStartStop(wynik.stan);
                     this.OdczytajStartStop.next(wynik.stan);
-                    this.addLiniaKomunikatu('Odczytano "stan akcji": ' + wynik.stan ,'')  
+                    this.addLiniaKomunikatu('Odczytano "stan akcji": STOP','')  
                   }
                   
                 }
@@ -509,14 +474,42 @@ private odczytaj_czas_dedala(licznik : number)
     this.http.get(this.httpURL + 'dataakcji/').subscribe( 
       data =>  {
         let wynik = JSON.parse(JSON.stringify(data));
+        console.log(wynik)
         if (wynik.wynik == true) 
         {
-          this.czas_dedala_org = wynik.stan;
-          this.changeCzasDedala(wynik.stan);
-          this.czasRzeczywistyDedala.next( wynik.stan );
-          this.czasOryginalnyDedala.next( wynik.stan)
-          this.OdczytajCzasDedala.next(wynik.stan);
-          this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + wynik.stan ,'')
+          if (wynik.stan == 'START')
+          {
+            this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + wynik.czasnew ,'')
+            this.czas_dedala_org = wynik.czasorg;
+            this.OdczytajCzasDedala.next(wynik.czasorg);
+            
+            this.czas_dedala_ofset_org = moment(this.czas_dedala_org,"YYYY-MM-DD HH:mm:ss").diff(moment(this.czas_rzeczywisty_start,"YYYY-MM-DD HH:mm:ss"),'milliseconds',true)
+            
+            this.czas_dedala_new = wynik.czasnew;
+
+            this.czas_dedala_ofset = moment(this.czas_dedala_new,"YYYY-MM-DD HH:mm:ss").diff(moment(this.czas_rzeczywisty_start,"YYYY-MM-DD HH:mm:ss"),'milliseconds',true)
+            //this.czasRzeczywistyDedala.next( czas )
+            //this.czasRzeczywistyDedala.next( wynik.czas );
+            
+
+/*
+            this.czas_dedala_ofset = moment(this.czas_dedala_new,"YYYY-MM-DD HH:mm:ss").diff(moment(this.czas_rzeczywisty_start,"YYYY-MM-DD HH:mm:ss"),'milliseconds',true)
+     
+      this.czas_rzeczywisty_Dedala_id = setInterval(() => 
+      {    
+       let czas = moment().add(this.czas_dedala_ofset,'milliseconds')
+       this.czas_dedala_new = moment(czas).format('YYYY-MM-DD HH:mm:ss');
+  */          
+          } 
+          else
+          {
+          this.czas_dedala_org = wynik.czasorg;
+          this.changeCzasDedala(wynik.czasorg);
+          //this.czasRzeczywistyDedala.next( wynik.czas );
+          this.czasOryginalnyDedala.next( wynik.czasorg)
+          this.OdczytajCzasDedala.next(wynik.czasorg);
+          this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + wynik.czasorg ,'')
+          }
         }
         else
         {
@@ -560,8 +553,8 @@ private odczytaj_czas_dedala(licznik : number)
               let wynik = JSON.parse(JSON.stringify(data));
               if (wynik.wynik == true) 
               {
-                this.changeCzasDedala( wynik.stan );
-                this.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + wynik.stan ,'') 
+                this.changeCzasDedala( wynik.czas );
+                this.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + wynik.czas ,'') 
               }
               else
               {

@@ -14,6 +14,7 @@
   <mat-card-actions align="end">
     <div class="example-button-row">
     <button type="button" class="btn btn-danger" (click)="data_startu_new()" [disabled]="buttonDSNdisabled">Zmień datę startu na wybraną</button>  
+    <button type="button" class="btn btn-info" (click)="data_startu_poprz()" [disabled]="buttonDSAPdisabled">Poprzedna: {{czas_startu_poprz}}</button>
     <button type="button" class="btn btn-info" (click)="data_startu_org()" [disabled]="buttonDSOdisabled">Oryginalna: {{czas_startu_org}}</button>
   </div>
   </mat-card-actions>
