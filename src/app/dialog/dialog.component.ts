@@ -9,7 +9,7 @@ import { Wiersze } from '../wiersze';
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  //changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -37,18 +37,20 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
         //console.log(this.checked)
         if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
       }
-    );    
+    );   
+    /* 
     this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
     ( data =>
       {
-        if (data == 1) {
+        if (data == 10) {
                let count = this.VSVDialog.getDataLength();
                changeDetectorRef.detectChanges();
-               //console.log(this.checked)
+               console.log(this.checked)
                if (this.checked) { this.VSVDialog.scrollToIndex((count), 'smooth'); }
               }
       }
     );
+    */
   }
   
   Przewijaj()

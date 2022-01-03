@@ -212,6 +212,7 @@ zatrzymajDedalaUplyw()
 /* (end) dodanie lini komunikatu */
 
 /* (start)  */
+/*
   private PrzelaczZakladka = new Subject<any>();
   PrzelaczZakladka$ = this.PrzelaczZakladka.asObservable()
   changePrzelaczZakladka(numer: number)
@@ -361,14 +362,14 @@ setStart()
       this.czas_rzeczywisty_start =  (moment()).format('YYYY-MM-DD HH:mm:ss');
       this.czas_rzeczywisty_end = '';
       this.addLiniaKomunikatu('Użyto [START] czas','green');
-      this.zapisz_startstop(5,'START'); 
+      this.zapisz_startstop(5, 'START', this.czas_rzeczywisty_start); 
       }
 
 setStop()
       { 
       this.czas_rzeczywisty_end =  (moment()).format('YYYY-MM-DD HH:mm:ss');
       this.addLiniaKomunikatu('Użyto [STOP] czas','red'); 
-      this.zapisz_startstop(5,'STOP');
+      this.zapisz_startstop(5, 'STOP', this.czas_rzeczywisty_end);
       }
 
 private GetStartStop = new Subject();
@@ -404,9 +405,23 @@ private odczytaj_startstop(licznik : number)
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true)
                 {
-                  this.changeStartStop(wynik.stan);
-                  this.OdczytajStartStop.next(wynik.stan);
-                  this.addLiniaKomunikatu('Odczytano "stan akcji": ' + wynik.stan ,'')
+                  if (wynik.stan == 'START')
+                  {
+                    this.addLiniaKomunikatu('Uruchomienie po restarcie aplikacji: ' + wynik.stan ,'red')
+                    this.addLiniaKomunikatu('Ustawiam parametry: ','')
+                    this.addLiniaKomunikatu('"stan akcji": ' + wynik.stan ,'')
+                    this.czas_rzeczywisty_start = wynik.czas;
+                    this.addLiniaKomunikatu('"czas startu": ' + wynik.czas ,'')
+                    this.changeStartStop(wynik.stan);
+                    this.OdczytajStartStop.next(wynik.stan);
+                  }
+                  else
+                  {
+                    this.changeStartStop(wynik.stan);
+                    this.OdczytajStartStop.next(wynik.stan);
+                    this.addLiniaKomunikatu('Odczytano "stan akcji": ' + wynik.stan ,'')  
+                  }
+                  
                 }
                 else
                 {
@@ -426,7 +441,7 @@ private odczytaj_startstop(licznik : number)
     }
   }
 
-  zapisz_startstop(licznik : number, stan: string)
+  zapisz_startstop(licznik : number, stan: string, czas: string)
   {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -436,7 +451,7 @@ private odczytaj_startstop(licznik : number)
       })
     };
     
-    var dane = JSON.stringify({ "stan": stan })  
+    var dane = JSON.stringify({ "stan": stan, "czas": czas })  
    if (licznik == 0) 
     { this.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "stan akcji" ','red'); }
     else
@@ -452,12 +467,13 @@ private odczytaj_startstop(licznik : number)
                  else
                  {
                   this.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                   setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500)             
+                   setTimeout(() => {this.zapisz_startstop(--licznik, stan, czas)}, 1500)             
                  }        
                },
       error => { 
+        console.log(error)
                 this.addLiniaKomunikatu('Błąd połączenia "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
-                setTimeout(() => {this.zapisz_startstop(--licznik,stan)}, 1500);
+                setTimeout(() => {this.zapisz_startstop(--licznik, stan, czas)}, 1500);
                }
                )      
     }

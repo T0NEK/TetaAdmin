@@ -24,6 +24,6 @@ export class NawigacjaComponent implements OnInit {
  
   Changed(event: any)
   {
-    this.komunikacja.changePrzelaczZakladka(event)
+    //this.komunikacja.changePrzelaczZakladka(event)
   }
 }

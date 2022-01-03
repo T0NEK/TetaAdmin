@@ -33,7 +33,8 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ],changeDetection : ChangeDetectionStrategy.OnPush
+  ],
+  //changeDetection : ChangeDetectionStrategy.OnPush
   })
 
 export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -52,7 +53,7 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
   {
    this.czas_startu_new_subscribe = komunikacja.OdczytajCzasStartu$.subscribe
      ( data => { this.czas_startu_org = data;
-    changeDetectorRef.detectChanges()
+    //changeDetectorRef.detectChanges()
     } )
    this.buttonDSNdisabled = true;
    this.buttonDSOdisabled = true;       

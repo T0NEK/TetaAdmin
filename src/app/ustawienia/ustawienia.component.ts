@@ -10,7 +10,7 @@ import { Wiersze } from '../wiersze';
   templateUrl: './ustawienia.component.html',
   styleUrls: ['./ustawienia.component.css'],
   providers: [],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  //changeDetection : ChangeDetectionStrategy.OnPush
   })
 
 
@@ -35,7 +35,7 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
         this.VSVUstawienia.scrollToIndex((count), 'smooth')
       }
     );  
-    
+    /*
     this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
     ( data =>
       {
@@ -46,6 +46,7 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
               }
       }
     );
+    */
   }
 
   

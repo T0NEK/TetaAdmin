@@ -34,7 +34,7 @@ export const MY_FORMATS = {
     },
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  //changeDetection : ChangeDetectionStrategy.OnPush
   })
 
 export class UstawieniaCzasNaDedaluComponent implements OnDestroy, AfterViewInit {
@@ -59,12 +59,12 @@ export class UstawieniaCzasNaDedaluComponent implements OnDestroy, AfterViewInit
    this.czas_startu_akcji_subscribe_cd = komunikacja.OdczytajCzasDedala$.subscribe
     ( data => {
        this.czas_startu_org = data; 
-       changeDetectorRef.detectChanges();
+       //changeDetectorRef.detectChanges();
        } );
    this.czas_startu_akcji_org_subscribe_cd = komunikacja.czasOryginalnyDedala$.subscribe
        ( data => {
           this.czas_startu_pier = data; 
-          changeDetectorRef.detectChanges();
+          //changeDetectorRef.detectChanges();
           } );
    this.buttonDSANdisabled = true;
    this.buttonDSAOdisabled = true;
@@ -102,7 +102,8 @@ data_startu_new()
 data_startu_poprz()
   {
     let czas = this.komunikacja.getCzasDedala() 
-    this.komunikacja.changeCzasDedala( this.czas_startu_poprz );
+    this.komunikacja.zapisz_data_akcji(10, this.czas_startu_poprz);
+    //this.komunikacja.changeCzasDedala( this.czas_startu_poprz );
     this.czas_startu_poprz = czas;
   //this.buttonDSAPdisabled = true;
   }
@@ -110,7 +111,8 @@ data_startu_poprz()
 data_startu_pier()
   {
     this.czas_startu_poprz = this.komunikacja.getCzasDedala();
-    this.komunikacja.changeCzasDedala( this.komunikacja.getCzasDedalaOryg() );
+    this.komunikacja.zapisz_data_akcji(10, this.komunikacja.getCzasDedalaOryg() );
+    //this.komunikacja.changeCzasDedala( this.komunikacja.getCzasDedalaOryg() );
     //this.buttonDSAOdisabled = true;
   }
     
@@ -118,7 +120,8 @@ data_startu_pier()
 data_startu_org()
 {
   this.czas_startu_poprz = this.komunikacja.getCzasDedala();
-  this.komunikacja.changeCzasDedala( this.czas_startu_org );
+  this.komunikacja.zapisz_data_akcji(10, this.czas_startu_org);
+  //this.komunikacja.changeCzasDedala( this.czas_startu_org );
   //this.buttonDSAOdisabled = true;
 }
 
