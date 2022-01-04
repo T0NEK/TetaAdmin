@@ -141,12 +141,13 @@ formatUplyw(poczatek: any, obecny: any)
   let d = moment.duration(ms);
   let uplyw = '';
   let przecinek = ''
-  if (d.years() > 0)  { uplyw = d.years().toString() + (d.years() > 1 ? ' lata':' rok'); przecinek = ', ';}
-  if (d.months() > 0) { uplyw = uplyw + przecinek + d.months().toString() + (d.months() > 1 ? ' miesięcy':' miesiąc'); przecinek = ', ';}
-  if (d.days() > 0)   { uplyw = uplyw + przecinek + d.days().toString() + (d.days() > 1 ? ' dni':' dzień'); przecinek = ', ';}
-  if (d.hours() > 0)  { uplyw = uplyw + przecinek + d.hours().toString() + (d.hours() > 1 ? ' godzin':' godzina'); przecinek = ', ';}
-  if (d.minutes() > 0){ uplyw = uplyw + przecinek + d.minutes().toString() + (d.minutes() > 1 ? ' minut':' minuta'); przecinek = ', ';}
-  if (d.seconds() > 0){ uplyw = uplyw + przecinek + d.seconds().toString() + (d.seconds() > 1 ? ' sekund':' sekunda'); przecinek = ', ';}
+  if (ms < 0) { uplyw = '- '}
+  if (d.years() != 0)  { uplyw = uplyw + d.years().toString() + (d.years() > 1 ? ' lata':' rok'); przecinek = ', ';}
+  if (d.months() != 0) { uplyw = uplyw + przecinek + d.months().toString() + (d.months() > 1 ? ' miesięcy':' miesiąc'); przecinek = ', ';}
+  if (d.days() != 0)   { uplyw = uplyw + przecinek + d.days().toString() + (d.days() > 1 ? ' dni':' dzień'); przecinek = ', ';}
+  if (d.hours() != 0)  { uplyw = uplyw + przecinek + d.hours().toString() + (d.hours() > 1 ? ' godzin':' godzina'); przecinek = ', ';}
+  if (d.minutes() != 0){ uplyw = uplyw + przecinek + d.minutes().toString() + (d.minutes() > 1 ? ' minut':' minuta'); przecinek = ', ';}
+  if (d.seconds() != 0){ uplyw = uplyw + przecinek + d.seconds().toString() + (d.seconds() > 1 ? ' sekund':' sekunda'); przecinek = ', ';}
     return uplyw
 }
 /* (end) formatowanie upływu */ 
