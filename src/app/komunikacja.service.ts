@@ -140,12 +140,13 @@ formatUplyw(poczatek: any, obecny: any)
   let ms = moment(czas_obecny,"YYYY-MM-DD HH:mm:ss").diff(moment(czas_poczatek,"YYYY-MM-DD HH:mm:ss"));
   let d = moment.duration(ms);
   let uplyw = '';
-  if (d.years() > 0)  { uplyw = d.years().toString() + (d.years() > 1 ? ' lata, ':' rok, '); }
-  if (d.months() > 0) { uplyw = uplyw + d.months().toString() + (d.months() > 1 ? ' miesięcy, ':' miesiąc, '); }
-  if (d.days() > 0)   { uplyw = uplyw + d.days().toString() + (d.days() > 1 ? ' dni, ':' dzień, '); }
-  if (d.hours() > 0)  { uplyw = uplyw + d.hours().toString() + (d.hours() > 1 ? ' godzin, ':' godzina, '); }
-  if (d.minutes() > 0){ uplyw = uplyw + d.minutes().toString() + (d.minutes() > 1 ? ' minut, ':' minuta, '); }
-  if (d.seconds() > 0){ uplyw = uplyw + d.seconds().toString() + (d.seconds() > 1 ? ' sekund, ':' sekunda, '); }
+  let przecinek = ''
+  if (d.years() > 0)  { uplyw = d.years().toString() + (d.years() > 1 ? ' lata':' rok'); przecinek = ', ';}
+  if (d.months() > 0) { uplyw = uplyw + przecinek + d.months().toString() + (d.months() > 1 ? ' miesięcy':' miesiąc'); przecinek = ', ';}
+  if (d.days() > 0)   { uplyw = uplyw + przecinek + d.days().toString() + (d.days() > 1 ? ' dni':' dzień'); przecinek = ', ';}
+  if (d.hours() > 0)  { uplyw = uplyw + przecinek + d.hours().toString() + (d.hours() > 1 ? ' godzin':' godzina'); przecinek = ', ';}
+  if (d.minutes() > 0){ uplyw = uplyw + przecinek + d.minutes().toString() + (d.minutes() > 1 ? ' minut':' minuta'); przecinek = ', ';}
+  if (d.seconds() > 0){ uplyw = uplyw + przecinek + d.seconds().toString() + (d.seconds() > 1 ? ' sekund':' sekunda'); przecinek = ', ';}
     return uplyw
 }
 /* (end) formatowanie upływu */ 
