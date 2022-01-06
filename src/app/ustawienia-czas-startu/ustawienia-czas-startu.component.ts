@@ -58,7 +58,7 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
     //changeDetectorRef.detectChanges()
     } )
    this.buttonDSNdisabled = true;
-   this.buttonDSOdisabled = true;  
+   this.buttonDSOdisabled = false;  
    this.buttonDSAPdisabled = true;     
   }
 

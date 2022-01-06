@@ -138,16 +138,17 @@ formatUplyw(poczatek: any, obecny: any)
   let czas_obecny = moment(obecny);
   let czas_poczatek = moment(poczatek)
   let ms = moment(czas_obecny,"YYYY-MM-DD HH:mm:ss").diff(moment(czas_poczatek,"YYYY-MM-DD HH:mm:ss"));
-  let d = moment.duration(ms);
+  let d = moment.duration(Math.abs(ms));
   let uplyw = '';
   let przecinek = ''
-  if (ms < 0) { uplyw = '- '}
-  if (d.years() != 0)  { uplyw = uplyw + d.years().toString() + (d.years() > 1 ? ' lata':' rok'); przecinek = ', ';}
-  if (d.months() != 0) { uplyw = uplyw + przecinek + d.months().toString() + (d.months() > 1 ? ' miesięcy':' miesiąc'); przecinek = ', ';}
-  if (d.days() != 0)   { uplyw = uplyw + przecinek + d.days().toString() + (d.days() > 1 ? ' dni':' dzień'); przecinek = ', ';}
-  if (d.hours() != 0)  { uplyw = uplyw + przecinek + d.hours().toString() + (d.hours() > 1 ? ' godzin':' godzina'); przecinek = ', ';}
-  if (d.minutes() != 0){ uplyw = uplyw + przecinek + d.minutes().toString() + (d.minutes() > 1 ? ' minut':' minuta'); przecinek = ', ';}
-  if (d.seconds() != 0){ uplyw = uplyw + przecinek + d.seconds().toString() + (d.seconds() > 1 ? ' sekund':' sekunda'); przecinek = ', ';}
+  if (ms < 0) { uplyw = '– '}
+  if (d.years() != 0)  { uplyw = uplyw + d.years().toString() + (d.years() > 1 ? ' lata':' rok'); przecinek = '; ';}
+  if (d.months() != 0) { uplyw = uplyw + ' ' + d.months().toString() + (d.months() > 1 ? ' miesięcy':' miesiąc'); przecinek = '; ';}
+  if (d.days() != 0)   { uplyw = uplyw + ' ' + d.days().toString() + (d.days() > 1 ? ' dni':' dzień'); przecinek = '; ';}
+  uplyw = uplyw + przecinek;
+  if (d.hours() != 0)  { uplyw = uplyw + ' ' + d.hours().toString() + (d.hours() > 1 ? ' godzin':' godzina');}
+  if (d.minutes() != 0){ uplyw = uplyw + ' ' + d.minutes().toString() + (d.minutes() > 1 ? ' minut':' minuta');}
+  if (d.seconds() != 0){ uplyw = uplyw + ' ' + d.seconds().toString() + (d.seconds() > 1 ? ' sekund':' sekunda');}
     return uplyw
 }
 /* (end) formatowanie upływu */ 
@@ -175,6 +176,7 @@ formatUplyw(poczatek: any, obecny: any)
   zatrzymajUplyw()
     {
       if (this.czas_rzeczywisty_start_id) { clearInterval(this.czas_rzeczywisty_start_id); }
+      this.czasRzeczywistyUplyw.next('')
     }
 /* (end) upływ czasu rzeczywistego */ 
 
@@ -195,6 +197,7 @@ taktujDedalaUplyw()
 zatrzymajDedalaUplyw()
   {
     if (this.czas_uplyw_dedala_id) { clearInterval(this.czas_uplyw_dedala_id); }
+    this.czasDedalaUplyw.next('')
   }
 
 /* (end) upływ czasu Dedala */ 
@@ -263,11 +266,23 @@ zatrzymajDedalaUplyw()
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true)
                 {
-                  this.czas_startu_org = wynik.stan;
-                  this.changeCzasStartuNew(wynik.stan);
-                  this.OdczytajCzasStartu.next(wynik.stan);
-                  this.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + wynik.stan ,'')
-                }
+                  if (wynik.stan == 'START')
+                  {
+                    this.czas_startu_org = wynik.czasorg;
+                    this.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu Dedala": ' + wynik.czasnew ,'red')
+                    this.changeCzasStartuNew(wynik.czasnew);
+                    this.OdczytajCzasStartu.next(wynik.czasorg);
+                    }
+                  else
+                  {
+                    this.czas_startu_org = wynik.czasorg;
+                    this.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + wynik.czasorg ,'')
+                    this.changeCzasStartuNew(wynik.czasorg);
+                    this.OdczytajCzasStartu.next(wynik.czasorg);
+                    }
+          
+          
+                 }
                 else
                 {
                   this.czas_startu_org = 'ponawiam';
@@ -388,11 +403,9 @@ private odczytaj_startstop(licznik : number)
                 {
                   if (wynik.stan == 'START')
                   {
-                    this.addLiniaKomunikatu('Uruchomienie po Restarcie Aplikacji','red')
-                    this.addLiniaKomunikatu('Ustawiam parametry: ','rgb(199, 100, 43)')
-                    this.addLiniaKomunikatu('"stan akcji": START','rgb(199, 100, 43)')
+                    this.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "stan akcji": START','red')
                     this.czas_rzeczywisty_start = wynik.czas;
-                    this.addLiniaKomunikatu('"czas startu akcji": ' + wynik.czas ,'rgb(199, 100, 43)')
+                    this.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu akcji": ' + wynik.czas ,'red')
                     this.changeStartStop(wynik.stan);
                     this.OdczytajStartStop.next(wynik.stan);
                   }
@@ -402,7 +415,6 @@ private odczytaj_startstop(licznik : number)
                     this.OdczytajStartStop.next(wynik.stan);
                     this.addLiniaKomunikatu('Odczytano "stan akcji": STOP','')  
                   }
-                  
                 }
                 else
                 {
@@ -496,7 +508,7 @@ private odczytaj_czas_dedala(licznik : number)
         {
           if (wynik.stan == 'START')
           {
-            this.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + wynik.czasnew ,'')
+            this.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu akcji na Dedalu": ' + wynik.czasnew ,'red')
             this.czas_dedala_org = wynik.czasorg;
             this.OdczytajCzasDedala.next(wynik.czasorg);
             this.czas_dedala_ofset_org = moment(this.czas_dedala_org,"YYYY-MM-DD HH:mm:ss").diff(moment(this.czas_rzeczywisty_start,"YYYY-MM-DD HH:mm:ss"),'milliseconds',true)

@@ -67,9 +67,9 @@ export class UstawieniaCzasNaDedaluComponent implements OnDestroy, AfterViewInit
           //changeDetectorRef.detectChanges();
           } );
    this.buttonDSANdisabled = true;
-   this.buttonDSAOdisabled = true;
+   this.buttonDSAOdisabled = false;
    this.buttonDSAPdisabled = true;
-   this.buttonDSAFdisabled = true;     
+   this.buttonDSAFdisabled = false;     
   // console.log('this.czas_dedala_org_new')
   }
 

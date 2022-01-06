@@ -15,6 +15,7 @@ export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
   private startstop_subscribe_sl = new Subscription();
   czas_rzeczywisty_start: any;
   czas_rzeczywisty_end: any;
+  czas_trwania: any;
 
 
   constructor(private komunikacja: KomunikacjaService) 
@@ -25,6 +26,7 @@ export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
                       this.buttonSTOPdisabled = ( data == 'STOP' ? true:false);
                       this.czas_rzeczywisty_start = komunikacja.getCzasRzeczywistyStart();
                       this.czas_rzeczywisty_end = komunikacja.getCzasRzeczywistyEnd();
+                      this.czas_trwania = ( komunikacja.getCzasRzeczywistyEnd() != '' ?  komunikacja.formatUplyw(komunikacja.getCzasRzeczywistyStart(),komunikacja.getCzasRzeczywistyEnd()):'')
                       } );
    }
 
