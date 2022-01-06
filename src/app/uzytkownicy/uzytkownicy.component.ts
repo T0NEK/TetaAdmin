@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Subscription } from 'rxjs';
+import { Osoby } from '../definicje';
 import { OsobyService } from '../osoby.service';
 
 @Component({
@@ -6,13 +9,23 @@ import { OsobyService } from '../osoby.service';
   templateUrl: './uzytkownicy.component.html',
   styleUrls: ['./uzytkownicy.component.css']
 })
-export class UzytkownicyComponent implements OnInit {
+export class UzytkownicyComponent implements OnInit, OnDestroy 
+{
 
-  myTextVal = '';
+  private osobysubscribe = new Subscription();
+  tablicaosoby: Osoby[] = [];
+  checked = true;
 
-  constructor(private osoby: OsobyService)
+  constructor(private osoby: OsobyService, )
    {
-    // console.log(osoby.getURL())
+     console.log('użytkownicy con')
+    this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
+    (
+      data => {
+              this.tablicaosoby = data;
+              }
+    )
+    console.log(this.tablicaosoby)
    }
 
    
@@ -21,4 +34,13 @@ export class UzytkownicyComponent implements OnInit {
   
   }
 
+  ngOnDestroy()
+  {
+   if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
+  }
+
+  setZalogowany(change: any, event: MatSlideToggleChange )
+  {
+    console.log('zalogowany:',change,'    to co= ',event)
+  }
 }

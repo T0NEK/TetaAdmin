@@ -2,7 +2,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
-import { Wiersze } from '../wiersze';
+import { Wiersze } from '../definicje';
+
 
 
 @Component({

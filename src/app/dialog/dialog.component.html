@@ -3,6 +3,7 @@
     <div *cdkVirtualFor="let item of tablicazawartosci"  class="example-item"  >{{item.data}}<span>,&nbsp;{{item.name}} ></span><span [style.color]="item.kolor">&nbsp;{{item.tekst}}</span></div>
   </cdk-virtual-scroll-viewport>
 
-  <mat-checkbox class="example-margin" [(ngModel)]="checked" (click)="Przewijaj()">Przewijaj</mat-checkbox>
+ 
+  <mat-slide-toggle [(ngModel)]="checked"><span [ngClass]="{'text-success':checked, 'text-danger':!checked}">{{ checked ? "przewijaj" : "nie przewijaj"}}</span></mat-slide-toggle>
 
 </div>

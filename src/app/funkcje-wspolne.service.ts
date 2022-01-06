@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
-import { Wiersze } from './wiersze';
+import { Wiersze } from './definicje';
 
 @Injectable({
   providedIn: 'root'

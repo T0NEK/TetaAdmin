@@ -3,3 +3,17 @@
     color: lightgreen;
     cursor: crosshair;
 }
+.example-mat-card
+{
+    background: black;
+    color: lightgreen;
+    border: 1px solid silver;
+}
+.example-mat-card:hover
+{
+    border: 2px solid yellow;
+}
+.obok
+{
+  display: inline-block;
+}

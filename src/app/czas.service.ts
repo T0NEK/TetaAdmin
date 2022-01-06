@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { KomunikacjaService } from './komunikacja.service';
 import { FunkcjeWspolneService } from './funkcje-wspolne.service';
+import { OsobyService } from './osoby.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { FunkcjeWspolneService } from './funkcje-wspolne.service';
 export class CzasService implements OnDestroy
 {
 
-  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService) 
+  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService, private osoby: OsobyService) 
   {
   //console.log('czas con'); 
   this.sprawdzSQL(5);  
@@ -48,6 +49,7 @@ export class CzasService implements OnDestroy
         this.taktujCzas();
         this.odczytaj_czas_startu(10);
         this.odczytaj_czas_dedala(10);
+        this.osoby.wczytajOsoby(5);
       }  
     }
   }

@@ -3,7 +3,7 @@ import { Component,  OnInit, ChangeDetectorRef, AfterViewInit, ViewChild, OnDest
 import { Subscription } from 'rxjs';
 import { CzasService } from '../czas.service';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service'; 
-import { Wiersze } from '../wiersze';
+import { Wiersze } from '../definicje';
 
 
 @Component({

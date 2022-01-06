@@ -25,7 +25,7 @@ import { UstawieniaStartLarpaComponent } from './ustawienia-start-larpa/ustawien
 import { UzytkownicyComponent } from './uzytkownicy/uzytkownicy.component';
 import { WiadomosciComponent } from './wiadomosci/wiadomosci.component';
 import { NotatkiComponent } from './notatki/notatki.component';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [											
@@ -56,8 +56,9 @@ import { NotatkiComponent } from './notatki/notatki.component';
     CdkAccordionModule,
     MatCardModule,
     MatButtonModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    MatSlideToggleModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

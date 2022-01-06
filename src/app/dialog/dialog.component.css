@@ -20,6 +20,23 @@
     background-color: red !important;
   }
   
-::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background 
+{
   background-color: green !important;
+}
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar
+{
+  background-color: lightgreen ;
+}
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb 
+{
+  background-color:  green;
+}
+::ng-deep .mat-slide-toggle-thumb
+{
+  background-color:  red;
+}
+::ng-deep .mat-slide-toggle-bar 
+{
+  background-color:  rgb(255, 155, 155);
 }
