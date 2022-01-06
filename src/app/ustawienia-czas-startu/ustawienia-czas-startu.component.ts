@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KomunikacjaService } from '../komunikacja.service';
+import { CzasService } from '../czas.service';
 import { MatDatepickerInputEvent} from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -51,9 +51,9 @@ export class UstawieniaCzasStartuComponent implements OnInit, AfterViewInit, OnD
   timeDataStartuNew: NgbTimeStruct  = { hour: 12, minute: 0, second: 0};
   seconds = true;
   
-  constructor(private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef ) 
+  constructor(private czasy: CzasService, private changeDetectorRef: ChangeDetectorRef ) 
   {
-   this.czas_startu_new_subscribe = komunikacja.OdczytajCzasStartu$.subscribe
+   this.czas_startu_new_subscribe = czasy.OdczytajCzasStartu$.subscribe
      ( data => { this.czas_startu_org = data;
     //changeDetectorRef.detectChanges()
     } )
@@ -86,25 +86,25 @@ ngOnDestroy()
 
 data_startu_new()
   {
-    this.czas_startu_poprz = this.komunikacja.getCzasStartu();
+    this.czas_startu_poprz = this.czasy.getCzasStartu();
     this.czas_startu_new.hour(this.timeDataStartuNew.hour).minute(this.timeDataStartuNew.minute).seconds(this.timeDataStartuNew.second);
-    this.komunikacja.zapisz_data_startu(10, this.czas_startu_new.format('YYYY-MM-DD HH:mm:ss'));
+    this.czasy.zapisz_data_startu(10, this.czas_startu_new.format('YYYY-MM-DD HH:mm:ss'));
     this.buttonDSOdisabled = false;
     this.buttonDSAPdisabled = false;
   }
 
 data_startu_poprz()
   {
-    let czas = this.komunikacja.getCzasStartu() 
-    this.komunikacja.zapisz_data_startu(10, this.czas_startu_poprz);
+    let czas = this.czasy.getCzasStartu() 
+    this.czasy.zapisz_data_startu(10, this.czas_startu_poprz);
     this.czas_startu_poprz = czas;
   //this.buttonDSAPdisabled = true;
   }
 
 data_startu_org()
   {
-    this.czas_startu_poprz = this.komunikacja.getCzasStartu(); 
-    this.komunikacja.zapisz_data_startu(10, this.czas_startu_org);
+    this.czas_startu_poprz = this.czasy.getCzasStartu(); 
+    this.czasy.zapisz_data_startu(10, this.czas_startu_org);
   // this.buttonDSOdisabled = true;
   }
 

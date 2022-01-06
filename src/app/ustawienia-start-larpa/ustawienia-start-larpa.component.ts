@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KomunikacjaService } from '../komunikacja.service';
+import { CzasService } from '../czas.service';
 
 @Component({
   selector: 'app-ustawienia-start-larpa',
@@ -18,15 +18,15 @@ export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
   czas_trwania: any;
 
 
-  constructor(private komunikacja: KomunikacjaService) 
+  constructor(private czasy: CzasService) 
    {
-    this.startstop_subscribe_sl = komunikacja.GetStartStop$.subscribe
+    this.startstop_subscribe_sl = czasy.GetStartStop$.subscribe
            ( data => {
                       this.buttonSTARTdisabled = ( data == 'START' ? true:false);
                       this.buttonSTOPdisabled = ( data == 'STOP' ? true:false);
-                      this.czas_rzeczywisty_start = komunikacja.getCzasRzeczywistyStart();
-                      this.czas_rzeczywisty_end = komunikacja.getCzasRzeczywistyEnd();
-                      this.czas_trwania = ( komunikacja.getCzasRzeczywistyEnd() != '' ?  komunikacja.formatUplyw(komunikacja.getCzasRzeczywistyStart(),komunikacja.getCzasRzeczywistyEnd()):'')
+                      this.czas_rzeczywisty_start = czasy.getCzasRzeczywistyStart();
+                      this.czas_rzeczywisty_end = czasy.getCzasRzeczywistyEnd();
+                      this.czas_trwania = ( czasy.getCzasRzeczywistyEnd() != '' ?  czasy.formatUplyw(czasy.getCzasRzeczywistyStart(),czasy.getCzasRzeczywistyEnd()):'')
                       } );
    }
 
@@ -41,12 +41,12 @@ ngOnDestroy()
 
 start()
   {
-    this.komunikacja.setStart();
+    this.czasy.setStart();
   }
 
 stop()
   {
-    this.komunikacja.setStop()
+    this.czasy.setStop()
   }
 
 }

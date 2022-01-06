@@ -1,7 +1,7 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KomunikacjaService } from '../komunikacja.service';
+import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { Wiersze } from '../wiersze';
 
 
@@ -23,10 +23,10 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
   
   
    
-  constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
+  constructor(private funkcje: FunkcjeWspolneService,private changeDetectorRef: ChangeDetectorRef) 
   {
   
-    this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
+    this.tablicazawartoscisubscribe = funkcje.LiniaKomunikatu$.subscribe
     ( data => 
       { 
         this.tablicazawartosci = [...this.tablicazawartosci, data]; 
@@ -36,7 +36,7 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );  
     /*
-    this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
+    this.zakladkasubscribe = czasy.PrzelaczZakladka$.subscribe
     ( data =>
       {
         if (data == 2) {
@@ -56,7 +56,7 @@ export class UstawieniaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit()
   {
-    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
+    this.tablicazawartosci = this.funkcje.getLinieDialogu(); 
     this.changeDetectorRef.detectChanges();
   } 
 

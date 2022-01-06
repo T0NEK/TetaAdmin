@@ -1,7 +1,8 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component,  OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component,  OnInit, ChangeDetectorRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KomunikacjaService } from '../komunikacja.service';
+import { CzasService } from '../czas.service';
+import { FunkcjeWspolneService } from '../funkcje-wspolne.service'; 
 import { Wiersze } from '../wiersze';
 
 
@@ -24,11 +25,11 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   //@Input() : any;
   //@Output() raport = new EventEmitter<string>();
   
-  constructor(private komunikacja: KomunikacjaService,private changeDetectorRef: ChangeDetectorRef) 
+  constructor(private czasy: CzasService, private funkcje: FunkcjeWspolneService, private changeDetectorRef: ChangeDetectorRef) 
   {
 
     //console.log('konstruktor dialog')
-    this.tablicazawartoscisubscribe = komunikacja.LiniaKomunikatu$.subscribe
+    this.tablicazawartoscisubscribe = funkcje.LiniaKomunikatu$.subscribe
     ( data => 
       { 
         this.tablicazawartosci = [...this.tablicazawartosci, data]; 
@@ -39,7 +40,7 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );   
     /* 
-    this.zakladkasubscribe = komunikacja.PrzelaczZakladka$.subscribe
+    this.zakladkasubscribe = czasy.PrzelaczZakladka$.subscribe
     ( data =>
       {
         if (data == 10) {
@@ -67,7 +68,7 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit()
   {
   //  console.log('AV dialog')
-    this.tablicazawartosci = this.komunikacja.getLinieDialogu(); 
+    this.tablicazawartosci = this.funkcje.getLinieDialogu(); 
     this.changeDetectorRef.detectChanges();
   } 
 

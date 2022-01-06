@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { KomunikacjaService } from '../komunikacja.service';
-
 
 
 @Component({
@@ -12,7 +10,7 @@ export class NawigacjaComponent implements OnInit {
 
   active: any = 2;
   
-  constructor(private komunikacja: KomunikacjaService) 
+  constructor() 
   {
     
   }

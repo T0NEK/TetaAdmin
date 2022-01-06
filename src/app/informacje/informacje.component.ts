@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KomunikacjaService } from '../komunikacja.service';
+import { CzasService } from '../czas.service';
+import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 
 //import * as $ from 'jquery';
 
@@ -26,20 +27,20 @@ export class InformacjeComponent implements OnInit, OnDestroy {
   czas_startu: any;
   stan: any;
 
-  constructor(private komunikacja: KomunikacjaService) 
+  constructor(private czasy: CzasService, private funkcje: FunkcjeWspolneService) 
   {
     //console.log(' constr informacje')
     
-    this.czas_rzeczywisty_subscribe_i = komunikacja.czasRzeczywisty$.subscribe ( data => { this.czas_rzeczywisty = data } );  
-    this.czas_startu_subscribe_i = komunikacja.GetCzasStartuNew$.subscribe ( data => { this.czas_startu = data; } );
-    this.czas_startu_akcji_subscribe_i = komunikacja.czasRzeczywistyDedala$.subscribe ( data => { this.czas_na_dedalu = data; } );
-    this.startstop_subscribe_i = komunikacja.GetStartStop$.subscribe ( data => { this.stan = data; } );
-    this.uplyw_subscribe_i = komunikacja.czasRzeczywistyUplyw$.subscribe ( data => { this.czas_rzeczywisty_uplyw = data; } );
-    this.uplyw_dedala_subscribe_i = komunikacja.czasDedalaUplyw$.subscribe ( data => { this.czas_od_startu_uplyw = data; } );
+    this.czas_rzeczywisty_subscribe_i = czasy.czasRzeczywisty$.subscribe ( data => { this.czas_rzeczywisty = data } );  
+    this.czas_startu_subscribe_i = czasy.GetCzasStartuNew$.subscribe ( data => { this.czas_startu = data; } );
+    this.czas_startu_akcji_subscribe_i = czasy.czasRzeczywistyDedala$.subscribe ( data => { this.czas_na_dedalu = data; } );
+    this.startstop_subscribe_i = czasy.GetStartStop$.subscribe ( data => { this.stan = data; } );
+    this.uplyw_subscribe_i = czasy.czasRzeczywistyUplyw$.subscribe ( data => { this.czas_rzeczywisty_uplyw = data; } );
+    this.uplyw_dedala_subscribe_i = czasy.czasDedalaUplyw$.subscribe ( data => { this.czas_od_startu_uplyw = data; } );
 
            
-    this.komunikacja.addLiniaKomunikatu('uruchomiono moduł Administratora','');
-    this.komunikacja.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
+    this.funkcje.addLiniaKomunikatu('uruchomiono moduł Administratora','');
+    this.funkcje.addLiniaKomunikatu('uruchomiono czas rzeczywisty','');
   }
 
     ngOnInit() 
