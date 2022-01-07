@@ -15,4 +15,4 @@ export interface Osoby
    zalogowany: boolean;
    blokada: boolean;
    hannah: boolean;
-}
+  }

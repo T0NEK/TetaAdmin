@@ -13,21 +13,20 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
 {
 
   private osobysubscribe = new Subscription();
+  private gosciesubscribe = new Subscription();
   tablicaosoby: Osoby[] = [];
-  checked = true;
+  tablicagoscie: Osoby[] = [];
+  zalogowany = true;
 
   constructor(private osoby: OsobyService, )
    {
-     console.log('użytkownicy con')
-    this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
-    (
-      data => {
-              this.tablicaosoby = data;
-              }
-    )
-    console.log(this.tablicaosoby)
-   }
-
+    console.log('użytkownicy con')
+     this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
+     ( data => { this.tablicaosoby = data; } )
+    this.gosciesubscribe = osoby.OdczytajGoscie$.subscribe
+     ( data => { this.tablicagoscie = data; } )
+  }
+ 
    
   ngOnInit() 
   {
@@ -37,6 +36,7 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
   ngOnDestroy()
   {
    if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
+   if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}   
   }
 
   setZalogowany(change: any, event: MatSlideToggleChange )

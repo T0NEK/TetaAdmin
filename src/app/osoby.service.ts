@@ -19,6 +19,7 @@ constructor(private funkcje: FunkcjeWspolneService, private komunikacja: Komunik
 wczytajOsoby(licznik: number)
 {
     this.odczytaj_osoby(licznik);
+    this.odczytaj_goscie(licznik);
 }
 
 private OdczytajOsoby = new Subject<any>();
@@ -29,7 +30,7 @@ private odczytaj_osoby(licznik : number)
     {
       
       this.OdczytajOsoby.next('osoby');
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "czas startu akcji na Dedalu" ', 'red');
+      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WCZYTAĆ Osoby', 'red');
     }
     else
     {
@@ -71,6 +72,55 @@ private odczytaj_osoby(licznik : number)
     }
   }
 
-
+  private OdczytajGoscie = new Subject<any>();
+  OdczytajGoscie$ = this.OdczytajGoscie.asObservable()
+  private odczytaj_goscie(licznik : number)
+    {
+      if (licznik == 0) 
+      {
+        
+        this.OdczytajGoscie.next('osoby');
+        this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WCZYTAĆ Goście', 'red');
+      }
+      else
+      {
+      this.http.get(this.komunikacja.getURL() + 'goscie/').subscribe( 
+        data =>  {
+          let wynik = JSON.parse(JSON.stringify(data));    
+          if (wynik.wynik == true) 
+          {
+            if (wynik.stan == 'START')
+            {
+              let osoby = Array();  
+              this.funkcje.addLiniaKomunikatu('Wczytano Goście po Restarcie Aplikacji', 'red')
+              for (let index = 0; index < wynik.osoby.length; index++) {
+                  osoby = [...osoby, (wynik.osoby[index])];
+              } 
+              this.OdczytajGoscie.next(osoby);
+           } 
+            else
+            {         
+            this.OdczytajGoscie.next('');
+            this.funkcje.addLiniaKomunikatu('Wczytano Goście', '')
+            }
+          }
+          else
+          {
+            this.OdczytajGoscie.next('');
+            this.funkcje.addLiniaKomunikatu('Błąd odczytu Goście - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+            setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
+          }
+                          
+                 },
+        error => {
+                  
+                  this.OdczytajGoscie.next("");
+                  this.funkcje.addLiniaKomunikatu('Błąd połączenia Goście  - ponawiam:' + licznik,'rgb(199, 100, 43)');
+                  setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
+                 }
+                 )      
+      }
+    }
+  
 
 }
