@@ -26,9 +26,11 @@ import { UzytkownicyComponent } from './uzytkownicy/uzytkownicy.component';
 import { WiadomosciComponent } from './wiadomosci/wiadomosci.component';
 import { NotatkiComponent } from './notatki/notatki.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DialogMiniComponent } from './dialog-mini/dialog-mini.component';
+import { TestyComponent } from './testy/testy.component';
 
 @NgModule({
-  declarations: [											
+  declarations: [													
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -39,7 +41,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
       UzytkownicyComponent,
       WiadomosciComponent,
       NotatkiComponent,
-      DialogComponent
+      DialogComponent,
+      DialogMiniComponent,
+      TestyComponent
    ],
   imports: [
     BrowserModule,

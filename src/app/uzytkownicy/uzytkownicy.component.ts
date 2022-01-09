@@ -39,8 +39,26 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}   
   }
 
-  setZalogowany(change: any, event: MatSlideToggleChange )
-  {
-    console.log('zalogowany:',change,'    to co= ',event)
-  }
+setZaloga(czynnosc: string, stan: boolean)
+{
+  this.osoby.zapisz_osoby_all( 5, czynnosc, stan);
+//for (let index = 0; index < this.tablicaosoby.length; index++) { kto[index].zalogowany = stan; }
+}
+
+setGoscie(czynnosc: string, stan: boolean)
+{
+  this.osoby.zapisz_goscie_all( 5, czynnosc, stan);
+}
+
+setZalogaOne(czynnosc: string, kto: any, event: MatSlideToggleChange )
+{
+ this.osoby.zapisz_osoby( 5, czynnosc, kto, event.checked);
+ //console.log('czynnosc: ',czynnosc, 'kto:', kto.id, '    to co= ',event.checked)
+}
+
+setGoscieOne(czynnosc: string, kto: any, event: MatSlideToggleChange )
+{
+ this.osoby.zapisz_goscie( 5, czynnosc, kto, event.checked);
+}
+
 }

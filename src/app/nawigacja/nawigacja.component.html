@@ -33,6 +33,14 @@
     </ng-template>
   </li>
   <li [ngbNavItem]="5">
+    <a ngbNavLink>Testy</a>
+    <ng-template ngbNavContent>
+      <app-testy>
+        
+      </app-testy>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="6">
     <a ngbNavLink>Notatki</a>
     <ng-template ngbNavContent>
       <app-notatki>
@@ -42,5 +50,10 @@
   </li>
 </ul>
 
+
 <div [ngbNavOutlet]="nav" class="mt-1"></div>
 </div>
+
+<app-dialog-mini>
+
+</app-dialog-mini>

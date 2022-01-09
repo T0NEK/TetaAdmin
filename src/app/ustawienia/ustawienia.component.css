@@ -1,9 +1,8 @@
 .ustawienia
 {
     display: block;
-    height: var(--ustawienia);
-    max-height: var(--ustawienia);
-    border-bottom: 2px solid red;
+    height: var(--dialogmax);
+    max-height: var(--dialogmax);
 }
 .example-viewport
   {

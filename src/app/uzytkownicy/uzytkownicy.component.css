@@ -3,6 +3,12 @@
     color: lightgreen;
     cursor: crosshair;
 }
+.ustawienia
+{
+    display: block;
+    height: var(--dialogmax);
+    max-height: var(--dialogmax);
+}
 .example-mat-card
 {
     background: black;
@@ -18,3 +24,9 @@
 {
   display: inline-block;
 }
+button
+{
+  width: 100px;
+}
+
+
