@@ -495,6 +495,7 @@ private odczytaj_czas_dedala(licznik : number)
           else
           {
           this.czas_dedala_org = wynik.czasorg;
+          this.zapisz_data_akcji(5,wynik.czasorg);
           this.changeCzasDedala(wynik.czasorg);
           //this.czasRzeczywistyDedala.next( wynik.czas );
           this.czasOryginalnyDedala.next( wynik.czasorg)
