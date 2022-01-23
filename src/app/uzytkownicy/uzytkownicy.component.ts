@@ -18,7 +18,7 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
   tablicagoscie: Osoby[] = [];
   zalogowany = true;
 
-  constructor(private osoby: OsobyService, )
+  constructor(private osoby: OsobyService )
    {
     console.log('użytkownicy con')
      this.osobysubscribe = osoby.OdczytajOsoby$.subscribe

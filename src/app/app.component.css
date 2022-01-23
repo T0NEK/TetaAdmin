@@ -1,6 +1,8 @@
 :host
 {
     font-size: 18px;
+    color: lightgreen;
+    cursor: crosshair;
 }
 .informacje
 {
