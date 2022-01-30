@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CzasService } from '../czas.service';
+import { OsobyService } from '../osoby.service';
 
 @Component({
   selector: 'app-ustawienia-start-larpa',
@@ -10,7 +11,7 @@ import { CzasService } from '../czas.service';
 export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
 
   buttonSTARTdisabled!: boolean;
-  buttonPAUSEdisabled!: boolean;
+  buttonRESETdisabled!: boolean;
   buttonSTOPdisabled!: boolean;
   private startstop_subscribe_sl = new Subscription();
   czas_rzeczywisty_start: any;
@@ -18,11 +19,12 @@ export class UstawieniaStartLarpaComponent implements OnInit, OnDestroy {
   czas_trwania: any;
 
 
-  constructor(private czasy: CzasService) 
+  constructor(private osoby: OsobyService, private czasy: CzasService) 
    {
     this.startstop_subscribe_sl = czasy.GetStartStop$.subscribe
            ( data => {
                       this.buttonSTARTdisabled = ( data == 'START' ? true:false);
+                      this.buttonRESETdisabled = ( data == 'START' ? true:false);
                       this.buttonSTOPdisabled = ( data == 'STOP' ? true:false);
                       this.czas_rzeczywisty_start = czasy.getCzasRzeczywistyStart();
                       this.czas_rzeczywisty_end = czasy.getCzasRzeczywistyEnd();
@@ -47,6 +49,11 @@ start()
 stop()
   {
     this.czasy.setStop()
+  }
+
+reset()
+  {
+    this.osoby.resetOsoby()
   }
 
 }

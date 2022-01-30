@@ -25,6 +25,11 @@ wczytajOsoby(licznik: number)
     this.odczytaj_goscie(licznik);
 }
 
+resetOsoby()
+{
+  this.reset_osoby_all(5)
+}
+
 private OdczytajOsoby = new Subject<any>();
 OdczytajOsoby$ = this.OdczytajOsoby.asObservable()
 private odczytaj_osoby(licznik : number)
@@ -70,6 +75,49 @@ private odczytaj_osoby(licznik : number)
                 this.OdczytajOsoby.next("");
                 this.funkcje.addLiniaKomunikatu('Błąd połączenia Załoga  - ponawiam:' + licznik,'rgb(199, 100, 43)');
                 setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
+               }
+               )      
+    }
+  }
+
+reset_osoby_all(licznik: number)
+{
+  const httpOptions = {
+    headers: new HttpHeaders({
+      'Access-Control-Allow-Origin':'*',
+      'content-type': 'application/json',
+      Authorization: 'my-auth-token'
+    })
+  };
+  
+  var data = JSON.stringify({"czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
+
+
+  if (licznik == 0) 
+  { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WYKONAĆ RESET','red'); }
+  else
+  {
+  this.http.post(this.komunikacja.getURL() + 'reset/', data, httpOptions).subscribe( 
+    data =>  {
+
+//console.log(data)        
+              let wynik = JSON.parse(JSON.stringify(data));
+              if (wynik.wynik == true) 
+              {
+                //this.changeCzasDedala( wynik.czas );
+                this.funkcje.addLiniaKomunikatu('Wykonano reset dla All"','') 
+                this.odczytaj_osoby(5);
+              }
+              else
+              {
+                this.funkcje.addLiniaKomunikatu('Błąd Reset - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
+              }
+                },
+      error => {
+//console.log(error)         
+                this.funkcje.addLiniaKomunikatu('Błąd połączenia dla Reset - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
                }
                )      
     }
