@@ -29,11 +29,11 @@ private sprawdz_port(port: string)
 {
   this.http.get(port + 'conect/').subscribe( 
     data =>  {
-      console.log(data)
+    //  console.log(data)
               this.httpURL = port;
              },
     error => {
-      console.log(error)
+    //  console.log(error)
              }         
              )      
 }

@@ -48,9 +48,17 @@
       </app-notatki>
     </ng-template>
   </li>
+  <li [ngbNavItem]="7">
+    <a ngbNavLink>Polecenia</a>
+    <ng-template ngbNavContent>
+      <app-polecenia>
+        
+      </app-polecenia>
+    </ng-template>
+  </li>
 </ul>
 
 
-<div [ngbNavOutlet]="nav" class="mt-1"></div>
+<div [ngbNavOutlet]="nav"  class="mt-1"></div>
 </div>
 

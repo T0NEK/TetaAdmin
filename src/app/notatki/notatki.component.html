@@ -1,3 +1,11 @@
-<p>
-  notatki works!
-</p>
+<div class="row">
+    <div>  
+      <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="66"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
+        <div *cdkVirtualFor="let item of tablicall" (click)="Wybrany(item.id)">
+          <div class="example-item-detail" >{{item.imie}} {{item.nazwisko}}</div>
+          <div class="example-item-detail">({{item.funkcja}})</div>
+          <div class="example-item-detail"></div>
+        </div>
+      </cdk-virtual-scroll-viewport>
+  </div>
+  <div>

@@ -37,8 +37,8 @@ private odczytaj_osoby(licznik : number)
     if (licznik == 0) 
     {
       
-      this.OdczytajOsoby.next('osoby');
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WCZYTAĆ Osoby', 'red');
+      //this.OdczytajOsoby.next('osoby');
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Osoby');
     }
     else
     {
@@ -47,33 +47,33 @@ private odczytaj_osoby(licznik : number)
         let wynik = JSON.parse(JSON.stringify(data));    
         if (wynik.wynik == true) 
         {
-          let osoby = Array();  
+          let osoby: Osoby[] = [];  
             for (let index = 0; index < wynik.osoby.length; index++) {
                 osoby = [...osoby, (wynik.osoby[index])];
             } 
           if (wynik.stan == 'START')
           {
             this.OdczytajOsoby.next(osoby);
-            this.funkcje.addLiniaKomunikatu('Wczytano Załoga', '')
+            this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Wczytano Załoga')
             } 
           else
           {         
-          this.OdczytajOsoby.next(osoby);
-          this.funkcje.addLiniaKomunikatu('Wczytano Załoga - stan oryginalny', '')
+          //this.OdczytajOsoby.next(osoby);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Wczytano Załoga - stan oryginalny')
           }
         }
         else
         {
-          this.OdczytajOsoby.next('');
-          this.funkcje.addLiniaKomunikatu('Błąd odczytu Załoga - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+          //this.OdczytajOsoby.next('');
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Załoga - ponawiam: ' + licznik);
           setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
         }
                         
                },
       error => {
                 
-                this.OdczytajOsoby.next("");
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia Załoga  - ponawiam:' + licznik,'rgb(199, 100, 43)');
+                //this.OdczytajOsoby.next("");
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia Załoga  - ponawiam:' + licznik);
                 setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
                }
                )      
@@ -94,7 +94,7 @@ reset_osoby_all(licznik: number)
 
 
   if (licznik == 0) 
-  { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WYKONAĆ RESET','red'); }
+  { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WYKONAĆ RESET'); }
   else
   {
   this.http.post(this.komunikacja.getURL() + 'reset/', data, httpOptions).subscribe( 
@@ -105,18 +105,18 @@ reset_osoby_all(licznik: number)
               if (wynik.wynik == true) 
               {
                 //this.changeCzasDedala( wynik.czas );
-                this.funkcje.addLiniaKomunikatu('Wykonano reset dla All"','') 
+                this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Wykonano reset dla All"') 
                 this.odczytaj_osoby(5);
               }
               else
               {
-                this.funkcje.addLiniaKomunikatu('Błąd Reset - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd Reset - ponawiam: ' + licznik); 
                 setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
               }
                 },
       error => {
 //console.log(error)         
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia dla Reset - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia dla Reset - ponawiam: ' + licznik); 
                 setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
                }
                )      
@@ -135,32 +135,32 @@ reset_osoby_all(licznik: number)
     
     
     var data = JSON.stringify({ "id": 0, "zmiana": zmiana, "stan": stan, "czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
-console.log(data)        
+//console.log(data)        
 
    if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Załoga','red'); }
+    { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Załoga'); }
     else
     {
     this.http.post(this.komunikacja.getURL() + 'osoby/', data, httpOptions).subscribe( 
       data =>  {
 
-console.log(data)        
+//console.log(data)        
               let wynik = JSON.parse(JSON.stringify(data));
               if (wynik.wynik == true) 
               {
                 //this.changeCzasDedala( wynik.czas );
-                this.funkcje.addLiniaKomunikatu('Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + '] dla Załoga"','') 
+                this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + '] dla Załoga"') 
                 this.odczytaj_osoby(5);
               }
               else
               {
-                this.funkcje.addLiniaKomunikatu('Błąd zapisu "zmiana: [' + zmiana + '] dla Załoga" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "zmiana: [' + zmiana + '] dla Załoga" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_osoby_all(--licznik, zmiana, stan)}, 1000) 
               }
                 },
       error => {
-console.log(error)         
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "zmiana: [' + zmiana + '] dla Załoga" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+//console.log(error)         
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "zmiana: [' + zmiana + '] dla Załoga" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_osoby_all(--licznik, zmiana, stan)}, 1000) 
                }
                )      
@@ -179,11 +179,11 @@ console.log(error)
     
     
     var data = JSON.stringify({ "id": dane.id, "zmiana": zmiana, "stan": stan, "czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
-console.log(data)        
+//console.log(data)        
 
    if (licznik == 0) 
     { 
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"','red'); 
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"'); 
       this.odczytaj_osoby(5);    
     }
     else
@@ -191,22 +191,22 @@ console.log(data)
     this.http.post(this.komunikacja.getURL() + 'osoby/', data, httpOptions).subscribe( 
       data =>  {
 
-console.log(data)        
+//console.log(data)        
               let wynik = JSON.parse(JSON.stringify(data));
               if (wynik.wynik == true) 
               {
                 //this.changeCzasDedala( wynik.czas );
-                this.funkcje.addLiniaKomunikatu('Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"','') 
+                this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"') 
               }
               else
               {
-                this.funkcje.addLiniaKomunikatu('Błąd zapisu "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_osoby(--licznik, zmiana, dane, stan)}, 1000) 
               }
                 },
       error => {
-console.log(error)         
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+//console.log(error)         
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_osoby(--licznik, zmiana, dane, stan)}, 1000) 
                }
                )      
@@ -224,7 +224,7 @@ console.log(error)
       {
         
         this.OdczytajGoscie.next('osoby');
-        this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ WCZYTAĆ Goście', 'red');
+        this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Goście');
       }
       else
       {
@@ -240,18 +240,18 @@ console.log(error)
             if (wynik.stan == 'START')
             {
               this.OdczytajGoscie.next(osoby);
-              this.funkcje.addLiniaKomunikatu('Wczytano Goście', '')
+              this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Wczytano Goście')
             } 
             else
             {         
             this.OdczytajGoscie.next(osoby);
-            this.funkcje.addLiniaKomunikatu('Wczytano Goście - stan oryginalny', '')
+            this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Wczytano Goście - stan oryginalny')
             }
           }
           else
           {
             this.OdczytajGoscie.next('');
-            this.funkcje.addLiniaKomunikatu('Błąd odczytu Goście - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+            this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Goście - ponawiam: ' + licznik);
             setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
           }
                           
@@ -259,7 +259,7 @@ console.log(error)
         error => {
                   
                   this.OdczytajGoscie.next('');
-                  this.funkcje.addLiniaKomunikatu('Błąd połączenia Goście  - ponawiam:' + licznik,'rgb(199, 100, 43)');
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia Goście  - ponawiam:' + licznik);
                   setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
                  }
                  )      
@@ -278,32 +278,32 @@ console.log(error)
       
       
       var data = JSON.stringify({ "id": 0, "zmiana": zmiana, "stan": stan, "czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
-  console.log(data)        
+  //console.log(data)        
   
      if (licznik == 0) 
-      { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Osoby Dodatkowe','red'); }
+      { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Osoby Dodatkowe'); }
       else
       {
       this.http.post(this.komunikacja.getURL() + 'goscie/', data, httpOptions).subscribe( 
         data =>  {
   
-  console.log(data)        
+  //console.log(data)        
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true) 
                 {
                   //this.changeCzasDedala( wynik.czas );
-                  this.funkcje.addLiniaKomunikatu('Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') +'] dla Osoby Dodatkowe"','') 
+                  this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') +'] dla Osoby Dodatkowe"') 
                   this.odczytaj_goscie(licznik);
                 }
                 else
                 {
-                  this.funkcje.addLiniaKomunikatu('Błąd zapisu "zmiana: [' + zmiana + '] dla Osoby Dodatkowe" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Błąd zapisu "zmiana: [' + zmiana + '] dla Osoby Dodatkowe" - ponawiam: ' + licznik); 
                   setTimeout(() => {this.zapisz_goscie_all(--licznik, zmiana, stan)}, 1000) 
                 }
                   },
         error => {
-  console.log(error)         
-                  this.funkcje.addLiniaKomunikatu('Błąd połączenia "zmiana: [' + zmiana + '] dla Osoby Dodatkowe" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+  //console.log(error)         
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "zmiana: [' + zmiana + '] dla Osoby Dodatkowe" - ponawiam: ' + licznik); 
                   setTimeout(() => {this.zapisz_goscie_all(--licznik, zmiana, stan)}, 1000) 
                  }
                  )      
@@ -322,11 +322,11 @@ console.log(error)
       
       
       var data = JSON.stringify({ "id": dane.id, "zmiana": zmiana, "stan": stan, "czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
-  console.log(data)        
+  //console.log(data)        
   
      if (licznik == 0) 
       { 
-        this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"','red'); 
+        this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"'); 
         this.odczytaj_goscie(5);    
       }
       else
@@ -334,22 +334,22 @@ console.log(error)
       this.http.post(this.komunikacja.getURL() + 'goscie/', data, httpOptions).subscribe( 
         data =>  {
   
-  console.log(data)        
+  //console.log(data)        
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true) 
                 {
                   //this.changeCzasDedala( wynik.czas );
-                  this.funkcje.addLiniaKomunikatu('Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"','') 
+                  this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"') 
                 }
                 else
                 {
-                  this.funkcje.addLiniaKomunikatu('Błąd zapisu "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik); 
                   setTimeout(() => {this.zapisz_goscie(--licznik, zmiana, dane, stan)}, 1000) 
                 }
                   },
         error => {
-  console.log(error)         
-                  this.funkcje.addLiniaKomunikatu('Błąd połączenia "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+  //console.log(error)         
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "zmiana: [' + zmiana + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '" - ponawiam: ' + licznik); 
                   setTimeout(() => {this.zapisz_goscie(--licznik, zmiana, dane, stan)}, 1000) 
                  }
                  )      

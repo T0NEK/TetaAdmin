@@ -60,11 +60,7 @@ mat-card-actions
   }
 .example-item
   {
-    height: 26px;
-  }
-  .example-item-detail {
-    height: 20px;
-    padding-left: 5px;
+    height: 24px;
   }
 .example-margin {
     margin: 0 10px;

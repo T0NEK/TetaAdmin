@@ -28,9 +28,10 @@ import { NotatkiComponent } from './notatki/notatki.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogMiniComponent } from './dialog-mini/dialog-mini.component';
 import { TestyComponent } from './testy/testy.component';
+import { PoleceniaComponent } from './polecenia/polecenia.component';
 
 @NgModule({
-  declarations: [													
+  declarations: [														
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -43,7 +44,8 @@ import { TestyComponent } from './testy/testy.component';
       NotatkiComponent,
       DialogComponent,
       DialogMiniComponent,
-      TestyComponent
+      TestyComponent,
+      PoleceniaComponent
    ],
   imports: [
     BrowserModule,

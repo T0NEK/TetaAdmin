@@ -9,6 +9,10 @@
     height: var(--dialogmax);
     max-height: var(--dialogmax);
 }
+button
+{
+  padding: 3px 6px 3px 6px;
+}
 .example-mat-card
 {
     background: black;

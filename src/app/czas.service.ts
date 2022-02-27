@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { KomunikacjaService } from './komunikacja.service';
 import { FunkcjeWspolneService } from './funkcje-wspolne.service';
 import { OsobyService } from './osoby.service';
+import { PoleceniaService } from './polecenia.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { OsobyService } from './osoby.service';
 export class CzasService implements OnDestroy
 {
 
-  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService, private osoby: OsobyService) 
+  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService, private osoby: OsobyService, private polecenia: PoleceniaService) 
   {
   //console.log('czas con'); 
   this.sprawdzSQL(5);  
@@ -34,22 +35,23 @@ export class CzasService implements OnDestroy
   sprawdzSQL(licznik : number)
   {
     if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatu('Sprawdzono porty, brak komunikacji z MySql', 'red'); }
+    { this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Sprawdzono porty, brak komunikacji z MySql'); }
     else
     {
       if (this.komunikacja.getURL() == 'error') 
         {
-          this.funkcje.addLiniaKomunikatu('Sprawdzam połączenie z MySql', 'rgb(199, 100, 43)');
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Sprawdzam połączenie z MySql');
           setTimeout(()=> { this.sprawdzSQL(--licznik) },1000)
         }    
       else
       {
-        this.funkcje.addLiniaKomunikatu('Połączenie z MySql: OK', '');
+        this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Połączenie z MySql: OK');
         this.odczytaj_startstop(10);
         this.taktujCzas();
         this.odczytaj_czas_startu(10);
         this.odczytaj_czas_dedala(10);
         this.osoby.wczytajOsoby(5);
+        this.polecenia.WczytajPolecenia(5)
       }  
     }
   }
@@ -234,7 +236,7 @@ zatrzymajDedalaUplyw()
       this.czas_startu_org = 'ERROR';
       this.changeCzasStartuNew(this.czas_startu_org);
       this.OdczytajCzasStartu.next(this.czas_startu_org)
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "czas startu Dedala" ','red');
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ODCZYTAĆ "czas startu Dedala" ');
     }
     else
     {
@@ -246,14 +248,14 @@ zatrzymajDedalaUplyw()
                   if (wynik.stan == 'START')
                   {
                     this.czas_startu_org = wynik.czasorg;
-                    this.funkcje.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu Dedala": ' + wynik.czasnew ,'red')
+                    this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Parametry po Restarcie Aplikacji: "czas startu Dedala": ' + wynik.czasnew )
                     this.changeCzasStartuNew(wynik.czasnew);
                     this.OdczytajCzasStartu.next(wynik.czasorg);
                     }
                   else
                   {
                     this.czas_startu_org = wynik.czasorg;
-                    this.funkcje.addLiniaKomunikatu('Odczytano "czas startu Dedala":  ' + wynik.czasorg ,'')
+                    this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Odczytano "czas startu Dedala":  ' + wynik.czasorg)
                     this.changeCzasStartuNew(wynik.czasorg);
                     this.OdczytajCzasStartu.next(wynik.czasorg);
                     }
@@ -265,7 +267,7 @@ zatrzymajDedalaUplyw()
                   this.czas_startu_org = 'ponawiam';
                   this.changeCzasStartuNew(this.czas_startu_org);
                   this.OdczytajCzasStartu.next(this.czas_startu_org);
-                  this.funkcje.addLiniaKomunikatu('Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu "czas startu Dedala" - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                 }
                 },
@@ -273,7 +275,7 @@ zatrzymajDedalaUplyw()
                 this.czas_startu_org = 'ponawiam';
                 this.changeCzasStartuNew(this.czas_startu_org);
                 this.OdczytajCzasStartu.next(this.czas_startu_org);
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "czas startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "czas startu Dedala" - ponawiam: ' + licznik);
                 setTimeout(() => {this.odczytaj_czas_startu(--licznik)}, 1000)
                }
                )      
@@ -292,7 +294,7 @@ zatrzymajDedalaUplyw()
     
     var data = JSON.stringify({"czas": czas, "zmiana": moment().format('YYYY-MM-DD HH:mm:ss') })  
    if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "nowa data startu Dedala" ','red'); }
+    { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "nowa data startu Dedala" '); }
     else
     {
     this.http.post(this.komunikacja.getURL() + 'datastartu/', data, httpOptions).subscribe( 
@@ -301,17 +303,17 @@ zatrzymajDedalaUplyw()
                 if (wynik.wynik == true)
                 {
                   this.changeCzasStartuNew( wynik.stan );
-                  this.funkcje.addLiniaKomunikatu('Zapisano "nowa data startu Dedala": ' + wynik.stan ,'') 
+                  this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "nowa data startu Dedala": ' + wynik.stan ) 
                 }
                 else
                 {
-                  this.funkcje.addLiniaKomunikatu('Błąd zapisu "nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "nowa data startu Dedala" - ponawiam: ' + licznik); 
                   setTimeout(() => {this.zapisz_data_startu(--licznik, czas)}, 1500) 
                 }
                 
                },
       error => { 
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "nowa data startu Dedala" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "nowa data startu Dedala" - ponawiam: '); 
                 setTimeout(() => {this.zapisz_data_startu(--licznik, czas)}, 1500) 
                }
                )      
@@ -328,14 +330,14 @@ setStart()
       { 
       this.czas_rzeczywisty_start =  (moment()).format('YYYY-MM-DD HH:mm:ss');
       this.czas_rzeczywisty_end = '';
-      this.funkcje.addLiniaKomunikatu('Użyto [START] czas','green');
+      this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal(),'Użyto [START] czas','green');
       this.zapisz_startstop(5, 'START', this.czas_rzeczywisty_start, this.getCzasDedala()); 
       }
 
 setStop()
       { 
       this.czas_rzeczywisty_end =  (moment()).format('YYYY-MM-DD HH:mm:ss');
-      this.funkcje.addLiniaKomunikatu('Użyto [STOP] czas','red'); 
+      this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal(),'Użyto [STOP] czas','red'); 
       this.zapisz_startstop(5, 'STOP', this.czas_rzeczywisty_end, this.getCzasDedala());
       }
 
@@ -369,7 +371,7 @@ private odczytaj_startstop(licznik : number)
     {
       this.changeStartStop('STOP');
       this.OdczytajStartStop.next('STOP')
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "stanu akcji = stop" ','red');
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ODCZYTAĆ "stanu akcji = stop" ');
     }
     else
     {
@@ -380,9 +382,9 @@ private odczytaj_startstop(licznik : number)
                 {
                   if (wynik.stan == 'START')
                   {
-                    this.funkcje.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "stan akcji": START','red')
+                    this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Parametry po Restarcie Aplikacji: "stan akcji": START')
                     this.czas_rzeczywisty_start = wynik.czas;
-                    this.funkcje.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu akcji": ' + wynik.czas ,'red')
+                    this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Parametry po Restarcie Aplikacji: "czas startu akcji": ' + wynik.czas )
                     this.changeStartStop(wynik.stan);
                     this.OdczytajStartStop.next(wynik.stan);
                   }
@@ -390,21 +392,21 @@ private odczytaj_startstop(licznik : number)
                   {
                     this.changeStartStop(wynik.stan);
                     this.OdczytajStartStop.next(wynik.stan);
-                    this.funkcje.addLiniaKomunikatu('Odczytano "stan akcji": STOP','')  
+                    this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Odczytano "stan akcji": STOP')  
                   }
                 }
                 else
                 {
                   this.changeStartStop('STOP');
                   this.OdczytajStartStop.next('STOP');
-                  this.funkcje.addLiniaKomunikatu('Błąd odczytu "stan akcji = STOP" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu "stan akcji = STOP" - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)  
                 }
                },
       error => {
                 this.changeStartStop('STOP');
                 this.OdczytajStartStop.next('STOP');
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "stan akcji = STOP" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "stan akcji = STOP" - ponawiam: ' + licznik);
                 setTimeout(() => {this.odczytaj_startstop(--licznik)}, 1000)
                }
                )      
@@ -424,7 +426,7 @@ private odczytaj_startstop(licznik : number)
     var dane = JSON.stringify({ "stan": stan, "czas": czas, "zmiana": moment().format('YYYY-MM-DD HH:mm:ss'),"czasD" : czasD })  
     //console.log(dane)
    if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "stan akcji" ','red'); }
+    { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "stan akcji" '); }
     else
     {
     this.http.post(this.komunikacja.getURL() + 'stan/', dane, httpOptions).subscribe( 
@@ -433,17 +435,17 @@ private odczytaj_startstop(licznik : number)
                 if (wynik.wynik == true) 
                  {
                   this.changeStartStop(wynik.stan);
-                  this.funkcje.addLiniaKomunikatu('Zapisano "stan akcji"','') 
+                  this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "stan akcji"') 
                  } 
                  else
                  {
-                  this.funkcje.addLiniaKomunikatu('Błąd zapisu "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "stan akcji" - ponawiam: ' + licznik); 
                    setTimeout(() => {this.zapisz_startstop(--licznik, stan, czas, czasD)}, 1500)             
                  }        
                },
       error => { 
         //console.log(error)
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "stan akcji" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "stan akcji" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_startstop(--licznik, stan, czas, czasD)}, 1500);
                }
                )      
@@ -473,7 +475,7 @@ private odczytaj_czas_dedala(licznik : number)
       this.czas_dedala_org = 'ERROR';
       this.changeCzasDedala(this.czas_dedala_org);
       this.OdczytajCzasDedala.next(this.czas_dedala_org);
-      this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ODCZYTAĆ "czas startu akcji na Dedalu" ','red');
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ODCZYTAĆ "czas startu akcji na Dedalu" ');
     }
     else
     {
@@ -485,7 +487,7 @@ private odczytaj_czas_dedala(licznik : number)
         {
           if (wynik.stan == 'START')
           {
-            this.funkcje.addLiniaKomunikatu('Parametry po Restarcie Aplikacji: "czas startu akcji na Dedalu": ' + wynik.czasnew ,'red')
+            this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Parametry po Restarcie Aplikacji: "czas startu akcji na Dedalu": ' + wynik.czasnew)
             this.czas_dedala_org = wynik.czasorg;
             this.OdczytajCzasDedala.next(wynik.czasorg);
             this.czas_dedala_ofset_org = moment(this.czas_dedala_org,"YYYY-MM-DD HH:mm:ss").diff(moment(this.czas_rzeczywisty_start,"YYYY-MM-DD HH:mm:ss"),'milliseconds',true)
@@ -500,7 +502,7 @@ private odczytaj_czas_dedala(licznik : number)
           //this.czasRzeczywistyDedala.next( wynik.czas );
           this.czasOryginalnyDedala.next( wynik.czasorg)
           this.OdczytajCzasDedala.next(wynik.czasorg);
-          this.funkcje.addLiniaKomunikatu('Odczytano "czas startu akcji na Dedalu": ' + wynik.czasorg ,'')
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Odczytano "czas startu akcji na Dedalu": ' + wynik.czasorg )
           }
         }
         else
@@ -508,7 +510,7 @@ private odczytaj_czas_dedala(licznik : number)
           this.czas_dedala_org = 'ponawiam';
           this.changeCzasDedala(this.czas_dedala_org);
           this.OdczytajCzasDedala.next(this.czas_dedala_org);
-          this.funkcje.addLiniaKomunikatu('Błąd odczytu "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu "czas startu akcji na Dedalu" - ponawiam: ' + licznik);
           setTimeout(() => {this.odczytaj_czas_dedala(--licznik)}, 1000)
         }
                         
@@ -517,7 +519,7 @@ private odczytaj_czas_dedala(licznik : number)
                 this.czas_dedala_org = 'ponawiam';
                 this.changeCzasDedala(this.czas_dedala_org);
                 this.OdczytajCzasDedala.next(this.czas_dedala_org);
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "czas startu akcji na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)');
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "czas startu akcji na Dedalu" - ponawiam: ' + licznik);
                 setTimeout(() => {this.odczytaj_czas_dedala(--licznik)}, 1000)
                }
                )      
@@ -537,7 +539,7 @@ private odczytaj_czas_dedala(licznik : number)
     var data = JSON.stringify({ "czas": czas, "zmiana": moment().format('YYYY-MM-DD HH:mm:ss')})  
 
    if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatu('NIE UDAŁO SIĘ ZAPISAĆ "nowa data na Dedalu" ','red'); }
+    { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZAPISAĆ "nowa data na Dedalu" '); }
     else
     {
     this.http.post(this.komunikacja.getURL() + 'dataakcji/', data, httpOptions).subscribe( 
@@ -546,16 +548,16 @@ private odczytaj_czas_dedala(licznik : number)
               if (wynik.wynik == true) 
               {
                 this.changeCzasDedala( wynik.czas );
-                this.funkcje.addLiniaKomunikatu('Zapisano "nowa data na Dedalu" - ' + wynik.czas ,'') 
+                this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'Zapisano "nowa data na Dedalu" - ' + wynik.czas ) 
               }
               else
               {
-                this.funkcje.addLiniaKomunikatu('Błąd zapisu "nowa data na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu "nowa data na Dedalu" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_data_akcji(--licznik, czas)}, 1000) 
               }
                 },
       error => { 
-                this.funkcje.addLiniaKomunikatu('Błąd połączenia "nowa data na Dedalu" - ponawiam: ' + licznik,'rgb(199, 100, 43)'); 
+                this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd połączenia "nowa data na Dedalu" - ponawiam: ' + licznik); 
                 setTimeout(() => {this.zapisz_data_akcji(--licznik,czas)}, 1000) 
                }
                )      

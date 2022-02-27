@@ -20,7 +20,7 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
 
   constructor(private osoby: OsobyService )
    {
-    console.log('użytkownicy con')
+    //console.log('użytkownicy con')
      this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
      ( data => { this.tablicaosoby = data; } )
     this.gosciesubscribe = osoby.OdczytajGoscie$.subscribe
