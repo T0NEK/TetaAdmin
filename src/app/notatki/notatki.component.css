@@ -57,15 +57,21 @@ mat-card-actions
   {
     width: 100%;
     max-width: 100%;
+    border: 1px solid blue;
   }
 .example-item
   {
     height: 26px;
   }
-  .example-item-detail {
+  .example-item-detail 
+  {
     height: 20px;
     padding-left: 5px;
   }
+  .example-item-detail2
+  {
+    height: 10px;
+  }  
 .example-margin {
     margin: 0 10px;
   }

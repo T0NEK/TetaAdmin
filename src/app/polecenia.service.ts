@@ -102,8 +102,6 @@ private odczytaj_polecenia(licznik: number, get: string, idosoba : number, idpol
 
   if (licznik == 0) 
     {
-      
-      //this.OdczytajPolecenia.next('polecenia');
       this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Poleceń: ' + wynik);
     }
     else

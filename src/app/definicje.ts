@@ -74,3 +74,24 @@ export interface Osoby
       osoby: OsobyPol[];
   }
 
+  export interface Notatka
+  {
+    id: number;  
+    identyfikator: string;
+    tytul :string;
+    wlasciciel: number;
+    wlascicielText: string;
+    stan: boolean;
+    stanText: string;
+    czas: string;
+  }
+
+export interface Tresc
+  {
+    id: number;  
+    wersja: number;
+    stan: boolean;
+    stanText: string;
+    czas: string;
+    tresc: string;
+  }
