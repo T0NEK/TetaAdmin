@@ -73,7 +73,7 @@ Wczytajnotatki(stan: number)
                   else
                   {//stan false
                     //this.notatkiStan = true;
-                    this.OdczytajNotatki.next({"stan": true, "notatki": this.notatki, "komunikat": wynik.error})
+                    this.OdczytajNotatki.next({"stan": false, "notatki": this.notatki, "komunikat": wynik.error})
                   }
                 }
                 else
@@ -99,14 +99,14 @@ Wczytajnotatki(stan: number)
     //console.log('notatki', this.getNotatki())
       this.notatka = [];
       //this.notatkaStan = {"wczytana": false, "edycja": false, "notatka": {"id":0, "identyfikator": "", "czas": "", "stan": false, "stanText": "", "tytul": "", "wlasciciel": 0, "wlascicielText":""}, "wersja": 0, "zmiany": false, "tresc": ""};
-      this.odczytaj_notatki_tresc(5, stan, notatka);
+      this.odczytaj_notatki_tresc(5, stan, notatka,'');
   }
 
   private OdczytajTresc = new Subject<any>();
   OdczytajTresc$ = this.OdczytajTresc.asObservable()
   private OdczytajNotatkiTresc = new Subject<any>();
   OdczytajNotatkiTresc$ = this.OdczytajNotatkiTresc.asObservable()
-  private odczytaj_notatki_tresc(licznik: number, stan: number, notatka: string)
+  private odczytaj_notatki_tresc(licznik: number, stan: number, notatka: string, wynik: string)
   {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -117,9 +117,12 @@ Wczytajnotatki(stan: number)
     };
     
   var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": notatka})  
-console.log('data WNT',data)
-  if (licznik > 0 )
-    {
+  if (licznik == 0) 
+  {
+    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Treści: ' + wynik);
+  }
+  else
+  {
       --licznik;
       this.http.post(this.komunikacja.getURL() + 'notatka/', data, httpOptions).subscribe( 
         data =>  {
@@ -140,31 +143,26 @@ console.log('data WNT',data)
                           "tresc": wynik.notatki[index].tresc,
                           }]
                   }  
-                  //this.notatkiStan = true;
-                  //this.notatkaStan = {"wczytana": true, "edycja": false, "notatka": {"id": wynik.id, "identyfikator": wynik.identyfikator, "czas": wynik.czas, "stan": wynik.stan, "stanText": wynik.stanText, "tytul": wynik.tytul, "wlasciciel": wynik.wlasciciel, "wlascicielText": wynik.wlascicielText}, "wersja": wynik.wersja, "zmiany": false, "tresc": ""};
-                  this.OdczytajNotatkiTresc.next({"komunikat": wynik.error})
-                  this.OdczytajTresc.next({"notatka": this.notatka, "wersja": wynik.wersja })
-//console.log('notatka odczyt:',this.notatka)
+                  this.OdczytajNotatkiTresc.next({"stan": true, "wersje": this.notatka, "komunikat": wynik.error})
+
                   }
                   else
                   {//stan false
-                    this.OdczytajNotatkiTresc.next({"komunikat": wynik.error})
+                    this.OdczytajNotatkiTresc.next({"stan": false, "wersje": this.notatka, "komunikat": wynik.error})
                   }
                 }
                 else
                 {
-                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka)}, 1000) 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
+                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka,'')}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka)}, 1000) 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
+                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka,'')}, 1000) 
                 }
                 )      
-    }
-    else
-    {
-      this.OdczytajNotatkiTresc.next({"komunikat": "problem z odczytem"})
     }
   }
 

@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { concat, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
-import { Notatka, Osoby, OsobyPol } from '../definicje';
+import { Notatka, Osoby, OsobyPol, Tresc } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { NotatkiService } from '../notatki.service';
 import { OsobyService } from '../osoby.service';
@@ -24,20 +24,27 @@ export class NotatkiComponent implements OnInit {
   private tablicagoscie: Osoby[] = [];
   tablicaall: Osoby[] = [];
   tablicanotatki: Notatka[] = [];
+  tablicawersje: Notatka[] = [];
   wlasciciel = 0;
   identyfikator = "";
   height1: any;
   width1: any;
   height2: any;
   width2: any;
+  height3: any;
+  height4: any;
 
+  
+  
 
   constructor(private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private all: AppComponent, private notatki: NotatkiService) 
   { 
     this.height1 = (all.wysokoscNawigacja - 42) + 'px';
     this.width1 = all.szerokoscOsoby + 'px';
-    this.height2 = (all.wysokoscTematy) + 'px';
+    this.height2 = all.wysokoscTematy + 'px';
     this.width2 = (all.szerokoscNawigacja - all.szerokoscOsoby) + 'px';
+    this.height3 = all.wysokoscWersje + 'px';
+    this.height4 = this.height1;
     this.zakladkadialogusubscribe = funkcje.ZakladkaDialogu$.subscribe
     (
        data =>
@@ -64,10 +71,17 @@ export class NotatkiComponent implements OnInit {
     this.notatkisubscribe = notatki.OdczytajNotatki$.subscribe
     ( data => 
       { 
-        console.log(data)
-        this.tablicanotatki = data.notatki; 
-        this.VSVDialogTytuly.checkViewportSize();
-        this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+        if (data.stan)
+        {
+          this.tablicanotatki = data.notatki; 
+          this.VSVDialogTytuly.checkViewportSize();
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+        }
+        else
+        {
+          this.tablicanotatki = [];
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+        }
       }
     )
 
@@ -91,7 +105,10 @@ export class NotatkiComponent implements OnInit {
     { if (this.tablicagoscie.length > 0) {
                        this.tablicaall = this.tablicaall.concat(this.tablicagoscie);
                        warunek = false;
-                       this.VSVDialogOsoby.checkViewportSize(); }
+                       this.VSVDialogOsoby.checkViewportSize(); 
+                       this.WybranaOsoba(0);
+                       this.WybranyTemat(0);
+                      }
     else
     { setTimeout(() => {
                         this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Czekam na pełne dane osób');
@@ -111,6 +128,11 @@ export class NotatkiComponent implements OnInit {
   {
     this.identyfikator = event;
     this.notatki.WczytajnotatkiTresc(this.wlasciciel, event)
+    console.log(event)
+  }
+
+  WybranaWersja(event: any)
+  {
     console.log(event)
   }
 
