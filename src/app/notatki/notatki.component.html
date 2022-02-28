@@ -1,11 +1,21 @@
 <div class="row">
     <div>  
-      <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="66"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
-        <div *cdkVirtualFor="let item of tablicall" (click)="Wybrany(item.id)">
+      <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width1}" autosize>
+        <div *cdkVirtualFor="let item of tablicaall" (click)="WybranaOsoba(item.id)">
           <div class="example-item-detail" >{{item.imie}} {{item.nazwisko}}</div>
           <div class="example-item-detail">({{item.funkcja}})</div>
-          <div class="example-item-detail"></div>
+          <div class="example-item-detail2"></div>
         </div>
       </cdk-virtual-scroll-viewport>
   </div>
+  <div>  
+    <cdk-virtual-scroll-viewport #scrollViewportTytuly appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height2, 'width': width2}" autosize>
+      <div *cdkVirtualFor="let item of tablicanotatki" (click)="WybranyTemat(item.identyfikator)">
+        <div class="example-item-detail" > temat: <span class="text-primary">{{item.tytul}}</span></div>
+        <div class="example-item-detail" > z dnia: <span class="text-info">{{item.czas}}</span>; autor: <span [ngClass]="{'text-info': (item.wlasciciel==wlasciciel), 'text-warning':!(item.wlasciciel==wlasciciel)}">{{item.wlascicielText}}</span>; stan: <span [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span>; id: <span class="text-info">{{item.identyfikator}}</span></div>
+        <div class="example-item-detail2"></div>
+      </div>
+    </cdk-virtual-scroll-viewport>
+</div>
+
   <div>

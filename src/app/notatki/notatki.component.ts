@@ -2,8 +2,9 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { concat, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
-import { Osoby, OsobyPol } from '../definicje';
+import { Notatka, Osoby, OsobyPol } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
+import { NotatkiService } from '../notatki.service';
 import { OsobyService } from '../osoby.service';
 
 @Component({
@@ -15,28 +16,34 @@ export class NotatkiComponent implements OnInit {
 
   private osobysubscribe = new Subscription();
   private gosciesubscribe = new Subscription();
+  private notatkisubscribe = new Subscription();
   private zakladkadialogusubscribe = new Subscription();
   @ViewChild('scrollViewportOsoby')  VSVDialogOsoby!: CdkVirtualScrollViewport;
+  @ViewChild('scrollViewportTytuly')  VSVDialogTytuly!: CdkVirtualScrollViewport;
   private tablicaosoby: Osoby[] = [];
   private tablicagoscie: Osoby[] = [];
-  tablicall: Osoby[] = [];
-  height: any;
+  tablicaall: Osoby[] = [];
+  tablicanotatki: Notatka[] = [];
+  wlasciciel = 0;
+  identyfikator = "";
+  height1: any;
   width1: any;
+  height2: any;
+  width2: any;
 
 
-  constructor(private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private all: AppComponent) 
+  constructor(private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private all: AppComponent, private notatki: NotatkiService) 
   { 
-    this.height = (all.wysokoscNawigacja - 42) + 'px';
+    this.height1 = (all.wysokoscNawigacja - 42) + 'px';
     this.width1 = all.szerokoscOsoby + 'px';
+    this.height2 = (all.wysokoscTematy) + 'px';
+    this.width2 = (all.szerokoscNawigacja - all.szerokoscOsoby) + 'px';
     this.zakladkadialogusubscribe = funkcje.ZakladkaDialogu$.subscribe
     (
        data =>
        {
-        //console.log(this.VSVDialogPolecenia._totalContentHeight)  
           if (data == 6)
          {
-          //this.tablicazawartosci = polecenia.getPolecenia();
-          //this.VSVDialog.setTotalContentSize(1200);
           this.Polacz(true);
          }
        }
@@ -44,7 +51,7 @@ export class NotatkiComponent implements OnInit {
     this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
     ( data => 
       { 
-        this.tablicall = data;
+        this.tablicaall = data;
         
       }
     )
@@ -54,6 +61,17 @@ export class NotatkiComponent implements OnInit {
         this.tablicagoscie = data; 
       }
     )
+    this.notatkisubscribe = notatki.OdczytajNotatki$.subscribe
+    ( data => 
+      { 
+        console.log(data)
+        this.tablicanotatki = data.notatki; 
+        this.VSVDialogTytuly.checkViewportSize();
+        this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+      }
+    )
+
+
   }
 
   ngOnInit() {
@@ -63,6 +81,7 @@ export class NotatkiComponent implements OnInit {
   {
    if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()};   
    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()};  
+   if(this.notatkisubscribe) { this.notatkisubscribe.unsubscribe()};  
    if(this.zakladkadialogusubscribe) {this.zakladkadialogusubscribe.unsubscribe()};   
   }
 
@@ -70,7 +89,7 @@ export class NotatkiComponent implements OnInit {
   {
     if (warunek)
     { if (this.tablicagoscie.length > 0) {
-                       this.tablicall = this.tablicall.concat(this.tablicagoscie);
+                       this.tablicaall = this.tablicaall.concat(this.tablicagoscie);
                        warunek = false;
                        this.VSVDialogOsoby.checkViewportSize(); }
     else
@@ -81,8 +100,18 @@ export class NotatkiComponent implements OnInit {
   }
   }
 
-  Wybrany(event: any)
+  
+  WybranaOsoba(event: any)
   {
-console.log(event)
+    this.wlasciciel = event;
+    this.notatki.Wczytajnotatki(event);
   }
+
+  WybranyTemat(event: any)
+  {
+    this.identyfikator = event;
+    this.notatki.WczytajnotatkiTresc(this.wlasciciel, event)
+    console.log(event)
+  }
+
 }
