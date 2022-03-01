@@ -1,7 +1,7 @@
 <div class="row">
     <div>  
       <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width1}" autosize>
-        <div *cdkVirtualFor="let item of tablicaall" (click)="WybranaOsoba(item.id)">
+        <div *cdkVirtualFor="let item of tablicaall" [ngClass]="{'text-primary': !(item.id==wlasciciel), '':(item.id==wlasciciel)}" (click)="WybranaOsoba(item.id)">
           <div class="example-item-detail" >{{item.imie}} {{item.nazwisko}}</div>
           <div class="example-item-detail">({{item.funkcja}})</div>
           <div class="example-item-detail2"></div>
@@ -13,14 +13,22 @@
 
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportTytuly appendOnly itemSize="52"  class="example-viewport" [ngStyle]="{'height': height2, 'width': width2}" autosize>
-      <div *cdkVirtualFor="let item of tablicanotatki" (click)="WybranyTemat(item.identyfikator)">
+      <div *cdkVirtualFor="let item of tablicanotatki" [ngClass]="{'text-primary': !(item.identyfikator==identyfikator), '':(item.identyfikator==identyfikator)}" (click)="WybranyTemat(item.identyfikator)">
         <div class="example-item-detail" > temat: <span class="text-primary">{{item.tytul}}</span></div>
         <div class="example-item-detail" > z dnia: <span class="text-info">{{item.czas}}</span>; autor: <span [ngClass]="{'text-info': (item.wlasciciel==wlasciciel), 'text-warning':!(item.wlasciciel==wlasciciel)}">{{item.wlascicielText}}</span>; stan: <span [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span></div>
         <div class="example-item-detail2"></div>
       </div>
     </cdk-virtual-scroll-viewport>
   </div>
-
+<br>
+  <div>
+    <mat-card> 
+      <mat-card-title>id: <span>"wybrane"</span> </mat-card-title> 
+      <mat-card-subtitle> polecenie: <span>"wybranepolecenie.nazwa"</span> </mat-card-subtitle> 
+      <mat-card-subtitle> opis: <span>wybranepolecenie.komunikat</span> </mat-card-subtitle> 
+   </mat-card> 
+  </div>
+<br>  
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportWersje appendOnly itemSize="32"  class="example-viewport" [ngStyle]="{'height': height3, 'width': width2}" autosize>
       <div *cdkVirtualFor="let item of tablicawersje" (click)="WybranaWersja(item.identyfikator)">
@@ -30,13 +38,6 @@
     </cdk-virtual-scroll-viewport>
   </div>
 
-<div>
-  <mat-card> 
-    <mat-card-title>Wybrane polecenie: <span>"wybrane"</span> </mat-card-title> 
-    <mat-card-subtitle> polecenie: <span>"wybranepolecenie.nazwa"</span> </mat-card-subtitle> 
-    <mat-card-subtitle> opis: <span>wybranepolecenie.komunikat</span> </mat-card-subtitle> 
- </mat-card> 
-</div>
 </div>
 </div>
   

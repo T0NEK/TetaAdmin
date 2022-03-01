@@ -2,7 +2,7 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportPolecenia appendOnly itemSize="24"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
       <div *cdkVirtualFor="let item of tablicazawartosci"  class="example-item" (click)="Wybrany($event)">
-        {{item.podstawowe ? '&nbsp;' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}}<span [class]="item.podstawowe == true ? '' : 'text-success'" >{{item.nazwa}}</span>
+        {{item.podstawowe ? '&nbsp;' : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}}<span [ngClass]="{'text-success':((!(item.podstawowe))&&(!(item.nazwa==wybrane))), 'text-primary': (item.nazwa==wybrane)}">{{item.nazwa}}</span>
       </div>
     </cdk-virtual-scroll-viewport>
 </div>

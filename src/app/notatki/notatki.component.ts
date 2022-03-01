@@ -79,7 +79,6 @@ export class NotatkiComponent implements OnInit {
         }
         else
         {
-          this.tablicanotatki = [];
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
         }
       }
@@ -106,8 +105,7 @@ export class NotatkiComponent implements OnInit {
                        this.tablicaall = this.tablicaall.concat(this.tablicagoscie);
                        warunek = false;
                        this.VSVDialogOsoby.checkViewportSize(); 
-                       this.WybranaOsoba(0);
-                       this.WybranyTemat(0);
+                       this.WybranaOsoba(2);
                       }
     else
     { setTimeout(() => {
@@ -120,12 +118,14 @@ export class NotatkiComponent implements OnInit {
   
   WybranaOsoba(event: any)
   {
+    this.tablicanotatki = [];
     this.wlasciciel = event;
     this.notatki.Wczytajnotatki(event);
   }
 
   WybranyTemat(event: any)
   {
+    this.tablicawersje = [];
     this.identyfikator = event;
     this.notatki.WczytajnotatkiTresc(this.wlasciciel, event)
     console.log(event)
