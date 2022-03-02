@@ -25,8 +25,8 @@ export class AppComponent
   public szerokoscNawigacja: any;
   public szerokoscPolecenia = 240;
   public szerokoscOsoby = 240;
-  public wysokoscTematy = 200;
-  public wysokoscWersje = 200;
+  public wysokoscTematy = 180;
+  public wysokoscWersje = 140;
 
 constructor(private window: Window)
   {

@@ -92,21 +92,15 @@ Wczytajnotatki(stan: number)
   }
 
 
-  WczytajnotatkiTresc(stan: number, notatka: string)
+  WczytajnotatkiTresc(stan: number, idnotatki: number)
   {
-    //console.log('identyfikator: ', notatka)
-    //console.log('id: ', this.getNotatkaId(notatka))
-    //console.log('notatki', this.getNotatki())
       this.notatka = [];
-      //this.notatkaStan = {"wczytana": false, "edycja": false, "notatka": {"id":0, "identyfikator": "", "czas": "", "stan": false, "stanText": "", "tytul": "", "wlasciciel": 0, "wlascicielText":""}, "wersja": 0, "zmiany": false, "tresc": ""};
-      this.odczytaj_notatki_tresc(5, stan, notatka,'');
+      this.odczytaj_notatki_tresc(5, stan, idnotatki,'');
   }
 
-  private OdczytajTresc = new Subject<any>();
-  OdczytajTresc$ = this.OdczytajTresc.asObservable()
   private OdczytajNotatkiTresc = new Subject<any>();
   OdczytajNotatkiTresc$ = this.OdczytajNotatkiTresc.asObservable()
-  private odczytaj_notatki_tresc(licznik: number, stan: number, notatka: string, wynik: string)
+  private odczytaj_notatki_tresc(licznik: number, stan: number, idnotatki: number, wynik: string)
   {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -116,7 +110,7 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": notatka})  
+  var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": idnotatki})  
   if (licznik == 0) 
   {
     this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Treści: ' + wynik);
@@ -154,13 +148,13 @@ Wczytajnotatki(stan: number)
                 else
                 {
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
-                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka,'')}, 1000) 
+                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, idnotatki,'')}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
-                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, notatka,'')}, 1000) 
+                  setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, idnotatki,'')}, 1000) 
                 }
                 )      
     }

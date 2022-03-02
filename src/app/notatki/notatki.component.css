@@ -17,6 +17,11 @@ span
 {
     color: lightgreen;
 }
+.br
+{
+  height: 8px;
+  min-height: 8px;
+}
 mat-card
 {
     color: green;
@@ -75,6 +80,22 @@ mat-card-actions
 .example-margin {
     margin: 0 10px;
   }
+
+
+.mat-form-field
+{
+  border: 1px solid blue;
+}
+.wymiary
+{
+    width: 100%;
+    min-width: 100%;
+}  
+.notatki
+{
+  resize: none;
+  cursor: crosshair;
+}
 
 ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar
 {
