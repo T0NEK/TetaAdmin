@@ -24,7 +24,7 @@ export class AppComponent
   public szerokoscInput: any;
   public szerokoscNawigacja: any;
   public szerokoscPolecenia = 240;
-  public szerokoscOsoby = 240;
+  public szerokoscOsoby = 340;
   public wysokoscTematy = 180;
   public wysokoscWersje = 140;
 

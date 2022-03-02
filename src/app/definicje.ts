@@ -84,6 +84,8 @@ export interface Osoby
     stan: boolean;
     stanText: string;
     czas: string;
+    blokadastan: boolean;
+    blokadaudo: boolean;
   }
 
 export interface Tresc
@@ -94,4 +96,22 @@ export interface Tresc
     stanText: string;
     czas: string;
     tresc: string;
+  }
+
+  export interface Udostepnienie
+  {
+    idosoby: number;
+    idudo: number;
+    czas: string;
+    stanudo: string;
+    autor: number;
+  }
+
+  export interface OsobyNot
+{
+   id: number;
+   imie: string;
+   nazwisko: string;
+   funkcja: string;
+   udost: Udostepnienie[];
   }
