@@ -3,7 +3,7 @@
       <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width1}" autosize>
         <div *cdkVirtualFor="let item of tablicaall " [ngClass]="{'text-primary': !(item.id==wlasciciel), '':(item.id==wlasciciel)}" (click)="WybranaOsoba(item.id)">
           <div class="example-item-detail" >{{item.imie}} {{item.nazwisko}}</div>
-          <div class="example-item-detail1">({{item.funkcja}}) <span *ngIf="item.udost.length != 0" [ngClass]="{'text-danger': (!(item.id==wlasciciel)&&(item.udost.idudo==0)&&(item.udost.autor!=item.udost.idosoby)), '':(item.id==wlasciciel)}">{{((item.id==wlasciciel)&&(item.id == item.udost.autor)) ? 'własna' : (item.udost.autor==item.udost.idosoby ? 'autor' : item.udost.stanudo)}}</span></div>
+          <div class="example-item-detail1">({{item.funkcja}}) <span *ngIf="item.udost.length != 0" (click)="Udostepnienie(item)" [ngClass]="{'text-danger': (!(item.id==wlasciciel)&&(item.udost.idudo==0)&&(item.udost.autor!=item.udost.idosoby)), '':(item.id==wlasciciel)}">{{((item.id==wlasciciel)&&(item.id == item.udost.autor)) ? 'własna' : (item.udost.autor==item.udost.idosoby ? 'autor' : item.udost.stanudo)}}</span></div>
           <div class="example-item-detail2"></div>
         </div>
       </cdk-virtual-scroll-viewport>
@@ -23,7 +23,7 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportWersje appendOnly itemSize="32"  class="example-viewport" [ngStyle]="{'height': height3, 'width': width2}" autosize>
       <div *cdkVirtualFor="let item of tablicawersje; let i = index" (click)="WybranaWersja(i)">
-        <div class="example-item-detail" ><span [ngClass]="{'text-primary': !(item.wersja==wersja), '':(item.wersja==wersja)}"> wersja: {{item.wersja}}</span>; z dnia: <span class="text-info">{{item.czas}}</span>; stan: <span [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span></div>
+        <div class="example-item-detail" ><span [ngClass]="{'text-primary': !(item.wersja==wersja), '':(item.wersja==wersja)}"> wersja: {{item.wersja}}</span>; z dnia: <span class="text-info">{{item.czas}}</span>; stan: <span (click)="WybranyStanWersja(item.id, i)" class="kursor" [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span></div>
         <div class="example-item-detail2"></div>
       </div>
     </cdk-virtual-scroll-viewport>
@@ -31,8 +31,10 @@
   <div class="br"></div>
 <div>
   <mat-form-field appearance="fill" class="wymiary">
-    <textarea matInput ngModel #PoleNotatki spellcheck="false" maxlength="notatkaLenght.max" (ngModelChange)="Zmiana()" class="notatki" [ngStyle]="{'height': height5}">{{tresc}}</textarea>
-    <mat-hint [ngStyle]="{ 'color': notatkaEdytowana}" align="end">{{(notatkaEdytowana == 'red' ? 'zmieniona treść' : 'orginalna treść')}} ({{notatkaLenght.obecna}} znaków z {{notatkaLenght.max}})</mat-hint>
+    <mat-label *ngIf="przyciskStan==5">Podaj tytuł:</mat-label>
+    <textarea matInput ngModel #PoleNotatki spellcheck="false" maxlength="notatkaLenght.max" [readonly]="!notatkaEdycja" (ngModelChange)="Zmiana(false)" class="notatki" [ngClass]="{'kursoredit': (notatkaEdycja)}" [ngStyle]="{'height': height5}">{{tresc}}</textarea>
+    <mat-hint  align="end"><span class="kursor" *ngIf="notatkaEdytowana||(przyciskStan < 4)" (click)="Zapisz(przyciskStan)">{{przycisk[przyciskStan]}}&nbsp;&nbsp;&nbsp;</span><span [ngClass]="{'text-primary': !(notatkaEdytowana), 'text-danger': (notatkaEdytowana)}">{{(notatkaEdytowana ? 'zmieniona treść' : 'orginalna treść')}} ({{notatkaLenght.obecna}} znaków z {{notatkaLenght.max}})</span>
+    </mat-hint>
     </mat-form-field>
 </div>
 </div>

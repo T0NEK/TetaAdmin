@@ -94,14 +94,15 @@ Wczytajnotatki(stan: number)
               }
   }
 
-  WczytajUdoNotatki(idnotatki: number)
+
+  ZapiszNowa(get: string, stan: number, tytul: string, czas: string, idnotatka: number, wersja: number)
   {
-      this.odczytaj_udo_notatki(5, idnotatki, "getudo",'');
+      this.set_nowa(5, stan, tytul, czas, idnotatka, wersja , get, '');
   }
   
-  private OdczytajUdoNotatki = new Subject<any>();
-  OdczytajUdoNotatki$ = this.OdczytajUdoNotatki.asObservable()
-  private odczytaj_udo_notatki(licznik: number, idnotatki: number, get: string, powod: string)
+  private NowaNotatka = new Subject<any>();
+  NowaNotatka$ = this.NowaNotatka.asObservable()
+  private set_nowa(licznik: number, stan: number, tytul: string, czas: string, idnotatka: number, wersja: number, get: string, powod: string)
   {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -111,11 +112,72 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki })  
+  var data = JSON.stringify({"kierunek": get, "stan": stan, "tytul": tytul, "idnotatka": idnotatka, "wersja": wersja, "czas": czas })  
   
   if (licznik == 0) 
   {
-    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Udostępnień: ' + powod);
+    this.NowaNotatka.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ utworzyć notatki ' + powod})
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+  }
+  else
+  {
+      --licznik;
+      this.http.post(this.komunikacja.getURL() + 'notatki/', data, httpOptions).subscribe( 
+        data =>  {
+          //console.log(data)
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true) 
+                {
+                  this.NowaNotatka.next({"wynik": true, "stan": wynik.stan, "kierunek": wynik.kierunek, "komunikat": wynik.error})
+                }
+                else
+                {//wynik false
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu nowej notatki - ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_nowa(licznik, stan, tytul, czas, idnotatka, wersja, get, wynik.error)}, 1000) 
+                }
+                  },
+        error => {
+          //console.log(error)
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu nowej notatki- ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_nowa(licznik,  stan, tytul, czas, idnotatka, wersja, get, 'error')}, 1000) 
+                }
+                )      
+              }
+  }
+
+
+
+  WczytajUdoNotatki(idnotatki: number)
+  {
+      this.odczytaj_udo_notatki(5, idnotatki, 0, "getudo",'');
+  }
+
+  ZmienUdoNotatki(idnotatki: number, idosoby: number, autor: number, wlasciciel: number)
+  {
+    if ((autor == idosoby)||(wlasciciel==idosoby))
+    { this.odczytaj_udo_notatki(5, idnotatki, 0, "getudo", ''); }
+    else
+    { this.odczytaj_udo_notatki(5, idnotatki, idosoby, "setudo", '') }
+  }
+  
+  private OdczytajUdoNotatki = new Subject<any>();
+  OdczytajUdoNotatki$ = this.OdczytajUdoNotatki.asObservable()
+  private odczytaj_udo_notatki(licznik: number, idnotatki: number, idosoby: number, get: string, powod: string)
+  {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin':'*',
+        'content-type': 'application/json',
+        Authorization: 'my-auth-token'
+      })
+    };
+    
+  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki, "stan": idosoby })  
+  
+  if (licznik == 0) 
+  {
+    this.OdczytajUdoNotatki.next({"wynik": false, "komunikat": 'PROBLEM Z UDOSTĘPNIENIAMI NOTATKI: ' + powod})
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Udostępnień: ' + powod);
   }
   else
   {
@@ -149,14 +211,14 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu udostępnień - ponawiam: ' + licznik);
-                  setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, get,wynik.error)}, 1000) 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd udostępnień - ponawiam: ' + licznik);
+                  setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, idosoby, get, wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu udostępnień - ponawiam: ' + licznik);
-                  setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, get,powod)}, 1000) 
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd udostępnień - ponawiam: ' + licznik);
+                  setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, idosoby, get, 'error')}, 1000) 
                 }
                 )      
               }
@@ -206,7 +268,7 @@ Wczytajnotatki(stan: number)
         error => {
           //console.log(error)
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
-                  setTimeout(() => {this.set_stan_notatki(licznik, idnotatki, idtablica, get,powod)}, 1000) 
+                  setTimeout(() => {this.set_stan_notatki(licznik, idnotatki, idtablica, get, 'error')}, 1000) 
                 }
                 )      
               }
@@ -284,7 +346,105 @@ Wczytajnotatki(stan: number)
     }
   }
 
+  SetStanWersja(get: string, idnotatki: number, idtablica: number)
+  {
+      this.set_stan_wersja(5, idnotatki, idtablica, get, '');
+  }
+  
+  private ZmienStanWersja = new Subject<any>();
+  ZmienStanWersja$ = this.ZmienStanWersja.asObservable()
+  private set_stan_wersja(licznik: number, idnotatki: number, idtablica: number, get: string, powod: string)
+  {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin':'*',
+        'content-type': 'application/json',
+        Authorization: 'my-auth-token'
+      })
+    };
+    
+  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki, "idtablica": idtablica })  
+  
+  if (licznik == 0) 
+  {
+    this.ZmienStanWersja.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ Stanu wersji ' + powod})
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+  }
+  else
+  {
+      --licznik;
+      this.http.post(this.komunikacja.getURL() + 'notatka/', data, httpOptions).subscribe( 
+        data =>  {
+          //console.log(data)
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true) 
+                {
+                  this.ZmienStanWersja.next({"wynik": true, "idnotatki": wynik.idnotatki, "idtablica": wynik.idtablica, "stan": wynik.stan , "stanText": wynik.stanText, "kierunek": wynik.kierunek, "komunikat": wynik.error})
+                }
+                else
+                {//wynik false
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_stan_wersja(licznik, idnotatki, idtablica, get,wynik.error)}, 1000) 
+                }
+                  },
+        error => {
+          //console.log(error)
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_stan_wersja(licznik, idnotatki, idtablica, get, 'error')}, 1000) 
+                }
+                )      
+              }
+  }
 
+  ZapiszWersja(get: string, idnotatki: number, idtablica: number, tresc: string)
+  {
+      this.set_tresc_wersja(5, idnotatki, idtablica, tresc, get, '');
+  }
+  
+  private ZmienTrescWersja = new Subject<any>();
+  ZmienTrescWersja$ = this.ZmienTrescWersja.asObservable()
+  private set_tresc_wersja(licznik: number, idnotatki: number, idtablica: number, tresc: string, get: string, powod: string)
+  {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin':'*',
+        'content-type': 'application/json',
+        Authorization: 'my-auth-token'
+      })
+    };
+    
+  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki, "idtablica": idtablica, "tresc": tresc })  
+  
+  if (licznik == 0) 
+  {
+    this.ZmienTrescWersja.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ Treścci notatki ' + powod})
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+  }
+  else
+  {
+      --licznik;
+      this.http.post(this.komunikacja.getURL() + 'notatka/', data, httpOptions).subscribe( 
+        data =>  {
+          //console.log(data)
+                let wynik = JSON.parse(JSON.stringify(data));
+                if (wynik.wynik == true) 
+                {
+                  this.ZmienTrescWersja.next({"wynik": true, "idnotatki": wynik.idnotatki, "idtablica": wynik.idtablica, "tresc": wynik.tresc, "kierunek": wynik.kierunek, "komunikat": wynik.error})
+                }
+                else
+                {//wynik false
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_tresc_wersja(licznik, idnotatki, idtablica, tresc, get,wynik.error)}, 1000) 
+                }
+                  },
+        error => {
+          //console.log(error)
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
+                  setTimeout(() => {this.set_tresc_wersja(licznik, idnotatki, idtablica, tresc, get, 'error')}, 1000) 
+                }
+                )      
+              }
+  }
 
   
 }

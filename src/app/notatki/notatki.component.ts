@@ -1,8 +1,9 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { concat, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
-import { Notatka, Osoby, OsobyNot, OsobyPol, Tresc, Udostepnienie } from '../definicje';
+import { CzasService } from '../czas.service';
+import { Notatka, OsobyNot, Tresc} from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { NotatkiService } from '../notatki.service';
 import { OsobyService } from '../osoby.service';
@@ -17,9 +18,13 @@ export class NotatkiComponent implements OnInit {
   private osobysubscribe = new Subscription();
   private gosciesubscribe = new Subscription();
   private notatkisubscribe = new Subscription();
+  private nowasubscribe = new Subscription();
   private trescsubscribe = new Subscription();
+  private trescnewsubscribe = new Subscription();
   private udostsubscribe = new Subscription();
   private standelsubscribe = new Subscription();
+  private stanwersubscribe = new Subscription();
+  private textareasubscribe = new Subscription();
   private zakladkadialogusubscribe = new Subscription();
   @ViewChild('scrollViewportOsoby')  VSVDialogOsoby!: CdkVirtualScrollViewport;
   @ViewChild('scrollViewportTytuly')  VSVDialogTytuly!: CdkVirtualScrollViewport;
@@ -35,9 +40,12 @@ export class NotatkiComponent implements OnInit {
   idnotatki = 0;
   wersja = 0;
   tresc = '';
-  notatkaEdytowana = "";
-  notatkaLenght = {"obecna": 0,"max": 1024}
-  stan ="";
+  notatkaEdytowana = false;
+  notatkaEdycja = false;
+  notatkaLenght = {"obecna": 0, "max": 1024, "orgmax": 1024, "orgtemat": 30}
+  //stan ="";
+  przycisk: string[] = ['', 'nowa NOTATKA','nowa WERSJA',"EDYTUJ","ZAPISZ","ZAPISZ","ZAPISZ"];
+  przyciskStan = 1;  
   blokadazmian = true;
   height1: any;  width1: any;
   height2: any;  width2: any;
@@ -48,13 +56,13 @@ export class NotatkiComponent implements OnInit {
   
   
 
-  constructor(private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private all: AppComponent, private notatki: NotatkiService) 
+  constructor(private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private all: AppComponent, private notatki: NotatkiService, private czasy: CzasService) 
   { 
     this.height1 = (all.wysokoscNawigacja - 42) + 'px';
     this.height2 = all.wysokoscTematy + 'px';
     this.height3 = all.wysokoscWersje + 'px';
     this.height4 = this.height1;
-    this.height5 = (all.wysokoscNawigacja - 42 - all.wysokoscTematy - all.wysokoscWersje - (3 *8) - 80) + 'px';
+    this.height5 = (all.wysokoscNawigacja - 42 - all.wysokoscTematy - all.wysokoscWersje - (3 *8) - 100) + 'px';
     this.width1 = all.szerokoscOsoby + 'px';
     this.width2 = (all.szerokoscNawigacja - all.szerokoscOsoby) + 'px';
     this.polaczenie = true
@@ -106,6 +114,24 @@ export class NotatkiComponent implements OnInit {
           this.tablicanotatki = data.notatki; 
           this.VSVDialogTytuly.checkViewportSize();
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.wersja = -1;
+          //this.notatkaEdycja = false;
+        }
+        else
+        {
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+        }
+        this.blokadazmian = true;  
+      }
+    )
+    this.nowasubscribe = notatki.NowaNotatka$.subscribe
+    ( data => 
+      { 
+        console.log(data)
+        if (data.wynik)
+        {
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.WybranaOsoba(data.stan);
         }
         else
         {
@@ -122,12 +148,15 @@ export class NotatkiComponent implements OnInit {
           this.tablicawersje = data.wersje; 
           this.VSVDialogWersje.checkViewportSize();
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
-          this.wersja = 0;
-          this.PoleNotatki.nativeElement.value = this.tablicawersje[0].tresc;  
+          this.blokadazmian = true;  
+          //this.wersja = 0;
+          //this.WybranaWersja(this.wersja);
+          //this.notatkaEdycja = true;
         }
         else
         {
           this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          //this.notatkaEdycja = false;
         }
         this.blokadazmian = true;  
       }
@@ -172,6 +201,43 @@ export class NotatkiComponent implements OnInit {
         this.blokadazmian = true;  
       }
     )
+    this.standelsubscribe = notatki.ZmienStanWersja$.subscribe
+    ( data => 
+      { 
+        if (data.wynik)
+        {
+          this.tablicawersje[data.idtablica].stan = data.stan;
+          this.tablicawersje[data.idtablica].stanText = data.stanText
+          this.VSVDialogWersje.checkViewportSize();
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+        }
+        else
+        {
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+        }
+        this.blokadazmian = true;  
+      }
+    )
+    this.trescnewsubscribe = notatki.ZmienTrescWersja$.subscribe
+    ( data => 
+      { 
+        if (data.wynik)
+        {
+          this.tablicawersje[data.idtablica].tresc = data.tresc;
+          this.VSVDialogWersje.checkViewportSize();
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.blokadazmian = true;
+          this.PoleNotatki.nativeElement.value = this.tablicawersje[data.idtablica].tresc;
+          this.Zmiana(false)
+        }
+        else
+        {
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+        }
+        this.blokadazmian = true;  
+      }
+    )
+
   }
 
   ngOnInit() {
@@ -182,9 +248,13 @@ export class NotatkiComponent implements OnInit {
    if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()};   
    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()};  
    if(this.notatkisubscribe) { this.notatkisubscribe.unsubscribe()};  
+   if(this.nowasubscribe) { this.nowasubscribe.unsubscribe()};  
    if(this.trescsubscribe) { this.trescsubscribe.unsubscribe()};  
+   if(this.trescnewsubscribe) { this.trescsubscribe.unsubscribe()};  
    if(this.udostsubscribe) { this.udostsubscribe.unsubscribe()};  
    if(this.standelsubscribe) { this.standelsubscribe.unsubscribe()};  
+   if(this.stanwersubscribe) { this.stanwersubscribe.unsubscribe()};  
+   if(this.textareasubscribe) { this.textareasubscribe.unsubscribe()};  
    if(this.zakladkadialogusubscribe) {this.zakladkadialogusubscribe.unsubscribe()};   
   }
 
@@ -234,28 +304,40 @@ PrzepiszUdo(data: any):boolean
     {
       this.blokadazmian = false;  
       this.tablicanotatki = [];
+      this.tablicawersje = [];
+      this.Zmiana(true)
       this.PrzepiszUdo([])
       this.idnotatki = 0;
-      this.tablicawersje = [];
-      this.PoleNotatki.nativeElement.value = '';
       this.wlasciciel = event;
       this.notatki.Wczytajnotatki(event);
+      this.przyciskStan = 1;
+
     }
   }
+
+  
+  Udostepnienie(event: any )
+{
+  if (this.blokadazmian)
+  {
+    this.blokadazmian = false;  
+    this.notatki.ZmienUdoNotatki(this.idnotatki, event.id, event.udost.autor, this.wlasciciel)
+  }
+}
+
 
   WybranyTemat(event: any)
   {
     if (this.blokadazmian)
     {
     this.blokadazmian = false;
-    //console.log(event)
+    this.notatkaEdycja = false;
     this.tablicawersje = [];
-    this.wersja = 0;
-    this.PoleNotatki.nativeElement.value = '';
+    this.Zmiana(true)
     this.idnotatki = event;
-    this.notatki.WczytajnotatkiTresc(this.wlasciciel, event)
-    this.notatki.WczytajUdoNotatki(event)
-    //console.log(event)
+    this.notatki.WczytajnotatkiTresc(this.wlasciciel, event);
+    this.notatki.WczytajUdoNotatki(event);
+    this.przyciskStan = 2
     }
   }
 
@@ -268,24 +350,82 @@ PrzepiszUdo(data: any):boolean
     }
   }
 
+  WybranyStanWersja(event: number, i: number)
+  {
+    if (this.blokadazmian)
+    {
+    //console.log("event", event)
+    //console.log("i ", i)
+    this.blokadazmian = false;
+    this.notatki.SetStanWersja("setstan", event, i)
+    }
+  }
   
   WybranaWersja(i: number)
   {
     //console.log('       ', i)
+    if (this.wersja != (this.tablicawersje.length - 1 - i))
+    {
     if (this.blokadazmian)
     {
-      this.wersja = i;
+      this.wersja = this.tablicawersje.length - 1 - i;
       this.PoleNotatki.nativeElement.value = this.tablicawersje[i].tresc;
+      this.notatkaEdycja = false;
+      this.Zmiana(false)
+      this.przyciskStan = 3;
     }
   }
-
-Zmiana()
-{
-  if (this.blokadazmian)
-  {
-    this.blokadazmian = false;  
-    
   }
+
+
+Zmiana(clear: boolean)
+{
+  if (clear)
+  { 
+    this.PoleNotatki.nativeElement.value = '';
+    this.wersja = -1;
+    this.notatkaLenght.max = this.notatkaLenght.orgmax;
+    this.notatkaEdycja = false;
+  }
+  this.notatkaLenght.obecna = this.PoleNotatki.nativeElement.value.length;
+  if (this.wersja > -1)
+  {
+  this.notatkaEdytowana = (this.PoleNotatki.nativeElement.value != this.tablicawersje[this.tablicawersje.length - 1 - this.wersja].tresc ? true : false);
+  }
+  else
+  {
+  this.notatkaEdytowana = (this.PoleNotatki.nativeElement.value != '' ? true : false);
+  }
+}
+
+Zapisz(polecenie: number)
+{
+  //console.log("polecenie:", polecenie)
+  //console.log("set", this.tablicawersje[this.tablicawersje.length - 1 - this.wersja].id, this.tablicawersje.length - 1 - this.wersja, this.PoleNotatki.nativeElement.value)
+
+  switch (polecenie) {
+    case 1: //nowa notatka - TYTUL
+            this.przyciskStan = 5;
+            this.notatkaLenght.max = this.notatkaLenght.orgtemat;
+            this.notatkaEdycja = true;
+            this.PoleNotatki.nativeElement.focus();
+      break;
+    case 2: //NOWA WERSJa
+            this.notatkaEdycja = false;
+            this.notatki.ZapiszNowa('setwer', this.wlasciciel, "", this.czasy.getCzasDedala(), this.idnotatki, this.tablicawersje.length)
+      break;
+    case 3: this.notatkaEdycja = true;
+            this.przyciskStan = 4;
+            this.PoleNotatki.nativeElement.focus();
+      break;
+    case 4: this.notatki.ZapiszWersja("set", this.tablicawersje[this.tablicawersje.length - 1 - this.wersja].id, this.tablicawersje.length - 1 - this.wersja, this.PoleNotatki.nativeElement.value)
+            this.notatkaEdycja = false;
+            this.przyciskStan = 3;
+      break;
+    case 5: //ZAPIS NOWA NOTATKA
+            this.notatki.ZapiszNowa('setnowa', this.wlasciciel, this.PoleNotatki.nativeElement.value, this.czasy.getCzasDedala(), 0, 0)
+      break
+  }  
 }
 
 }

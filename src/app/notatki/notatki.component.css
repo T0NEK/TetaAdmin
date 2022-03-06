@@ -87,6 +87,7 @@ mat-card-actions
 .mat-form-field
 {
   border: 1px solid blue;
+  padding-bottom: 10px;
 }
 .wymiary
 {
@@ -101,6 +102,10 @@ mat-card-actions
 .kursor
 {
   cursor: pointer;
+}
+.kursoredit
+{
+  cursor: text;
 }
 ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar
 {

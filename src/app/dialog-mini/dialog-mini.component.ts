@@ -31,6 +31,8 @@ export class DialogMiniComponent implements OnInit {
         {
           this.tablicazawartosci = [];
           changeDetectorRef.detectChanges();
+          this.VSVUstawienia.checkViewportSize()
+        
         }
         else
         {
@@ -42,6 +44,7 @@ export class DialogMiniComponent implements OnInit {
         }
         let count = this.VSVUstawienia.getDataLength()
         changeDetectorRef.detectChanges();
+        this.VSVUstawienia.checkViewportSize()
         this.VSVUstawienia.scrollToIndex((count), 'smooth')
       }
       }
@@ -54,6 +57,7 @@ export class DialogMiniComponent implements OnInit {
   {
    // this.tablicazawartosci = this.funkcje.getLinieDialogu(); 
     this.changeDetectorRef.detectChanges();
+    this.VSVUstawienia.checkViewportSize()
   } 
 
   ngOnDestroy()
