@@ -39,8 +39,8 @@ export class InformacjeComponent implements OnInit, OnDestroy {
     this.uplyw_dedala_subscribe_i = czasy.czasDedalaUplyw$.subscribe ( data => { this.czas_od_startu_uplyw = data; } );
 
            
-    this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'uruchomiono moduł Administratora');
-    this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),'uruchomiono czas rzeczywisty');
+    this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'uruchomiono moduł Administratora');
+    this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'uruchomiono czas rzeczywisty');
   }
 
     ngOnInit() 

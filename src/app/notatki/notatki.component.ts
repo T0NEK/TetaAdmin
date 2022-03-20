@@ -113,13 +113,13 @@ export class NotatkiComponent implements OnInit {
         {
           this.tablicanotatki = data.notatki; 
           this.VSVDialogTytuly.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
           this.wersja = -1;
           //this.notatkaEdycja = false;
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -130,12 +130,12 @@ export class NotatkiComponent implements OnInit {
         console.log(data)
         if (data.wynik)
         {
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
           this.WybranaOsoba(data.stan);
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -147,7 +147,7 @@ export class NotatkiComponent implements OnInit {
         {
           this.tablicawersje = data.wersje; 
           this.VSVDialogWersje.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
           this.blokadazmian = true;  
           //this.wersja = 0;
           //this.WybranaWersja(this.wersja);
@@ -155,7 +155,7 @@ export class NotatkiComponent implements OnInit {
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
           //this.notatkaEdycja = false;
         }
         this.blokadazmian = true;  
@@ -168,11 +168,11 @@ export class NotatkiComponent implements OnInit {
         {
           this.PrzepiszUdo(data.udost)
           this.VSVDialogWersje.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -192,11 +192,11 @@ export class NotatkiComponent implements OnInit {
               break;  
         }
           this.VSVDialogWersje.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -209,11 +209,11 @@ export class NotatkiComponent implements OnInit {
           this.tablicawersje[data.idtablica].stan = data.stan;
           this.tablicawersje[data.idtablica].stanText = data.stanText
           this.VSVDialogWersje.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -225,14 +225,14 @@ export class NotatkiComponent implements OnInit {
         {
           this.tablicawersje[data.idtablica].tresc = data.tresc;
           this.VSVDialogWersje.checkViewportSize();
-          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,data.komunikat);
           this.blokadazmian = true;
           this.PoleNotatki.nativeElement.value = this.tablicawersje[data.idtablica].tresc;
           this.Zmiana(false)
         }
         else
         {
-          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),data.komunikat);
+          this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,data.komunikat);
         }
         this.blokadazmian = true;  
       }
@@ -291,7 +291,7 @@ PrzepiszUdo(data: any):boolean
                       }
     else
     { setTimeout(() => {
-                        this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Czekam na pełne dane osób');
+                        this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Czekam na pełne dane osób');
                         this.Polacz()
                         }, 1000) }
   }

@@ -42,7 +42,7 @@ Wczytajnotatki(stan: number)
   
   if (licznik == 0) 
   {
-    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Notatki: ' + powod);
+    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Notatki: ' + powod);
   }
   else
   {
@@ -81,13 +81,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_notatki(licznik, stan, id, get,wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_notatki(licznik, stan, id, get,powod)}, 1000) 
                 }
                 )      
@@ -117,7 +117,7 @@ Wczytajnotatki(stan: number)
   if (licznik == 0) 
   {
     this.NowaNotatka.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ utworzyć notatki ' + powod})
-    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
   }
   else
   {
@@ -132,13 +132,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu nowej notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zapisu nowej notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.set_nowa(licznik, stan, tytul, czas, idnotatka, wersja, get, wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zapisu nowej notatki- ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zapisu nowej notatki- ponawiam: ' + licznik);
                   setTimeout(() => {this.set_nowa(licznik,  stan, tytul, czas, idnotatka, wersja, get, 'error')}, 1000) 
                 }
                 )      
@@ -177,7 +177,7 @@ Wczytajnotatki(stan: number)
   if (licznik == 0) 
   {
     this.OdczytajUdoNotatki.next({"wynik": false, "komunikat": 'PROBLEM Z UDOSTĘPNIENIAMI NOTATKI: ' + powod})
-    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Udostępnień: ' + powod);
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Udostępnień: ' + powod);
   }
   else
   {
@@ -211,13 +211,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd udostępnień - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd udostępnień - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, idosoby, get, wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd udostępnień - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd udostępnień - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, idosoby, get, 'error')}, 1000) 
                 }
                 )      
@@ -246,7 +246,7 @@ Wczytajnotatki(stan: number)
   if (licznik == 0) 
   {
     this.ZmienStanNotatki.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki ' + powod})
-    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
   }
   else
   {
@@ -261,13 +261,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.set_stan_notatki(licznik, idnotatki, idtablica, get,wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
                   setTimeout(() => {this.set_stan_notatki(licznik, idnotatki, idtablica, get, 'error')}, 1000) 
                 }
                 )      
@@ -299,7 +299,7 @@ Wczytajnotatki(stan: number)
   var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": idnotatki})  
   if (licznik == 0) 
   {
-    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Treści: ' + powod);
+    this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Treści: ' + powod);
   }
   else
   {
@@ -333,13 +333,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, idnotatki,wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Treści Notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_notatki_tresc(licznik, stan, idnotatki,powod)}, 1000) 
                 }
                 )      
@@ -368,7 +368,7 @@ Wczytajnotatki(stan: number)
   if (licznik == 0) 
   {
     this.ZmienStanWersja.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ Stanu wersji ' + powod})
-    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
   }
   else
   {
@@ -383,13 +383,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.set_stan_wersja(licznik, idnotatki, idtablica, get,wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
                   setTimeout(() => {this.set_stan_wersja(licznik, idnotatki, idtablica, get, 'error')}, 1000) 
                 }
                 )      
@@ -418,7 +418,7 @@ Wczytajnotatki(stan: number)
   if (licznik == 0) 
   {
     this.ZmienTrescWersja.next({"wynik": false, "komunikat": 'NIE UDAŁO SIĘ ZMIENIĆ Treścci notatki ' + powod})
-    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
+    //this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZMIENIĆ Stanu notatki: ' + wynik);
   }
   else
   {
@@ -433,13 +433,13 @@ Wczytajnotatki(stan: number)
                 }
                 else
                 {//wynik false
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki - ponawiam: ' + licznik);
                   setTimeout(() => {this.set_tresc_wersja(licznik, idnotatki, idtablica, tresc, get,wynik.error)}, 1000) 
                 }
                   },
         error => {
           //console.log(error)
-                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
                   setTimeout(() => {this.set_tresc_wersja(licznik, idnotatki, idtablica, tresc, get, 'error')}, 1000) 
                 }
                 )      

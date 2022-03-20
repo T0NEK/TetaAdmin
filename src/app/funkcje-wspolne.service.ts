@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
-import { Kolory, Linia, Nazwa, Wiersze } from './definicje';
+import { Kolory, Linia, Nazwa, Wiersze, Zalogowany } from './definicje';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,16 @@ import { Kolory, Linia, Nazwa, Wiersze } from './definicje';
 export class FunkcjeWspolneService {
 
   private kolory: Kolory;
-  private dedal = 'dedal';
+  private dedal = {"osoba": 'dedal'};
+  private osoba: Zalogowany;
+  public iloscZnakowwKomend = 60;
 
 constructor()
  {
   this.kolory = {"info": "", "alert": "rgb(199, 100, 43)", "krytyczny": "red", "liniakomend": "rgb(00, 123, 255)", "zalogowany": "rgb(230, 255, 0)", "wylogowany": "white"}
  
+  this.osoba =  { 'zalogowany': 1, 'imie': 'dedal', 'nazwisko': '', 'funkcja': '', 'rodzaj': '','kolor': "white"} 
+
   this.znaki = this.znaki.concat('',' ',this.klw11,this.klw11alt,this.klw12,this.klw12alt,this.klw12caps,this.klw21,this.klw21caps,this.klw22,this.klw22caps)
   this.dluznaki = this.dluznaki.concat(0,2.45,this.dlu11,this.dlu11alt,this.dlu12,this.dlu12alt,this.dlu12caps,this.dlu21,this.dlu21caps,this.dlu22,this.dlu22caps)
 
@@ -26,6 +30,7 @@ constructor()
 
  getDedal() { return this.dedal };
 
+ getZalogowany() { return this.osoba };
 
  private ZakladkaDialogu = new Subject<any>();
  ZakladkaDialogu$ = this.ZakladkaDialogu.asObservable();

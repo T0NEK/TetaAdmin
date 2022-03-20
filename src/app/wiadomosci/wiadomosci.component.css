@@ -3,3 +3,41 @@
     color: lightgreen;
     cursor: crosshair;
 }
+div.row
+{
+    margin: 0;
+}
+.kursor 
+{
+    cursor: pointer;
+}
+.male
+{
+    font-size: 14px;
+}
+::ng-deep .mat-slide-toggle.mat-disabled .mat-slide-toggle-label,
+::ng-deep .mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container
+{
+    cursor: pointer;
+}
+.example-item
+  {
+    height: 24px;
+  }
+.example-margin 
+  {
+    margin: 0 10px;
+  }
+  .example-item-detail1 
+  {
+    height: 24px;
+    font-size: 18px;
+    padding-left: 35px;
+    padding-top: 5px;
+  }
+  .example-item-detail2
+  {
+    height: 24px;
+    font-size: 20px;
+    padding-left: 5px;
+  }  

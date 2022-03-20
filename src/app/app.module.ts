@@ -29,9 +29,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogMiniComponent } from './dialog-mini/dialog-mini.component';
 import { TestyComponent } from './testy/testy.component';
 import { PoleceniaComponent } from './polecenia/polecenia.component';
+import { ZalogowaniUzytkownicyComponent } from './zalogowani-uzytkownicy/zalogowani-uzytkownicy.component';
+import { LiniaKomendComponent } from './linia-komend/linia-komend.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [														
+  declarations: [																
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -45,7 +48,9 @@ import { PoleceniaComponent } from './polecenia/polecenia.component';
       DialogComponent,
       DialogMiniComponent,
       TestyComponent,
-      PoleceniaComponent
+      PoleceniaComponent,
+      ZalogowaniUzytkownicyComponent,
+      LiniaKomendComponent
    ],
   imports: [
     BrowserModule,
@@ -63,7 +68,8 @@ import { PoleceniaComponent } from './polecenia/polecenia.component';
     MatCardModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule
     ],
   providers: [],
   bootstrap: [AppComponent]

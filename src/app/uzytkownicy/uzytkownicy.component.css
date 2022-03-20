@@ -6,8 +6,6 @@
 .ustawienia
 {
     display: block;
-    height: var(--dialogmax);
-    max-height: var(--dialogmax);
 }
 button
 {

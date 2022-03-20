@@ -1,11 +1,22 @@
+<div>
 <app-informacje class="informacje"  [ngStyle]="{'height': wysokoscInfo +'px', 'max-height': wysokoscInfo +'px'}">
 
 </app-informacje>
+</div>
+<div class="row">
+<div>
+    <app-nawigacja class="nawigacja" [ngStyle]="{'height': wysokoscNawigacja +'px', 'max-height': wysokoscNawigacja +'px', 'width': szerokoscNawigacja +'px', 'max-width': szerokoscNawigacja +'px'}">
 
-<app-nawigacja class="nawigacja" [ngStyle]="{'height': wysokoscNawigacja +'px', 'max-height': wysokoscNawigacja +'px', 'width': szerokoscNawigacja +'px', 'max-width': szerokoscNawigacja +'px'}">
+    </app-nawigacja>
+</div>
+<div>
+    <app-zalogowani-uzytkownicy [ngStyle]="{'height': wysokoscNawigacja +'px', 'max-height': wysokoscNawigacja +'px', 'width': szerokoscZalogowani +'px', 'max-width': szerokoscZalogowani +'px'}">
 
-</app-nawigacja>
-
+    </app-zalogowani-uzytkownicy>    
+</div>
+</div>
+<div>
 <app-dialog-mini [ngStyle]="{'height': wysokoscDialogMin +'px', 'max-height': wysokoscDialogMin +'px'}">
 
 </app-dialog-mini>
+</div>

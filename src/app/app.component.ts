@@ -27,13 +27,16 @@ export class AppComponent
   public szerokoscOsoby = 340;
   public wysokoscTematy = 180;
   public wysokoscWersje = 140;
+  public szerokoscZalogowani = 280;
+  public wysokoscLinia = 42;
+
 
 constructor(private window: Window)
   {
     this.wysokoscAll = window.innerHeight;
     this.szerokoscAll = window.innerWidth
     this.wysokoscNawigacja = (this.wysokoscAll - this.wysokoscInfo - this.wysokoscDialogMin - this.wysokoscPrzewijaj);
-    this.szerokoscNawigacja = this.szerokoscAll;
+    this.szerokoscNawigacja = this.szerokoscAll - this.szerokoscZalogowani ;
 
   }
 

@@ -115,3 +115,37 @@ export interface Tresc
    funkcja: string;
    udost: Udostepnienie[];
   }
+
+  export interface Zalogowany
+  {
+      zalogowany: number;
+      imie: string;
+      nazwisko: string;
+      funkcja: string;
+      rodzaj: string;
+      kolor: string;
+  }
+
+  export interface OsobyWiadomosci
+   {
+      id: number;
+      imie: string;
+      nazwisko: string;
+      funkcja: string;
+      widoczny: boolean;
+      wybrany: boolean;
+      nowe: boolean;
+  }
+
+  export interface Wiadomosci
+  {
+     id: number;
+     autor: number;
+     autorText: string;
+     odbiorca: number;
+     odbiorcaText: string;
+     tresc: string;
+     czas: string;
+     przeczytana: boolean;
+     wyslana: boolean;
+ }

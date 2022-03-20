@@ -4,11 +4,13 @@
     color: lightgreen;
     cursor: crosshair;
 }
+div.row
+{
+    margin: 0;
+}
 .informacje
 {
     display: block;
-    height: var(--informacje);
-    max-height: var(--informacje);
     overflow-y: hidden;
     overflow-x: hidden; 
     border-bottom: 2px solid rgb(57, 71, 255);

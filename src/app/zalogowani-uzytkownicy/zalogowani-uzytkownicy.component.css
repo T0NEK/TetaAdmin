@@ -1,0 +1,13 @@
+:host
+{
+    color: lightgreen;
+    cursor: crosshair;
+}
+.male
+{
+    font-size: 14px;
+}
+.kursor
+{
+  cursor: pointer;
+}

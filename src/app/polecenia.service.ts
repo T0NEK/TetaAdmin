@@ -102,7 +102,7 @@ private odczytaj_polecenia(licznik: number, get: string, idosoba : number, idpol
 
   if (licznik == 0) 
     {
-      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal(),'NIE UDAŁO SIĘ WCZYTAĆ Poleceń: ' + wynik);
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Poleceń: ' + wynik);
     }
     else
     {
@@ -158,17 +158,17 @@ private odczytaj_polecenia(licznik: number, get: string, idosoba : number, idpol
             //console.log(this.polecenia)
             this.OdczytajPolecenia.next(this.polecenia);
             //console.log(wynik.error)
-            this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal(),wynik.error)
+            this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,wynik.error)
             }
             else
             {
-              this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Polecenia - ponawiam: ' + licznik);
+              this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Polecenia - ponawiam: ' + licznik);
               setTimeout(() => {this.odczytaj_polecenia(licznik, get, idosoba, idpolecenia, dos, wynik.error)}, 1000) 
             }
               },
     error => {
       //console.log(error)
-              this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal(),'Błąd odczytu Polecenia - ponawiam: ' + licznik);
+              this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Polecenia - ponawiam: ' + licznik);
               setTimeout(() => {this.odczytaj_polecenia(licznik, get, idosoba, idpolecenia, dos, error.error)}, 1000) 
              }
              )      

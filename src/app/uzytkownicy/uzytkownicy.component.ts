@@ -22,7 +22,32 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
    {
     //console.log('użytkownicy con')
      this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
-     ( data => { this.tablicaosoby = data; } )
+     ( data => 
+      {
+        //console.log('data',data)
+        for (let index = 0; index < data.length; index++) 
+        {
+          if (this.tablicaosoby.length == 0)
+          {
+            this.tablicaosoby = data;
+          }
+          else
+          if (data[index].id != this.tablicaosoby[index].id)
+          {
+            this.tablicaosoby[index] = data[index];
+          }
+          else
+          {
+            if (data[index].zalogowany != this.tablicaosoby[index].zalogowany) {this.tablicaosoby[index].zalogowany = data[index].zalogowany; }
+            if (data[index].blokada != this.tablicaosoby[index].blokada) {this.tablicaosoby[index].blokada = data[index].blokada; }
+            if (data[index].hannah != this.tablicaosoby[index].hannah) {this.tablicaosoby[index].hannah = data[index].hannah; }
+            if (data[index].fiona != this.tablicaosoby[index].fiona) {this.tablicaosoby[index].fiona = data[index].fiona; }
+            if (data[index].rajeh != this.tablicaosoby[index].rajeh) {this.tablicaosoby[index].rajeh = data[index].rajeh; }
+          }
+          
+        }
+        
+      } )
     this.gosciesubscribe = osoby.OdczytajGoscie$.subscribe
      ( data => { this.tablicagoscie = data; } )
   }
