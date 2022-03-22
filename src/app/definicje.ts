@@ -37,7 +37,7 @@ export interface Osoby
    hannah: boolean;
    fiona: boolean;
    rajeh: boolean;
-  }
+  } 
 
   export interface Kolory
   {

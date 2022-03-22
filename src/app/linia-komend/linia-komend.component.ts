@@ -20,7 +20,7 @@ export class LiniaKomendComponent implements OnInit {
 
 constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent)
  {
-  this.szerokoscInput = all.szerokoscAll-30;     
+  this.szerokoscInput = all.szerokoscAll - 16;     
   this.maxLenght = funkcje.iloscZnakowwKomend;  
 }
 

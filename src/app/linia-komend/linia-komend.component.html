@@ -2,9 +2,4 @@
   <div class="obok">
   <input matInput ngModel #liniaInput autofocus autocomplete="off" [maxLength]="maxLenght" (keyup)="Zmiana($event)"  [type]="haslo ? 'password' : 'text'"  [ngStyle]="{'width': szerokoscInput +'px', 'max-width': szerokoscInput +'px'}">
   </div>
-  <div class="obok ikona">
-    <button *ngIf="linia" matSuffix mat-icon-button aria-label="Clear" (click)="ClearLinia()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
 </div>

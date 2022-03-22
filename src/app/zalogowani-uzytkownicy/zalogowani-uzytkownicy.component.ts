@@ -19,6 +19,7 @@ export class ZalogowaniUzytkownicyComponent implements OnDestroy {
   tablicaosobyInni: Osoby[] = [];
   height: any;
   width: any;
+  wybrany: number = 1;
 
 constructor(private all: AppComponent, private osoby: OsobyService) 
   {
@@ -40,6 +41,11 @@ constructor(private all: AppComponent, private osoby: OsobyService)
     if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
     if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}   
     if(this.innisubscribe) { this.innisubscribe.unsubscribe()}   
+  }
+
+  Wybrany(numer: number)
+  {
+    this.wybrany = numer;
   }
 
 }

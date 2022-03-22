@@ -11,3 +11,7 @@
 {
   cursor: pointer;
 }
+.wybrany
+{
+  border: 1px solid yellow;
+}

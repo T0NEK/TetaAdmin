@@ -1,15 +1,15 @@
 <div [ngStyle]="{'width': width +'px', 'max-width': width +'px'}">
   <div class="btn btn-primary">Załoga On</div>
   <div *ngFor="let item of tablicaosobyOn"  class="example-mat-card">
-    <div [class]="item.zalogowany == true ? 'text-success' : 'text-muted'">&nbsp;<span class="liniakomend kursor">{{item.imie}}</span>&nbsp;<span class="liniakomend kursor">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></div>
+    <div [class]="{'text-success':item.zalogowany, 'text-muted' : !item.zalogowany}">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></div>
   </div>
   <div class="btn btn-primary">Załoga Off</div>
   <div *ngFor="let item of tablicaosobyOff"  class="example-mat-card">
-    <div [class]="item.zalogowany == true ? 'text-success' : 'text-muted'">&nbsp;<span class="liniakomend kursor">{{item.imie}}</span>&nbsp;<span class="liniakomend kursor">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></div>
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (wybrany == item.id)}" (click)="Wybrany(item.id)" class="kursor">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></div>
   </div>
   <div class="btn btn-primary">Dodatkowe</div>
   <div *ngFor="let item of tablicaosobyInni"  class="example-mat-card">
-    <div [class]="item.zalogowany == true ? 'text-success' : 'text-muted'">&nbsp;<span class="liniakomend kursor">{{item.imie}}</span>&nbsp;<span class="liniakomend kursor">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></div>
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (wybrany == item.id)}" (click)="Wybrany(item.id)" class="kursor">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></div>
   </div>
   </div>
   

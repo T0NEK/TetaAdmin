@@ -36,7 +36,7 @@ input
     font-size: 24px;
     padding: 5px;
     margin-top: 20px;
-    border: 1px solid rgb(00, 123, 255);
+    border: 1px solid yellow;
     user-select: none;
 }
 input:focus
