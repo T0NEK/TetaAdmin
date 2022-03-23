@@ -41,8 +41,8 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   constructor(private all: AppComponent, private wiadomosci: WiadomosciService, private funkcje: FunkcjeWspolneService, private czas: CzasService, private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef) 
   { 
     this.height = (all.wysokoscNawigacja - all.wysokoscDialogMin) + 'px' ;
-    this.width = (all.szerokoscZalogowani + 10) + 'px';
-    this.width1 = (all.szerokoscAll - 2 * all.szerokoscZalogowani - 20) + 'px';
+    this.width = all.szerokoscWiadOsoby + 'px';
+    this.width1 = (all.szerokoscAll - all.szerokoscZalogowani - all.szerokoscWiadOsoby - 10) + 'px';
     this.wysokoscLinia = all.wysokoscLinia;
 
     this.zakladkasubscribe = funkcje.ZakladkaDialogu$.subscribe
