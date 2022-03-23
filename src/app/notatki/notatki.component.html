@@ -2,8 +2,8 @@
     <div>  
       <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width1}" autosize>
         <div *cdkVirtualFor="let item of tablicaall " [ngClass]="{'text-primary': !(item.id==wlasciciel), '':(item.id==wlasciciel)}" (click)="WybranaOsoba(item.id)">
-          <div class="example-item-detail" >{{item.imie}} {{item.nazwisko}}</div>
-          <div class="example-item-detail1">({{item.funkcja}}) <span *ngIf="item.udost.length != 0" (click)="Udostepnienie(item)" [ngClass]="{'text-danger': (!(item.id==wlasciciel)&&(item.udost.idudo==0)&&(item.udost.autor!=item.udost.idosoby)), '':(item.id==wlasciciel)}">{{((item.id==wlasciciel)&&(item.id == item.udost.autor)) ? 'własna' : (item.udost.autor==item.udost.idosoby ? 'autor' : item.udost.stanudo)}}</span></div>
+          <div class="example-item-detail" ><span class="kursor">{{item.imie}} {{item.nazwisko}}</span></div>
+          <div class="example-item-detail1">({{item.funkcja}}) <span *ngIf="item.udost.length != 0" (click)="Udostepnienie(item)" [ngClass]="{'text-danger': (!(item.id==wlasciciel)&&(item.udost.idudo==0)&&(item.udost.autor!=item.udost.idosoby)), '':(item.id==wlasciciel), ' kursor': (((item.id!=wlasciciel)&&(item.id != item.udost.autor)) )}">{{((item.id==wlasciciel)&&(item.id == item.udost.autor)) ? 'własna' : (item.udost.autor==item.udost.idosoby ? 'autor' : item.udost.stanudo)}}</span></div>
           <div class="example-item-detail2"></div>
         </div>
       </cdk-virtual-scroll-viewport>
@@ -13,7 +13,7 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportTytuly appendOnly itemSize="52"  class="example-viewport" [ngStyle]="{'height': height2, 'width': width2}" autosize>
       <div *cdkVirtualFor="let item of tablicanotatki, let i = index"  (click)="WybranyTemat(item.id)">
-        <div class="example-item-detail" > temat: <span [ngClass]="{'text-primary': !(item.id==idnotatki), '':(item.id==idnotatki)}">{{item.tytul}}</span></div>
+        <div class="example-item-detail" > <span class="kursor"> <span [ngClass]="{'text-primary': !(item.id==idnotatki), '':(item.id==idnotatki)}">{{item.tytul}}</span></span></div>
         <div class="example-item-detail" > z dnia: <span class="text-info">{{item.czas}}</span>; autor: <span [ngClass]="{ 'text-info': (item.wlasciciel==wlasciciel), 'text-warning':!(item.wlasciciel==wlasciciel)}">{{item.wlascicielText}}</span>; stan: <span (click)="WybranyStan('del', item.id, i)" class="kursor" [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span>; blokada-stan: <span (click)="WybranyStan('stan', item.id, i)" class="kursor" [ngClass]="{'text-info': item.blokadastan, 'text-danger':!item.blokadastan}">{{item.blokadastan ? 'Tak' : 'Nie'}}</span>; blokada-widoczność: <span (click)="WybranyStan('udo', item.id, i)" class="kursor" [ngClass]="{'text-info': item.blokadaudo, 'text-danger':!item.blokadaudo}">{{item.blokadaudo ? 'Tak' : 'Nie'}}</span></div>
         <div class="example-item-detail2"></div>
       </div>
@@ -23,7 +23,7 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportWersje appendOnly itemSize="32"  class="example-viewport" [ngStyle]="{'height': height3, 'width': width2}" autosize>
       <div *cdkVirtualFor="let item of tablicawersje; let i = index" (click)="WybranaWersja(i)">
-        <div class="example-item-detail" ><span [ngClass]="{'text-primary': !(item.wersja==wersja), '':(item.wersja==wersja)}"> wersja: {{item.wersja}}</span>; z dnia: <span class="text-info">{{item.czas}}</span>; stan: <span (click)="WybranyStanWersja(item.id, i)" class="kursor" [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span></div>
+        <div class="example-item-detail" ><span class="kursor" [ngClass]="{'text-primary': !(item.wersja==wersja), '':(item.wersja==wersja)}"> wersja: {{item.wersja}}</span>; z dnia: <span class="text-info">{{item.czas}}</span>; stan: <span (click)="WybranyStanWersja(item.id, i)" class="kursor" [ngClass]="{'text-info': item.stan, 'text-danger':!item.stan}">{{item.stanText}}</span></div>
         <div class="example-item-detail2"></div>
       </div>
     </cdk-virtual-scroll-viewport>

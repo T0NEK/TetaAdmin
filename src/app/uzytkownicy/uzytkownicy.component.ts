@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Subscription } from 'rxjs';
+import { AppComponent } from '../app.component';
 import { Osoby } from '../definicje';
 import { OsobyService } from '../osoby.service';
 
@@ -17,11 +18,17 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
   tablicaosoby: Osoby[] = [];
   tablicagoscie: Osoby[] = [];
   zalogowany = true;
+  width: any;
+  width1: any;
 
-  constructor(private osoby: OsobyService )
+
+  constructor(private osoby: OsobyService, private all: AppComponent )
    {
     //console.log('użytkownicy con')
-     this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
+    this.width = all.szerokoscAll -  all.szerokoscZalogowani - 10 + 'px';
+    this.width1 = ((all.szerokoscAll - all.szerokoscZalogowani - 30) / 7) + 'px';
+
+     this.osobysubscribe = osoby.OdczytujOsoby$.subscribe
      ( data => 
       {
         //console.log('data',data)
@@ -43,12 +50,13 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
             if (data[index].hannah != this.tablicaosoby[index].hannah) {this.tablicaosoby[index].hannah = data[index].hannah; }
             if (data[index].fiona != this.tablicaosoby[index].fiona) {this.tablicaosoby[index].fiona = data[index].fiona; }
             if (data[index].rajeh != this.tablicaosoby[index].rajeh) {this.tablicaosoby[index].rajeh = data[index].rajeh; }
+            if (data[index].narosl != this.tablicaosoby[index].narosl) {this.tablicaosoby[index].narosl = data[index].narosl; }
           }
           
         }
         
       } )
-    this.gosciesubscribe = osoby.OdczytajGoscie$.subscribe
+    this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe
      ( data => { this.tablicagoscie = data; } )
   }
  

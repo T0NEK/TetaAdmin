@@ -61,6 +61,7 @@ private odczytaj_osoby(licznik : number)
           else
           {         
           //this.OdczytajOsoby.next(osoby);
+          this.odczytuj_osoby();
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga - stan oryginalny')
           }
         }
@@ -82,6 +83,8 @@ private odczytaj_osoby(licznik : number)
     }
   }
 
+  private OdczytujOsoby = new Subject<any>();
+  OdczytujOsoby$ = this.OdczytujOsoby.asObservable()
   private odczytuj_osoby()
   {
     this.http.get(this.komunikacja.getURL() + 'osoby/').subscribe( 
@@ -93,7 +96,7 @@ private odczytaj_osoby(licznik : number)
             for (let index = 0; index < wynik.osoby.length; index++) {
                 osoby = [...osoby, (wynik.osoby[index])];
             } 
-            this.OdczytajOsoby.next(osoby);
+            this.OdczytujOsoby.next(osoby);
             //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
             setTimeout(() => {this.odczytuj_osoby()}, 1000)
         }
@@ -272,17 +275,19 @@ reset_osoby_all(licznik: number)
             if (wynik.stan == 'START')
             {
               this.OdczytajGoscie.next(osoby);
+              this.odczytuj_goscie();
               this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Goście')
             } 
             else
             {         
             this.OdczytajGoscie.next(osoby);
+            this.odczytuj_goscie();
             this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Goście - stan oryginalny')
             }
           }
           else
           {
-            this.OdczytajGoscie.next('');
+            //this.OdczytajGoscie.next('');
             this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Goście - ponawiam: ' + licznik);
             setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
           }
@@ -290,13 +295,46 @@ reset_osoby_all(licznik: number)
                  },
         error => {
                   
-                  this.OdczytajGoscie.next('');
+                  //this.OdczytajGoscie.next('');
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia Goście  - ponawiam:' + licznik);
                   setTimeout(() => {this.odczytaj_goscie(--licznik)}, 1000)
                  }
                  )      
       }
     }
+
+
+    private OdczytujGoscie = new Subject<any>();
+    OdczytujGoscie$ = this.OdczytujGoscie.asObservable()
+    private odczytuj_goscie()
+    {
+      this.http.get(this.komunikacja.getURL() + 'goscie/').subscribe( 
+        data =>  {
+          let wynik = JSON.parse(JSON.stringify(data));    
+          if (wynik.wynik == true) 
+          {
+            let osoby: Osoby[] = [];  
+              for (let index = 0; index < wynik.osoby.length; index++) {
+                  osoby = [...osoby, (wynik.osoby[index])];
+              } 
+              this.OdczytujGoscie.next(osoby);
+              //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
+              setTimeout(() => {this.odczytuj_goscie()}, 1000)
+          }
+          else
+          {
+            this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Goscie - ponawiam: ');
+            setTimeout(() => {this.odczytuj_goscie()}, 1000)
+          }
+                          
+                 },
+        error => {
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia Goscie  - ponawiam:');
+                  setTimeout(() => {this.odczytuj_goscie()}, 1000)
+                 }
+                 )      
+    }
+
 
     zapisz_goscie_all(licznik: number, zmiana: string, stan: boolean)
     {
@@ -414,11 +452,13 @@ private odczytaj_inni(licznik : number)
           if (wynik.stan == 'START')
           {
             this.OdczytajInni.next(osoby);
+            this.odczytuj_inni()
             this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Inni')
           } 
           else
           {         
           this.OdczytajInni.next(osoby);
+          this.odczytuj_inni()
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Inni - stan oryginalny')
           }
         }
@@ -440,4 +480,35 @@ private odczytaj_inni(licznik : number)
     }
   }
 
+
+    private OdczytujInni = new Subject<any>();
+    OdczytujInni$ = this.OdczytujInni.asObservable()
+    private odczytuj_inni()
+    {
+      this.http.get(this.komunikacja.getURL() + 'inni/').subscribe( 
+        data =>  {
+          let wynik = JSON.parse(JSON.stringify(data));    
+          if (wynik.wynik == true) 
+          {
+            let osoby: Osoby[] = [];  
+              for (let index = 0; index < wynik.osoby.length; index++) {
+                  osoby = [...osoby, (wynik.osoby[index])];
+              } 
+              this.OdczytujInni.next(osoby);
+              //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
+              setTimeout(() => {this.odczytuj_inni()}, 1000)
+          }
+          else
+          {
+            this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Inni - ponawiam: ');
+            setTimeout(() => {this.odczytuj_inni()}, 1000)
+          }
+                          
+                 },
+        error => {
+                  this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia Inni  - ponawiam:');
+                  setTimeout(() => {this.odczytuj_inni()}, 1000)
+                 }
+                 )      
+    }
 }

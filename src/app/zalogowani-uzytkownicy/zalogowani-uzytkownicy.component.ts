@@ -26,13 +26,11 @@ constructor(private all: AppComponent, private osoby: OsobyService)
     this.height = all.wysokoscNawigacja;
     this.width = all.szerokoscZalogowani;
     //console.log(this.height)
-    this.osobysubscribe = osoby.OdczytajOsoby$.subscribe
-    ( data => { 
-     //console.log(data)
-      this.tablicaosobyOn = data; } )
-    this.gosciesubscribe = osoby.OdczytajGoscie$.subscribe
+    this.osobysubscribe = osoby.OdczytujOsoby$.subscribe
+    ( data => { this.tablicaosobyOn = data; } )
+    this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe
     ( data => { this.tablicaosobyOff = data; } )
-    this.innisubscribe = osoby.OdczytajInni$.subscribe
+    this.innisubscribe = osoby.OdczytujInni$.subscribe
     ( data => { this.tablicaosobyInni = data; } )
   }
 

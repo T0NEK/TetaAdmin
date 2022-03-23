@@ -18,7 +18,8 @@ export class AppComponent
   public wysokoscAll: any;
   public wysokoscInfo = 32;
   public wysokoscNawigacja: any;
-  public wysokoscPrzewijaj = 24;
+  public wysokoscNawigacjaNag = 45;
+  public wysokoscPrzewijaj = 30;
   public wysokoscDialogMin = 140;
   public szerokoscAll: any;
   public szerokoscInput: any;
@@ -34,9 +35,9 @@ export class AppComponent
 
 constructor(private window: Window)
   {
-    this.wysokoscAll = window.innerHeight;
+    this.wysokoscAll = window.innerHeight - 10;
     this.szerokoscAll = window.innerWidth
-    this.wysokoscNawigacja = (this.wysokoscAll - this.wysokoscInfo - this.wysokoscDialogMin - this.wysokoscPrzewijaj);
+    this.wysokoscNawigacja = (this.wysokoscAll - this.wysokoscInfo - this.wysokoscDialogMin);
     this.szerokoscNawigacja = this.szerokoscAll - this.szerokoscZalogowani ;
 
   }
