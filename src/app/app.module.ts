@@ -33,6 +33,7 @@ import { ZalogowaniUzytkownicyComponent } from './zalogowani-uzytkownicy/zalogow
 import { LiniaKomendComponent } from './linia-komend/linia-komend.component';
 import { MatIconModule } from '@angular/material/icon';
 
+
 @NgModule({
   declarations: [																
     AppComponent,

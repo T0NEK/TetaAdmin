@@ -1,10 +1,10 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { CzasService } from '../czas.service';
-import { Osoby, OsobyWiadomosci, Wiadomosci, Wiersze } from '../definicje';
+import { OsobyWiadomosci, Wiadomosci } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { KomunikacjaService } from '../komunikacja.service';
 import { WiadomosciService } from '../wiadomosci.service';
@@ -40,7 +40,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
 
   constructor(private all: AppComponent, private wiadomosci: WiadomosciService, private funkcje: FunkcjeWspolneService, private czas: CzasService, private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef) 
   { 
-    this.height = (all.wysokoscNawigacja - all.wysokoscDialogMin) + 'px' ;
+    this.height = (all.wysokoscNawigacja - all.wysokoscNawigacjaNag - all.wysokoscLinia - all.wysokoscPrzewijaj ) + 'px' ;
     this.width = all.szerokoscWiadOsoby + 'px';
     this.width1 = (all.szerokoscAll - all.szerokoscZalogowani - all.szerokoscWiadOsoby - 10) + 'px';
     this.wysokoscLinia = all.wysokoscLinia;
@@ -185,7 +185,7 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
   return tabelawynik
 }
 
-
+ 
   Przelacz(wszystkie: number, all: boolean)
   {
     if (wszystkie == -1)
@@ -206,6 +206,7 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
     }
   this.tablicawiadomosci = this.AktualizujWybraneOsoby(this.tablicawiadomosciorg);
   this.AktualizujPrzeczytane(this.tablicawiadomosci);
+  this.funkcje.odbiorca(this.tablicaosoby)
   }
 
   onClick(kto: string)

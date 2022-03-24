@@ -30,7 +30,7 @@ export class DialogComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private all: AppComponent, private czasy: CzasService, private funkcje: FunkcjeWspolneService, private changeDetectorRef: ChangeDetectorRef) 
   {
 
-    this.height = (all.wysokoscAll - all.wysokoscInfo -  all.wysokoscDialogMin - all.wysokoscPrzewijaj - 100) + 'px';
+    this.height = (all.wysokoscNawigacja -  all.wysokoscNawigacjaNag - all.wysokoscPrzewijaj ) + 'px';
     this.zakladkadialogusubscribe = funkcje.ZakladkaDialogu$.subscribe
     (
        data =>

@@ -26,11 +26,33 @@ constructor()
 
 
 
- getKolor() : Kolory { return this.kolory }; 
+getKolor() : Kolory { return this.kolory }; 
 
- getDedal() { return this.dedal };
+getDedal() { return this.dedal };
 
- getZalogowany() { return this.osoba };
+getZalogowany() { return this.osoba };
+
+private Zalogowany = new Subject<any>();
+Zalogowany$ = this.Zalogowany.asObservable();
+setZalogowany(id: number, imie: string, nazwisko: string, funkcja: string, rodzaj: string) 
+ {
+  this.osoba.zalogowany = id;
+  this.osoba.imie = imie;
+  this.osoba.nazwisko = nazwisko;
+  this.osoba.funkcja = funkcja;
+  this.osoba.rodzaj = rodzaj;
+  this.osoba.kolor = 'white';
+  this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz w kontekście: ' + imie + ' ' + nazwisko + ' (' + funkcja + ') ', 'yellow')
+  this.Zalogowany.next(this.osoba)
+ }
+
+ private Odbiorca = new Subject<any>();
+ Odbiorca$ = this.Odbiorca.asObservable();
+ odbiorca(tabelaosoby: any)
+ {
+  this.Odbiorca.next(tabelaosoby)
+ }
+
 
  private ZakladkaDialogu = new Subject<any>();
  ZakladkaDialogu$ = this.ZakladkaDialogu.asObservable();

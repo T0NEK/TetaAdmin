@@ -102,8 +102,7 @@ private odczytaj_osoby(stan: string)
       
     var data = JSON.stringify({ "get": stan, "odbiorca": this.funkcje.getZalogowany().zalogowany})  
       
-  
-      this.http.post(this.komunikacja.getURL() + 'wiadomosci/', data, httpOptions).subscribe( 
+        this.http.post(this.komunikacja.getURL() + 'wiadomosci/', data, httpOptions).subscribe( 
         data =>  {
       //console.log(data)
           let wynik = JSON.parse(JSON.stringify(data));    

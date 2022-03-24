@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { Osoby } from '../definicje';
+import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { OsobyService } from '../osoby.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class ZalogowaniUzytkownicyComponent implements OnDestroy {
   width: any;
   wybrany: number = 1;
 
-constructor(private all: AppComponent, private osoby: OsobyService) 
+constructor(private all: AppComponent, private osoby: OsobyService, private funkcje: FunkcjeWspolneService) 
   {
     this.height = all.wysokoscNawigacja;
     this.width = all.szerokoscZalogowani;
@@ -41,9 +42,10 @@ constructor(private all: AppComponent, private osoby: OsobyService)
     if(this.innisubscribe) { this.innisubscribe.unsubscribe()}   
   }
 
-  Wybrany(numer: number)
+  Wybrany(tabela: any, numer: number)
   {
-    this.wybrany = numer;
+    this.wybrany = tabela[numer].id;
+    this.funkcje.setZalogowany(tabela[numer].id, tabela[numer].imie, tabela[numer].nazwisko, tabela[numer].funkcja, tabela[numer].rodzaj)
   }
 
 }
