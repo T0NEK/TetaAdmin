@@ -145,8 +145,9 @@ export interface Tresc
      autorText: string;
      odbiorca: number;
      odbiorcaText: string;
-     tresc: string;
+     tresc: string[];
      czas: string;
      przeczytana: boolean;
      wyslana: boolean;
+     admin: boolean;
  }

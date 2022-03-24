@@ -1,7 +1,7 @@
 <div class="linia-komend" [ngStyle]="{'width': width +'px', 'max-width': width +'px'}">
   <mat-card  class="example-mat-card">
   <div [ngStyle]="{'width': szerokoscInput +'px', 'max-width': szerokoscInput +'px'}" class="obok">
-    <input matInput ngModel #liniaInput autofocus autocomplete="off" [maxLength]="maxLenght" [ngStyle]="{'width': szerokoscInput -20 +'px', 'max-width': szerokoscInput -20 +'px'}">
+    <input matInput ngModel autofocus autocomplete="off" [maxLength]="maxLenght" [ngStyle]="{'width': szerokoscInput -20 +'px', 'max-width': szerokoscInput -20 +'px'}" [(ngModel)]="linia">
   </div >
   <div [ngStyle]="{'width': szerokoscWyslij +'px', 'max-width': szerokoscWyslij +'px'}" class="obok">
     <button type="button" class="btn" [ngClass]="wyslijkolor" [ngStyle]="{'width': szerokoscWyslij - 8 +'px', 'max-width': szerokoscWyslij - 8 +'px'}" (click)="Wyslij()">{{nadawca.imie}}{{nadawca.nazwisko}} &#9993; &#10152; {{odbiorcy}} </button>

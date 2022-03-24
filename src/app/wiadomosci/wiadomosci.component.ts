@@ -75,16 +75,36 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
         this.tablicaosoby.forEach((element, index) => { this.tablicaosobywybrane[index] = -1; });
       } 
     )
+
     this.wiadomoscisubscribe = wiadomosci.Wiadomosci$.subscribe
     ( data => 
       { 
+        let wiadomosci: Wiadomosci[] = [];
+        
+        const dlugosc = (all.szerokoscAll - all.szerokoscZalogowani - all.szerokoscWiadOsoby - 10) * 18 / 24;
+        for (let index = 0; index < data.wiadomosci.length; index++) 
+        {
+
+        if (this.funkcje.DlugoscTekstu(data.wiadomosci[index].tresc[0]) > dlugosc )  
+        {
+          let tresc: string[] = this.PodzielWiadomosc(data.wiadomosci[index].tresc[0], dlugosc);
+          console.log(tresc)
+          data.wiadomosci[index].tresc = tresc;
+          //console.log(data.wiadomosci[index].tresc)
+          wiadomosci = [...wiadomosci, data.wiadomosci[index]]
+        }
+        else
+        {
+          wiadomosci = [...wiadomosci, data.wiadomosci[index]]
+        }
+          
+        }
         this.tablicawiadomosciorg = data.wiadomosci;  
         this.tablicaosoby = this.AktualizujOsobyNoweWiadomosci(this.tablicaosoby, data.nadawcy)
         this.tablicawiadomosci = this.AktualizujWybraneOsoby(data.wiadomosci);
         //this.AktualizujPrzeczytane(this.tablicawiadomosci);
         if (this.checked) { this.Przewin()}
-        //changeDetectorRef.detectChanges();
-        //this.VSVDialog.checkViewportSize()
+        
       } 
     )
 
@@ -142,6 +162,41 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     this.VSVDialog.checkViewportSize()
   } 
 
+  PodzielWiadomosc(wiadomosc: string, dlugosc: number): string[]
+  {
+      let tresc: string[] = [];
+      let tresc1: string = '';
+      let tresc2: string = '';
+      let spacja: boolean = false;
+      for (let index = 0; index < wiadomosc.length; index++) 
+      {
+        if (this.funkcje.DlugoscTekstu(tresc2 + tresc1) > dlugosc )  
+        {
+          if (spacja)
+          { tresc = [...tresc, tresc2]; tresc2 = '', spacja = false}
+          else
+          { tresc = [...tresc, tresc1]; tresc1 = '';}
+        }
+        else
+        {
+          if (wiadomosc[index] == ' ')
+          {
+            spacja = true;
+            tresc2 = tresc2 + tresc1 + ' '; 
+            tresc1 = '';
+          }
+          else
+          {
+            tresc1 = tresc1 + wiadomosc[index]; 
+          }
+        }
+      }
+      tresc = [...tresc, tresc2+tresc1];
+  //console.log(tresc)    
+  return tresc;  
+  }
+  
+
 AktualizujOsobyNoweWiadomosci(tabela: OsobyWiadomosci[], nadawcy: number[]): OsobyWiadomosci[]
 {
   tabela.forEach(element => 
@@ -151,25 +206,33 @@ AktualizujOsobyNoweWiadomosci(tabela: OsobyWiadomosci[], nadawcy: number[]): Oso
   return tabela;
 }
 
-AktualizujPrzeczytane(tabela: Wiadomosci[])
+AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
 {
+  if (wiadomoscid == 0)
+  {
   let tabelawynik = '0';
   let odczytane = 0;
-  for (let index = 0; index < tabela.length; index++) 
+  for (let index = 0; index < this.tablicawiadomosci.length; index++) 
   {
-    if ((tabela[index].przeczytana == false)&&(tabela[index].wyslana==false))
+    if ((this.tablicawiadomosci[index].przeczytana == false)&&(this.tablicawiadomosci[index].wyslana==false))
     { 
       odczytane++;
-      tabelawynik = tabelawynik + ',' + tabela[index].id.toString(); 
+      tabelawynik = tabelawynik + ',' + this.tablicawiadomosci[index].id.toString(); 
     }
   }
   if (odczytane != 0)
   { 
     this.wiadomosci.AktualizujPrzeczytane(tabelawynik, this.funkcje.getZalogowany().zalogowany,odczytane); 
   }  
-  
+  }
+  else
+  {
+    if ((this.tablicawiadomosci[index].przeczytana == false)&&(this.tablicawiadomosci[index].wyslana==false))
+    {
+      this.wiadomosci.AktualizujPrzeczytane(wiadomoscid.toString(), this.funkcje.getZalogowany().zalogowany,1); 
+    }
+  }
 }
-
 
 AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
 {
@@ -205,7 +268,7 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
       this.tablicaosobywybrane[wszystkie] = (!all ? (1*this.tablicaosoby[wszystkie].id) : -1);
     }
   this.tablicawiadomosci = this.AktualizujWybraneOsoby(this.tablicawiadomosciorg);
-  this.AktualizujPrzeczytane(this.tablicawiadomosci);
+  //this.AktualizujPrzeczytane(this.tablicawiadomosci);
   this.funkcje.odbiorca(this.tablicaosoby)
   }
 

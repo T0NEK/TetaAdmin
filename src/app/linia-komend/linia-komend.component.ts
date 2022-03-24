@@ -1,8 +1,9 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { Zalogowany } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
+import { WiadomosciService } from '../wiadomosci.service';
 
 @Component({
   selector: 'app-linia-komend',
@@ -18,7 +19,6 @@ export class LiniaKomendComponent implements OnDestroy {
   szerokoscWyslij: any;
   width: any;
   maxLenght: number;
-  @ViewChild('liniaInput') liniaInput!: ElementRef;
   linia = '';
   private zalogowany = new Subscription();
   private odbiorca = new Subscription();
@@ -30,7 +30,7 @@ export class LiniaKomendComponent implements OnDestroy {
   
 
 
-constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent)
+constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent, private wiadomosci: WiadomosciService)
  {
   this.wysokoscInput = all.wysokoscLinia;
   this.width = all.szerokoscAll;      
@@ -47,7 +47,7 @@ constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent)
       this.ilosc = 0;
       for (let element of data)
       {
-        if (element.wybrany) 
+        if ((element.wybrany)&&(element.id != this.funkcje.getZalogowany().zalogowany)) 
         {
           this.wybrani = [...this.wybrani, element.id] 
           this.ilosc++;
@@ -70,7 +70,9 @@ ngOnDestroy()
   
 Wyslij()
 {
- if (this.ilosc > 0)
- { this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'Wysłano ', 'yellow') }
+ if ((this.ilosc > 0)&&(this.linia.length != 0))
+ { //this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'Wysłano ' + this.linia, 'yellow') 
+    this.wiadomosci.WyslijWiadomosc.next(this.linia);
+ }
 }
 }
