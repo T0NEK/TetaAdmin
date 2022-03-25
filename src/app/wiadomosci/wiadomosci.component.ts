@@ -23,6 +23,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   private zakladkasubscribe = new Subscription();
   private wiadomoscisubscribe = new Subscription();
   private logowaniesubscribe = new Subscription();
+  private zalogowany = new Subscription();
   tablicaosoby: OsobyWiadomosci[] = [];
   tablicaosobywybrane: number[] = [];
   tablicawiadomosciorg: Wiadomosci[] = []; 
@@ -51,19 +52,9 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
       {
           if (data == 4) 
           {
-            if (this.funkcje.getZalogowany().zalogowany == 0)
-            {
-              this.tablicaosoby = [];
-              this.tablicaosobywybrane = [];
-              this.tablicawiadomosciorg = []; 
-              this.tablicawiadomosci = []; 
-              //this.wiadomosci.wczytajOsoby(this.funkcje.getZalogowany().zalogowany);
-            }
-            else
-            {
             this.wiadomosci.wczytajOsoby();
             this.wiadomosci.OdczytajWiadomosci();
-            }
+            
           { if (this.checked) { this.Przewin()} }
          }
       }  
@@ -75,6 +66,13 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
         this.tablicaosoby.forEach((element, index) => { this.tablicaosobywybrane[index] = -1; });
       } 
     )
+
+    this.zalogowany = funkcje.Zalogowany$.subscribe 
+    ( data => 
+      { 
+        this.wiadomosci.wczytajOsoby();
+      } 
+    );  
 
     this.wiadomoscisubscribe = wiadomosci.Wiadomosci$.subscribe
     ( data => 
@@ -88,7 +86,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
         if (this.funkcje.DlugoscTekstu(data.wiadomosci[index].tresc[0]) > dlugosc )  
         {
           let tresc: string[] = this.PodzielWiadomosc(data.wiadomosci[index].tresc[0], dlugosc);
-          console.log(tresc)
+          //console.log(tresc)
           data.wiadomosci[index].tresc = tresc;
           //console.log(data.wiadomosci[index].tresc)
           wiadomosci = [...wiadomosci, data.wiadomosci[index]]
@@ -152,6 +150,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     if(this.zakladkasubscribe) { this.zakladkasubscribe.unsubscribe()}   
     if(this.wiadomoscisubscribe) { this.zakladkasubscribe.unsubscribe()}   
     if(this.logowaniesubscribe) { this.logowaniesubscribe.unsubscribe()}   
+    if(this.zalogowany) { this.zalogowany.unsubscribe()}   
   }
 
   ngAfterViewInit()
@@ -214,7 +213,7 @@ AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
   let odczytane = 0;
   for (let index = 0; index < this.tablicawiadomosci.length; index++) 
   {
-    if ((this.tablicawiadomosci[index].przeczytana == false)&&(this.tablicawiadomosci[index].wyslana==false))
+    if ((this.tablicawiadomosci[index].przeczytanaadmin == false)&&(this.tablicawiadomosci[index].wyslana==false))
     { 
       odczytane++;
       tabelawynik = tabelawynik + ',' + this.tablicawiadomosci[index].id.toString(); 
@@ -227,11 +226,17 @@ AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
   }
   else
   {
-    if ((this.tablicawiadomosci[index].przeczytana == false)&&(this.tablicawiadomosci[index].wyslana==false))
+    if ((this.tablicawiadomosci[index].przeczytanaadmin == false)&&(this.tablicawiadomosci[index].wyslana==false))
     {
       this.wiadomosci.AktualizujPrzeczytane(wiadomoscid.toString(), this.funkcje.getZalogowany().zalogowany,1); 
     }
   }
+}
+
+Odczytaj(wiadomoscid: number)
+{
+
+ this.wiadomosci.AktualizujPrzeczytaneOsoba(wiadomoscid.toString(), 0,1); 
 }
 
 AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]

@@ -44,8 +44,16 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
 
   Wybrany(tabela: any, numer: number)
   {
+    if (numer == -1)
+    {
+      this.wybrany = -1;
+      this.funkcje.setZalogowany(0, "", "", "", "")  
+    }
+    else
+    {
     this.wybrany = tabela[numer].id;
     this.funkcje.setZalogowany(tabela[numer].id, tabela[numer].imie, tabela[numer].nazwisko, tabela[numer].funkcja, tabela[numer].rodzaj)
+    }
   }
 
 }

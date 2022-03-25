@@ -69,13 +69,15 @@ private odczytaj_osoby(stan: string)
         else
         {
           setTimeout(() =>  {
-                            if (this.funkcje.getZalogowany().zalogowany != 0) {this.odczytaj_osoby(stan)}
+                            //if (this.funkcje.getZalogowany().zalogowany != 0) 
+                            {this.odczytaj_osoby(stan)}
                             }, 1000)
         }
                },
       error => {
                 setTimeout(() =>  {
-                                  if (this.funkcje.getZalogowany().zalogowany != 0) {this.odczytaj_osoby(stan)}
+                                  //if (this.funkcje.getZalogowany().zalogowany != 0) 
+                                  {this.odczytaj_osoby(stan)}
                                   }, 1000)
                }
                )      
@@ -101,7 +103,7 @@ private odczytaj_osoby(stan: string)
       };
       
     var data = JSON.stringify({ "get": stan, "odbiorca": this.funkcje.getZalogowany().zalogowany})  
-      
+     //console.log(data) 
         this.http.post(this.komunikacja.getURL() + 'wiadomosci/', data, httpOptions).subscribe( 
         data =>  {
       //console.log(data)
@@ -122,13 +124,15 @@ private odczytaj_osoby(stan: string)
             { this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'otrzymałeś: ' + noweilosc + ' nowych wiadomości', 'rgb(20,120,140)') }
             this.Wiadomosci.next({"wiadomosci": wynik.wiadomosci, "nadawcy": wynik.nadawcy, "nowe": noweilosc});
             setTimeout(() =>  {
-                              if (this.funkcje.getZalogowany().zalogowany != 0) {this.odczytaj_wiadomosci(stan)}
+                              //if (this.funkcje.getZalogowany().zalogowany != 0) 
+                              {this.odczytaj_wiadomosci(stan)}
                               }, 1000)
           }
           else
           {
             setTimeout(() =>  {
-                              if (this.funkcje.getZalogowany().zalogowany != 0) {this.odczytaj_wiadomosci(stan)}
+                              //if (this.funkcje.getZalogowany().zalogowany != 0)
+                               {this.odczytaj_wiadomosci(stan)}
                               }, 1000)
           }
                           
@@ -136,7 +140,7 @@ private odczytaj_osoby(stan: string)
         error => {
       //console.log(error)
                 setTimeout(() =>  {
-                                  if (this.funkcje.getZalogowany().zalogowany != 0)
+                                  //if (this.funkcje.getZalogowany().zalogowany != 0)
                                   {this.odczytaj_wiadomosci(stan)}
                                   }, 1000)
                  }
@@ -145,10 +149,18 @@ private odczytaj_osoby(stan: string)
 
 
   AktualizujPrzeczytane(przeczytane: string, odbiorca: number, odczytane: number)
-  {
+  { 
+    console.log(przeczytane)
    this.set_wiadomosci(2, 'prze', przeczytane, odbiorca, odczytane, '', '', '')
    }
   
+  AktualizujPrzeczytaneOsoba(przeczytane: string, odbiorca: number, odczytane: number)
+   {
+    console.log(przeczytane)
+    this.set_wiadomosci(2, 'przeoso', przeczytane, odbiorca, odczytane, '', '', '')
+    }
+   
+
   WyslijWiadomosci(odbiorcy: string, odbiorca: number, tresc: string, czas: string)
   {
     //console.log(5, 'set', odbiorcy , odbiorca, tresc, czas, '');

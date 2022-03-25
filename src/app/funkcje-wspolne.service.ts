@@ -42,8 +42,16 @@ setZalogowany(id: number, imie: string, nazwisko: string, funkcja: string, rodza
   this.osoba.funkcja = funkcja;
   this.osoba.rodzaj = rodzaj;
   this.osoba.kolor = 'white';
-  this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz w kontekście: ' + imie + ' ' + nazwisko + ' (' + funkcja + ') ', 'yellow')
-  this.Zalogowany.next(this.osoba)
+  if (id == 0)
+  {
+    this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz bez kontekstu osoby', 'yellow')
+    this.Zalogowany.next(this.osoba)
+  }
+  else
+  {
+    this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz w kontekście: ' + imie + ' ' + nazwisko + ( (funkcja.length !=  0) ? ' (' + funkcja + ') ' : ''), 'yellow')
+    this.Zalogowany.next(this.osoba)
+  }
  }
 
  private Odbiorca = new Subject<any>();

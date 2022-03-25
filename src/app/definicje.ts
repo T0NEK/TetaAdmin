@@ -148,6 +148,7 @@ export interface Tresc
      tresc: string[];
      czas: string;
      przeczytana: boolean;
+     przeczytanaadmin: boolean;
      wyslana: boolean;
      admin: boolean;
  }
