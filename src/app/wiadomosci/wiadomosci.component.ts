@@ -24,6 +24,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   private wiadomoscisubscribe = new Subscription();
   private logowaniesubscribe = new Subscription();
   private zalogowany = new Subscription();
+  private odbiorca = new Subscription();
   tablicaosoby: OsobyWiadomosci[] = [];
   tablicaosobywybrane: number[] = [];
   tablicawiadomosciorg: Wiadomosci[] = []; 
@@ -34,6 +35,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   checkedW = true;
   checkedN = false;
   wysokoscLinia: any;
+  nadawcy: number[] =[]
 
   checked = true;
   @ViewChild('scrollViewportDialog') VSVDialog!: CdkVirtualScrollViewport;
@@ -52,16 +54,21 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
       {
           if (data == 4) 
           {
-            this.wiadomosci.wczytajOsoby();
-            this.wiadomosci.OdczytajWiadomosci();
+            //this.wiadomosci.wczytajOsoby();
+            //this.wiadomosci.OdczytajWiadomosci();
             
           { if (this.checked) { this.Przewin()} }
          }
       }  
     )
+    
     this.osobysubscribe = wiadomosci.OdczytajOsoby$.subscribe
     ( data => 
       { 
+        //console.log(data)
+        //console.log(this.tablicaosoby)
+        //if ((this.tablicaosoby.length != 0)&&(data.length != 0))
+        //{data.forEach( (element: OsobyWiadomosci, index: number) => { element.wybrany = this.tablicaosoby[index].wybrany;  })};
         this.tablicaosoby = data;   
         this.tablicaosoby.forEach((element, index) => { this.tablicaosobywybrane[index] = -1; });
       } 
@@ -70,15 +77,17 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     this.zalogowany = funkcje.Zalogowany$.subscribe 
     ( data => 
       { 
-        this.wiadomosci.wczytajOsoby();
+        //this.wiadomosci.wczytajOsoby();
+        this.nadawcy = data.nadawcy;
       } 
     );  
+
+     
 
     this.wiadomoscisubscribe = wiadomosci.Wiadomosci$.subscribe
     ( data => 
       { 
-        let wiadomosci: Wiadomosci[] = [];
-        
+        //console.log(data)
         const dlugosc = (all.szerokoscAll - all.szerokoscZalogowani - all.szerokoscWiadOsoby - 10) * 18 / 24;
         for (let index = 0; index < data.wiadomosci.length; index++) 
         {
@@ -86,21 +95,14 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
         if (this.funkcje.DlugoscTekstu(data.wiadomosci[index].tresc[0]) > dlugosc )  
         {
           let tresc: string[] = this.PodzielWiadomosc(data.wiadomosci[index].tresc[0], dlugosc);
-          //console.log(tresc)
           data.wiadomosci[index].tresc = tresc;
-          //console.log(data.wiadomosci[index].tresc)
-          wiadomosci = [...wiadomosci, data.wiadomosci[index]]
-        }
-        else
-        {
-          wiadomosci = [...wiadomosci, data.wiadomosci[index]]
         }
           
         }
         this.tablicawiadomosciorg = data.wiadomosci;  
         this.tablicaosoby = this.AktualizujOsobyNoweWiadomosci(this.tablicaosoby, data.nadawcy)
         this.tablicawiadomosci = this.AktualizujWybraneOsoby(data.wiadomosci);
-        //this.AktualizujPrzeczytane(this.tablicawiadomosci);
+        //this.PokazWiadomosci(this.tablicawiadomosci);
         if (this.checked) { this.Przewin()}
         
       } 
@@ -131,8 +133,12 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
           
         if (odbiorcy.length > 1)  
         {
-          this.wiadomosci.WyslijWiadomosci(odbiorcy, this.funkcje.getZalogowany().zalogowany, data, this.czas.getCzasDedala())
-          //this.funkcje.OdblokujLinieDialogu('',0)
+          for (let index = 0; index < this.nadawcy.length; index++)
+          {
+            this.wiadomosci.WyslijWiadomosci(odbiorcy, this.nadawcy[index], data, this.czas.getCzasDedala())
+            //this.funkcje.OdblokujLinieDialogu('',0)  
+          }
+          
         }
         else
         {
@@ -151,6 +157,7 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     if(this.wiadomoscisubscribe) { this.zakladkasubscribe.unsubscribe()}   
     if(this.logowaniesubscribe) { this.logowaniesubscribe.unsubscribe()}   
     if(this.zalogowany) { this.zalogowany.unsubscribe()}   
+    if(this.odbiorca) { this.odbiorca.unsubscribe()}   
   }
 
   ngAfterViewInit()
@@ -205,6 +212,15 @@ AktualizujOsobyNoweWiadomosci(tabela: OsobyWiadomosci[], nadawcy: number[]): Oso
   return tabela;
 }
 
+PokazWiadomosci(tabela: Wiadomosci[])
+{
+  tabela.forEach(element => 
+    {
+    this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'wiadomosc od: ' + element.autorText + '  do: ' + element.odbiorcaText, 'rgb(20,120,140)') 
+    });
+}
+
+
 AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
 {
   if (wiadomoscid == 0)
@@ -213,7 +229,7 @@ AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
   let odczytane = 0;
   for (let index = 0; index < this.tablicawiadomosci.length; index++) 
   {
-    if ((this.tablicawiadomosci[index].przeczytanaadmin == false)&&(this.tablicawiadomosci[index].wyslana==false))
+    if ((this.tablicawiadomosci[index].przeczytanaadmin == false))
     { 
       odczytane++;
       tabelawynik = tabelawynik + ',' + this.tablicawiadomosci[index].id.toString(); 
@@ -226,7 +242,7 @@ AktualizujPrzeczytane(wiadomoscid: number, index: number = 0)
   }
   else
   {
-    if ((this.tablicawiadomosci[index].przeczytanaadmin == false)&&(this.tablicawiadomosci[index].wyslana==false))
+    if ((this.tablicawiadomosci[index].przeczytanaadmin == false))
     {
       this.wiadomosci.AktualizujPrzeczytane(wiadomoscid.toString(), this.funkcje.getZalogowany().zalogowany,1); 
     }
@@ -242,10 +258,13 @@ Odczytaj(wiadomoscid: number)
 AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
 {
   //console.log(this.tablicaosobywybrane)
-  let tabelawynik: Wiadomosci[] = []
+  let tabelawynik: Wiadomosci[] = [];
+  //console.log(this.nadawcy)
   for (let index = 0; index < tabela.length; index++) 
   {
-    if (( this.tablicaosobywybrane.includes(1*tabela[index].autor) )||((1*tabela[index].autor == this.funkcje.getZalogowany().zalogowany )&&( this.tablicaosobywybrane.includes(1*tabela[index].odbiorca))))
+    
+    if ((( this.tablicaosobywybrane.includes(1*tabela[index].autor) )||(( this.tablicaosobywybrane.includes(1*tabela[index].odbiorca))))&&(( this.nadawcy.includes(tabela[index].autor) )||(( this.nadawcy.includes(tabela[index].odbiorca))))  )
+    //if ((( this.tablicaosobywybrane.includes(1*tabela[index].autor) ))&&((( this.nadawcy.includes(tabela[index].odbiorca))))  )
     {
       tabelawynik = [...tabelawynik, tabela[index]];
     }    

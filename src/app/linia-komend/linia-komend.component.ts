@@ -24,7 +24,8 @@ export class LiniaKomendComponent implements OnDestroy {
   private odbiorca = new Subscription();
   nadawca: Zalogowany;
   odbiorcy: string = '';
-  wyslijkolor: string = 'btn-danger'
+  kolorN: boolean = false;
+  kolorO: boolean = false;
   wybrani: number [] = [];
   ilosc = 0;
   
@@ -40,8 +41,23 @@ constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent, p
   this.nadawca = this.funkcje.getZalogowany()
 
 
-  this.zalogowany = funkcje.Zalogowany$.subscribe ( data => { this.nadawca = data } );  
-  this.odbiorca = funkcje.Odbiorca$.subscribe ( data => 
+  this.zalogowany = funkcje.Zalogowany$.subscribe 
+  ( data => 
+    { 
+      //console.log(data)
+      if (data.zalogowany.zalogowany == 0)
+      { if (data.nadawcy.length == 0)
+        { this.nadawca.imie = 'wybierz'; this.nadawca.nazwisko = ''; this.kolorN = false; }
+        else
+        { this.nadawca.imie = 'wielu'; this.nadawca.nazwisko = '' ; this.kolorN = true; }
+      }
+      else
+      { this.nadawca = data.zalogowany; this.kolorN = true }
+    } 
+  );  
+
+  this.odbiorca = funkcje.Odbiorca$.subscribe 
+  ( data => 
     { 
       this.odbiorcy = '';
       this.ilosc = 0;
@@ -54,13 +70,15 @@ constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent, p
           this.odbiorcy = element.imie + ' ' + element.nazwisko
         }; 
       }
-      if (this.ilosc == 1) { this.wyslijkolor = 'btn-success' }
-      else if (this.ilosc == 0) { this.odbiorcy = 'wybierz'; this.wyslijkolor = 'btn-danger' }
-          else { this.odbiorcy = 'wielu'; this.wyslijkolor = 'btn-success'}
+      if (this.ilosc == 1) 
+        { this.kolorO = true }
+        else if (this.ilosc == 0) 
+             { this.odbiorcy = 'wybierz'; this.kolorO = false }
+             else 
+             { this.odbiorcy = 'wielu'; this.kolorO = true}
     }  
     );  
-
-}
+  }
 
 ngOnDestroy() 
   {
@@ -70,8 +88,8 @@ ngOnDestroy()
   
 Wyslij()
 {
- if ((this.ilosc > 0)&&(this.linia.length != 0))
- { //this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'Wysłano ' + this.linia, 'yellow') 
+ if ((this.kolorN)&&(this.kolorO)&&(this.linia.length != 0))
+ { 
     this.wiadomosci.WyslijWiadomosc.next(this.linia);
  }
 }

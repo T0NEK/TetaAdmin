@@ -26,19 +26,33 @@ export interface Wiersze
    }
 
 
-export interface Osoby
+export interface OsobyBaza
 {
    id: number;
    imie: string;
    nazwisko: string;
    funkcja: string;
    zalogowany: boolean;
-   blokada: boolean;
-   hannah: boolean;
-   fiona: boolean;
-   rajeh: boolean;
-   narosl : boolean;
+} 
+
+  export interface Osoby extends OsobyBaza
+  {
+     blokada: boolean;
+     hannah: boolean;
+     fiona: boolean;
+     rajeh: boolean;
+     narosl : boolean;
   } 
+  
+  export interface Osoby2 extends OsobyBaza
+  {
+    wybrany?: boolean;
+  }
+
+  export interface OsobyWybrane
+  {
+    tab: Osoby2[];
+  }
 
   export interface Kolory
   {

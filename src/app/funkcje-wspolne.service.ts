@@ -17,7 +17,7 @@ constructor()
  {
   this.kolory = {"info": "", "alert": "rgb(199, 100, 43)", "krytyczny": "red", "liniakomend": "rgb(00, 123, 255)", "zalogowany": "rgb(230, 255, 0)", "wylogowany": "white"}
  
-  this.osoba =  { 'zalogowany': 1, 'imie': 'dedal', 'nazwisko': '', 'funkcja': '', 'rodzaj': '','kolor': "white"} 
+  this.osoba =  { 'zalogowany': 0, 'imie': 'dedal', 'nazwisko': '', 'funkcja': '', 'rodzaj': '','kolor': "white"} 
 
   this.znaki = this.znaki.concat('',' ',this.klw11,this.klw11alt,this.klw12,this.klw12alt,this.klw12caps,this.klw21,this.klw21caps,this.klw22,this.klw22caps)
   this.dluznaki = this.dluznaki.concat(0,2.45,this.dlu11,this.dlu11alt,this.dlu12,this.dlu12alt,this.dlu12caps,this.dlu21,this.dlu21caps,this.dlu22,this.dlu22caps)
@@ -34,23 +34,23 @@ getZalogowany() { return this.osoba };
 
 private Zalogowany = new Subject<any>();
 Zalogowany$ = this.Zalogowany.asObservable();
-setZalogowany(id: number, imie: string, nazwisko: string, funkcja: string, rodzaj: string) 
+setZalogowany(zalogowany: any, nadawcy: any) 
  {
-  this.osoba.zalogowany = id;
-  this.osoba.imie = imie;
-  this.osoba.nazwisko = nazwisko;
-  this.osoba.funkcja = funkcja;
-  this.osoba.rodzaj = rodzaj;
+  this.osoba.zalogowany = zalogowany.id;
+  this.osoba.imie = zalogowany.imie;
+  this.osoba.nazwisko = zalogowany.nazwisko;
+  this.osoba.funkcja = zalogowany.funkcja;
+  this.osoba.rodzaj = zalogowany.rodzaj;
   this.osoba.kolor = 'white';
-  if (id == 0)
+  if (this.osoba.zalogowany == 0)
   {
     this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz bez kontekstu osoby', 'yellow')
-    this.Zalogowany.next(this.osoba)
+    this.Zalogowany.next({"zalogowany": this.osoba, "nadawcy": nadawcy})
   }
   else
   {
-    this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz w kontekście: ' + imie + ' ' + nazwisko + ( (funkcja.length !=  0) ? ' (' + funkcja + ') ' : ''), 'yellow')
-    this.Zalogowany.next(this.osoba)
+    this.addLiniaKomunikatuKolor(this.getDedal().osoba,'pracujesz w kontekście: ' + this.osoba.imie + ' ' + this.osoba.nazwisko + ( (this.osoba.funkcja.length !=  0) ? ' (' + this.osoba.funkcja + ') ' : ''), 'yellow')
+    this.Zalogowany.next({"zalogowany": this.osoba, "nadawcy": nadawcy})
   }
  }
 

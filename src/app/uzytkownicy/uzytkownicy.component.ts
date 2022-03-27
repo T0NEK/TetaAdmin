@@ -56,6 +56,7 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
         }
         
       } )
+
     this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe
      ( data => { this.tablicagoscie = data; } )
   }

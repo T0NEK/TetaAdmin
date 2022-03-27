@@ -1,3 +1,9 @@
+:host
+{
+    color: lightgreen;
+    cursor: crosshair;
+    white-space: pre;
+}
 .example-viewport
   {
     width: 100%;

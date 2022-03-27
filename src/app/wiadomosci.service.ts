@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
+import { Nazwa } from './definicje';
 import { FunkcjeWspolneService } from './funkcje-wspolne.service';
 import { KomunikacjaService } from './komunikacja.service';
 
@@ -25,7 +26,7 @@ this.osobysubscribe = this.OdczytajOsoby$.subscribe
   ( data => 
     { 
       //this.tablicaosoby = data;   
-      if (this.funkcje.getZalogowany().zalogowany != 0)
+      //if (this.funkcje.getZalogowany().zalogowany != 0)
       { this.OdczytajWiadomosci( ); }
     } 
   )
@@ -56,8 +57,7 @@ private odczytaj_osoby(stan: string)
     };
     
   var data = JSON.stringify({ "get": stan, "odbiorca": this.funkcje.getZalogowany().zalogowany})  
-    
-
+  
     this.http.post(this.komunikacja.getURL() + 'wiadomosci/', data, httpOptions).subscribe( 
       data =>  {
         let wynik = JSON.parse(JSON.stringify(data));    
@@ -67,20 +67,10 @@ private odczytaj_osoby(stan: string)
           this.OdczytajOsoby.next(wynik.osoby);
         }
         else
-        {
-          setTimeout(() =>  {
-                            //if (this.funkcje.getZalogowany().zalogowany != 0) 
-                            {this.odczytaj_osoby(stan)}
-                            }, 1000)
-        }
+        { setTimeout(() =>  { this.odczytaj_osoby(stan) }, 1000) }
                },
-      error => {
-                setTimeout(() =>  {
-                                  //if (this.funkcje.getZalogowany().zalogowany != 0) 
-                                  {this.odczytaj_osoby(stan)}
-                                  }, 1000)
-               }
-               )      
+      error => { setTimeout(() =>  { this.odczytaj_osoby(stan) }, 1000) }
+        )      
   }
 
   
@@ -111,38 +101,52 @@ private odczytaj_osoby(stan: string)
           if (wynik.wynik == true) 
           {
             let noweilosc = 0;
-            //let nowe: number[] = [];
+            let noweNadawcyTxt: string[]=[];
+            let noweOdbiorcy: number[]=[];
+            let noweOdbiorcyTxt: string[]=[];
             for (let index = 0; index < wynik.nowe.length; index++) 
             {
               if (  this.nowewiadomosci.includes(1*wynik.nowe[index]) == false)
               {
                 noweilosc++;
+                if (noweNadawcyTxt.includes(wynik.nadawcyTxt[index]) == false) { noweNadawcyTxt = [...noweNadawcyTxt, wynik.nadawcyTxt[index]];}
+                if (noweOdbiorcy.includes(wynik.odbiorcy[index]) == false) { noweOdbiorcy = [...noweOdbiorcy, wynik.odbiorcy[index]];}
+                if (noweOdbiorcyTxt.includes(wynik.odbiorcyTxt[index]) == false) { noweOdbiorcyTxt = [...noweOdbiorcyTxt, wynik.odbiorcyTxt[index]];}
               }  
             }
             this.nowewiadomosci = wynik.nowe;
             if(noweilosc > 0)
-            { this.funkcje.addLiniaKomunikatuKolor(this.funkcje.getDedal().osoba,'otrzymałeś: ' + noweilosc + ' nowych wiadomości', 'rgb(20,120,140)') }
+            { 
+            let info: Nazwa[] = [this.funkcje.setTextNazwa('otrzymałeś:','','','',''),this.funkcje.setTextNazwa(' ', noweilosc.toString() ,' ','yellow',''), this.funkcje.setTextNazwa('wiadomości od: ','','','','')];
+            let kolor: string;
+            for (let index = 0; index < noweNadawcyTxt.length; index++) 
+            {
+               info = [...info, this.funkcje.setTextNazwa((index == 0 ? ' ':', '),noweNadawcyTxt[index].toString(),'','rgb(20,120,140)','')]
+            }
+              info = [...info, this.funkcje.setTextNazwa((' dla: '),'','','','')]
+            for (let index = 0; index < noweOdbiorcy.length; index++) 
+            {
+              switch (noweOdbiorcy[index].toString())
+              {
+                case '1': kolor = 'red'; break;
+                case '15': kolor = 'red'; break;
+                case '12': kolor = 'red'; break;
+                default: kolor = 'rgb(20,120,140)'; break;
+              }
+               info = [...info, this.funkcje.setTextNazwa((index == 0 ? ' ':', '),noweOdbiorcyTxt[index].toString(),'',kolor,'')]
+            }
+              this.funkcje.addLiniaKomunikatu('',this.funkcje.getDedal().osoba,'','',[this.funkcje.setNazwaLinia('', info,'')],'')
+            }
             this.Wiadomosci.next({"wiadomosci": wynik.wiadomosci, "nadawcy": wynik.nadawcy, "nowe": noweilosc});
-            setTimeout(() =>  {
-                              //if (this.funkcje.getZalogowany().zalogowany != 0) 
-                              {this.odczytaj_wiadomosci(stan)}
-                              }, 1000)
+            setTimeout(() =>  { this.odczytaj_wiadomosci(stan) }, 1000)
           }
           else
-          {
-            setTimeout(() =>  {
-                              //if (this.funkcje.getZalogowany().zalogowany != 0)
-                               {this.odczytaj_wiadomosci(stan)}
-                              }, 1000)
-          }
+          { setTimeout(() =>  { this.odczytaj_wiadomosci(stan) }, 1000)}
                           
                  },
         error => {
       //console.log(error)
-                setTimeout(() =>  {
-                                  //if (this.funkcje.getZalogowany().zalogowany != 0)
-                                  {this.odczytaj_wiadomosci(stan)}
-                                  }, 1000)
+                setTimeout(() =>  { this.odczytaj_wiadomosci(stan) }, 1000)
                  }
                  )      
     }
@@ -163,7 +167,7 @@ private odczytaj_osoby(stan: string)
 
   WyslijWiadomosci(odbiorcy: string, odbiorca: number, tresc: string, czas: string)
   {
-    //console.log(5, 'set', odbiorcy , odbiorca, tresc, czas, '');
+    console.log(5, 'set', odbiorcy , odbiorca, tresc, czas, '');
     this.set_wiadomosci(5, 'set', odbiorcy , odbiorca, 0, tresc, czas, '');
   }
    

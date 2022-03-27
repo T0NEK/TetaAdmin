@@ -32,10 +32,11 @@ import { PoleceniaComponent } from './polecenia/polecenia.component';
 import { ZalogowaniUzytkownicyComponent } from './zalogowani-uzytkownicy/zalogowani-uzytkownicy.component';
 import { LiniaKomendComponent } from './linia-komend/linia-komend.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ZdarzeniaComponent } from './zdarzenia/zdarzenia.component';
 
 
 @NgModule({
-  declarations: [																
+  declarations: [																	
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -51,7 +52,8 @@ import { MatIconModule } from '@angular/material/icon';
       TestyComponent,
       PoleceniaComponent,
       ZalogowaniUzytkownicyComponent,
-      LiniaKomendComponent
+      LiniaKomendComponent,
+      ZdarzeniaComponent
    ],
   imports: [
     BrowserModule,

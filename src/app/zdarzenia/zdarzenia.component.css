@@ -11,20 +11,29 @@
 button
 {
   padding: 1px 3px 1px 3px;
-  width: 100px;
-  height: 26px;
+  margin: 0px 6px 6px 0px;
+  width: 120px;
+  height: 32px;
 }
-.example-mat-card
+.mat-card
 {
     background: black;
     color: lightgreen;
+}  
+.mat-card 
+{
     border: 1px solid silver;
     padding: 6px;
 }
-.example-mat-card:hover
+.mat-card:hover
 {
-  background: rgb(42, 42, 42);  
-  border: 1px solid yellow;
+    background: rgb(42, 42, 42);  
+    border: 1px solid yellow;
+}
+.mat-card-subtitle
+{
+    background: inherit;
+    color: inherit;  
 }
 .obok
 {

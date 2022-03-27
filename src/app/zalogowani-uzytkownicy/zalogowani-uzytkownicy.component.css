@@ -11,6 +11,10 @@
 {
   cursor: pointer;
 }
+.niewybrany
+{
+  border: 1px solid black;
+}
 .wybrany
 {
   border: 1px solid yellow;
@@ -20,3 +24,24 @@
   height: 10px;
   min-height: 10px;
 }
+.odstepmin
+{
+  height: 5px;
+  min-height: 5px;
+}
+.btn
+{
+  width: 110px;
+}
+.zmien
+{
+  width: 90px;
+  height: 22px;
+  padding: 0px;
+  border: 0px;
+}
+.zmienW
+{
+  width: 90px;
+}
+

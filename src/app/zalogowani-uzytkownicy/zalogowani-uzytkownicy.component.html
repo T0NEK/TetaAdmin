@@ -1,19 +1,32 @@
 <div [ngStyle]="{'width': width +'px', 'max-width': width +'px'}">
   <div class="btn btn-primary" >Załoga On</div>
+  <div class="odstep"></div>
   <div *ngFor="let item of tablicaosobyOn, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success':item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : ((wybrany == item.id)||(wybrany == -1))}" ><span class="kursor" (click)="Wybrany(tablicaosobyOn,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span></span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></div>
+    <div [class]="{'text-success':item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[0].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[0].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(0,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
   </div>
+  <div class="odstepmin"></div>
+  <div class="btn zmien btn-warning"  (click)="WybranyW(0,true)">Wszyscy</div>&nbsp;
+  <div class="btn zmien btn-warning" (click)="WybranyW(0,false)">Nikt</div>
   <div class="odstep"></div>
   <div class="btn btn-primary" >Załoga Off</div>
+  <div class="odstep"></div>
   <div *ngFor="let item of tablicaosobyOff, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : ((wybrany == item.id)||(wybrany == -1))}" ><span class="kursor" (click)="Wybrany(tablicaosobyOff,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span></span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></div>
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[1].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[1].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(1,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
   </div>
+  <div class="odstepmin"></div>
+  <div class="btn zmien btn-warning"  (click)="WybranyW(1,true)">Wszyscy</div>&nbsp;
+  <div class="btn zmien btn-warning" (click)="WybranyW(1,false)">Nikt</div>
   <div class="odstep"></div>
   <div class="btn btn-primary" >Dodatkowe</div>
-  <div *ngFor="let item of tablicaosobyInni, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : ((wybrany == item.id)||(wybrany == -1))}" ><span class="kursor" (click)="Wybrany(tablicaosobyInni,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span></span></div>
-  </div>
   <div class="odstep"></div>
-  <div class="btn btn-warning" (click)="Wybrany([],-1)">Wszyscy</div>
+  <div *ngFor="let item of tablicaosobyInni, let i = index"  class="example-mat-card">
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[2].tab[i].wybrany ), 'niewybrany' : (!(tablicaWybrany[2].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(2,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
+  </div>
+  <div class="odstepmin"></div>
+  <div class="btn zmien btn-warning"  (click)="WybranyW(2,true)">Wszyscy</div>&nbsp;
+  <div class="btn zmien btn-warning" (click)="WybranyW(2,false)">Nikt</div>
+  <div class="odstepmin"></div>
+  <div class="btn zmienW btn-warning"  (click)="WybranyW(-1,true)">Wszyscy</div>&nbsp;
+  <div class="btn zmienW btn-warning" (click)="WybranyW(-1,false)">Nikt</div>
   </div>
   

@@ -22,8 +22,8 @@ constructor(private funkcje: FunkcjeWspolneService, private komunikacja: Komunik
 wczytajOsoby(licznik: number)
 {
     this.odczytaj_osoby(licznik);
-    this.odczytaj_goscie(licznik);
-    this.odczytaj_inni(licznik)
+    //this.odczytaj_goscie(licznik);
+    //this.odczytaj_inni(licznik)
 }
 
 resetOsoby()
@@ -37,8 +37,6 @@ private odczytaj_osoby(licznik : number)
   {
     if (licznik == 0) 
     {
-      
-      //this.OdczytajOsoby.next('osoby');
       this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Osoby');
     }
     else
@@ -55,27 +53,26 @@ private odczytaj_osoby(licznik : number)
           if (wynik.stan == 'START')
           {
             this.OdczytajOsoby.next(osoby);
-            this.odczytuj_osoby();
+            this.odczytaj_goscie(5);
+            setTimeout(() => {this.odczytuj_osoby()}, 1000)
             this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga')
             } 
           else
           {         
-          //this.OdczytajOsoby.next(osoby);
-          this.odczytuj_osoby();
+          this.OdczytajOsoby.next(osoby);
+          this.odczytaj_goscie(5);
+          setTimeout(() => {this.odczytuj_osoby()}, 1000)
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga - stan oryginalny')
           }
         }
         else
         {
-          //this.OdczytajOsoby.next('');
           this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd odczytu Załoga - ponawiam: ' + licznik);
           setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
         }
                         
                },
       error => {
-                
-                //this.OdczytajOsoby.next("");
                 this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia Załoga  - ponawiam:' + licznik);
                 setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
                }
@@ -97,7 +94,6 @@ private odczytaj_osoby(licznik : number)
                 osoby = [...osoby, (wynik.osoby[index])];
             } 
             this.OdczytujOsoby.next(osoby);
-            //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
             setTimeout(() => {this.odczytuj_osoby()}, 1000)
         }
         else
@@ -141,7 +137,7 @@ reset_osoby_all(licznik: number)
               {
                 //this.changeCzasDedala( wynik.czas );
                 this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wykonano reset dla All"') 
-                this.odczytaj_osoby(5);
+                //this.odczytaj_osoby(5);
               }
               else
               {
@@ -185,7 +181,7 @@ reset_osoby_all(licznik: number)
               {
                 //this.changeCzasDedala( wynik.czas );
                 this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + '] dla Załoga"') 
-                this.odczytaj_osoby(5);
+                //this.odczytaj_osoby(5);
               }
               else
               {
@@ -258,7 +254,7 @@ reset_osoby_all(licznik: number)
       if (licznik == 0) 
       {
         
-        this.OdczytajGoscie.next('osoby');
+        //this.OdczytajGoscie.next('osoby');
         this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Goście');
       }
       else
@@ -275,13 +271,15 @@ reset_osoby_all(licznik: number)
             if (wynik.stan == 'START')
             {
               this.OdczytajGoscie.next(osoby);
-              this.odczytuj_goscie();
+              this.odczytaj_inni(5)
+              setTimeout(() => {this.odczytuj_goscie()}, 1000)
               this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Goście')
             } 
             else
             {         
             this.OdczytajGoscie.next(osoby);
-            this.odczytuj_goscie();
+            this.odczytaj_inni(5)
+            setTimeout(() => {this.odczytuj_goscie()}, 1000)
             this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Goście - stan oryginalny')
             }
           }
@@ -363,7 +361,7 @@ reset_osoby_all(licznik: number)
                 {
                   //this.changeCzasDedala( wynik.czas );
                   this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') +'] dla Osoby Dodatkowe"') 
-                  this.odczytaj_goscie(licznik);
+                  //this.odczytaj_goscie(licznik);
                 }
                 else
                 {
@@ -397,7 +395,7 @@ reset_osoby_all(licznik: number)
      if (licznik == 0) 
       { 
         this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"'); 
-        this.odczytaj_goscie(5);    
+        //this.odczytaj_goscie(5);    
       }
       else
       {
@@ -435,7 +433,7 @@ private odczytaj_inni(licznik : number)
     if (licznik == 0) 
     {
       
-      this.OdczytajInni.next('osoby');
+      //this.OdczytajInni.next('osoby');
       this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Inni');
     }
     else
@@ -452,13 +450,13 @@ private odczytaj_inni(licznik : number)
           if (wynik.stan == 'START')
           {
             this.OdczytajInni.next(osoby);
-            this.odczytuj_inni()
+            setTimeout(() => {this.odczytuj_inni()}, 1000)
             this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Inni')
           } 
           else
           {         
           this.OdczytajInni.next(osoby);
-          this.odczytuj_inni()
+          setTimeout(() => {this.odczytuj_inni()}, 1000)
           this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Inni - stan oryginalny')
           }
         }
@@ -495,7 +493,6 @@ private odczytaj_inni(licznik : number)
                   osoby = [...osoby, (wynik.osoby[index])];
               } 
               this.OdczytujInni.next(osoby);
-              //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
               setTimeout(() => {this.odczytuj_inni()}, 1000)
           }
           else

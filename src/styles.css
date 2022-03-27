@@ -9,15 +9,7 @@ html, body
     width: 100%;
     max-width: 100%;  
     overflow-y: hidden;
-    overflow-x: hidden;
-    
-    --informacje: 32px;
-    --dialogmax: 780px;
-    --dialogmin: 168px;
-    --stopka: 20px;
-    
-    --status: 26px;
-    
+    overflow-x: hidden;   
 }
 body 
 { 
