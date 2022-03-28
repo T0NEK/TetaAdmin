@@ -253,7 +253,7 @@ Wczytajnotatki(stan: number)
       --licznik;
       this.http.post(this.komunikacja.getURL() + 'notatki/', data, httpOptions).subscribe( 
         data =>  {
-          //console.log(data)
+          console.log(data)
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true) 
                 {
@@ -266,7 +266,7 @@ Wczytajnotatki(stan: number)
                 }
                   },
         error => {
-          //console.log(error)
+          console.log(error)
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd zmiany stanu notatki- ponawiam: ' + licznik);
                   setTimeout(() => {this.set_stan_notatki(licznik, idnotatki, idtablica, get, 'error')}, 1000) 
                 }

@@ -31,9 +31,9 @@
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.zalogowany" (change)="setZalogaOne('logowanie', item, $event)"><span [ngClass]="{'text-success':item.zalogowany, 'text-danger':!item.zalogowany}">{{item.zalogowany ? "Zalogowany" : "Wylogowany"}}</span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.blokada" (change)="setZalogaOne('blokowanie', item, $event)"><span [ngClass]="{'text-success':item.blokada, 'text-danger':!item.blokada}">{{item.blokada ? "dostępny" : "zablokowany"}} </span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.hannah" (change)="setZalogaOne('hannah', item, $event)"><span [ngClass]="{'text-success':item.hannah, 'text-danger':!item.hannah}"> Han {{item.hannah ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
-    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.fiona" (change)="setGoscieOne('fiona', item, $event)"><span [ngClass]="{'text-success':item.fiona, 'text-danger':!item.fiona}"> Akido {{item.fiona ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
-    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.rajeh" (change)="setGoscieOne('rajeh', item, $event)"><span [ngClass]="{'text-success':item.rajeh, 'text-danger':!item.rajeh}"> Rajeh {{item.rajeh ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
-    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.narosl" (change)="setGoscieOne('narosl', item, $event)"><span [ngClass]="{'text-success':item.narosl, 'text-danger':!item.narosl}"> Narośl Weira {{item.narosl ? "" : "nie"}}widoczna</span></mat-slide-toggle></div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.fiona" (change)="setZalogaOne('fiona', item, $event)"><span [ngClass]="{'text-success':item.fiona, 'text-danger':!item.fiona}"> Akido {{item.fiona ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.rajeh" (change)="setZalogaOne('rajeh', item, $event)"><span [ngClass]="{'text-success':item.rajeh, 'text-danger':!item.rajeh}"> Rajeh {{item.rajeh ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.narosl" (change)="setZalogaOne('narosl', item, $event)"><span [ngClass]="{'text-success':item.narosl, 'text-danger':!item.narosl}"> Narośl Weira {{item.narosl ? "" : "nie"}}widoczna</span></mat-slide-toggle></div>
     
 </mat-card>
 <mat-card  class="example-mat-card">
@@ -57,6 +57,10 @@
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
         <button type="button" class="btn btn-danger" (click)="setGoscie('rajeh', false)"> Ukryj </button>
         <button type="button" class="btn btn-success" (click)="setGoscie('rajeh', true)"> Pokaż </button>  
+    </div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
+        <button type="button" class="btn btn-danger" (click)="setGoscie('narosl', false)"> Ukryj </button>
+        <button type="button" class="btn btn-success" (click)="setGoscie('narosl', true)"> Pokaż </button>  
     </div>
 </mat-card>
 <mat-card *ngFor="let item of tablicagoscie"  class="example-mat-card">

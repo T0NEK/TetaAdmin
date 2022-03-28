@@ -23,7 +23,7 @@
     <div>
       <cdk-virtual-scroll-viewport #scrollViewportDialog appendOnly [itemSize]="44" minBufferPx="200" maxBufferPx="400" class="example-viewport" [ngStyle]="{'width': width1, 'min-width': width1,'height': height}" autosize>
         <div *cdkVirtualFor="let item of tablicawiadomosci, let i=index"  class="example-item, text-success" [ngClass]="{'text-info': !item.wyslana}" [ngStyle]="{'font-weight': ((item.przeczytanaadmin) ? 'normal' : 'bold')}" (click)="AktualizujPrzeczytane(item.id,i)">
-          <div class="example-item-detail1" [ngClass]="{'kursor': (!item.przeczytanaadmin)}"><span [ngClass]="{'text-danger': item.admin}">{{item.czas}} &nbsp;{{ item.autorText }} &#10140;</span> {{ item.odbiorcaText }}<span class="kursor" [ngClass]="{'text-warning': (!((item.przeczytana)))}" (click)="Odczytaj(item.id)">{{(((item.przeczytana)) ?  ' (przeczytana)' : ' (wysłana)')  }} </span></div>
+          <div class="example-item-detail1" [ngClass]="{'kursor': (!item.przeczytanaadmin)}"><span [ngClass]="{'text-danger': item.admin}">{{item.czas}} &nbsp;{{ item.autorText }} &#10140;</span> {{ item.odbiorcaText }}<span class="kursor" [ngClass]="{'text-warning': (!((item.przeczytana)))}" (click)="Odczytaj(item.id)">{{(((item.przeczytana)) ?  ' (przeczytana)' : ' (wysłana)')  }} </span><span class="text-danger"> {{Narosl(item.autor, item.odbiorca)}}</span></div>
           <div *ngFor="let item2 of item.tresc" class="example-item-detail2" >{{item2}}</div>
         </div>
       </cdk-virtual-scroll-viewport>

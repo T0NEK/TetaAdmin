@@ -7,6 +7,7 @@ import { CzasService } from '../czas.service';
 import { OsobyWiadomosci, Wiadomosci } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
 import { KomunikacjaService } from '../komunikacja.service';
+import { OsobyService } from '../osoby.service';
 import { WiadomosciService } from '../wiadomosci.service';
 
 @Component({
@@ -25,7 +26,11 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   private logowaniesubscribe = new Subscription();
   private zalogowany = new Subscription();
   private odbiorca = new Subscription();
+  private osobyNsubscribe = new Subscription();
+  private goscieNsubscribe = new Subscription();
   tablicaosoby: OsobyWiadomosci[] = [];
+  tablicaNaroslOsoby : number[] = [];
+  tablicaNaroslGoscie : number[] = [];
   tablicaosobywybrane: number[] = [];
   tablicawiadomosciorg: Wiadomosci[] = []; 
   tablicawiadomosci: Wiadomosci[] = []; 
@@ -35,13 +40,14 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
   checkedW = true;
   checkedN = false;
   wysokoscLinia: any;
-  nadawcy: number[] =[]
+  nadawcy: number[] =[];
+
 
   checked = true;
   @ViewChild('scrollViewportDialog') VSVDialog!: CdkVirtualScrollViewport;
 
 
-  constructor(private all: AppComponent, private wiadomosci: WiadomosciService, private funkcje: FunkcjeWspolneService, private czas: CzasService, private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef) 
+  constructor(private all: AppComponent, private wiadomosci: WiadomosciService, private funkcje: FunkcjeWspolneService, private czas: CzasService, private komunikacja: KomunikacjaService, private changeDetectorRef: ChangeDetectorRef, private osoby: OsobyService) 
   { 
     this.height = (all.wysokoscNawigacja - all.wysokoscNawigacjaNag - all.wysokoscLinia - all.wysokoscPrzewijaj ) + 'px' ;
     this.width = all.szerokoscWiadOsoby + 'px';
@@ -148,7 +154,31 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
 
       } 
     )
-  }
+
+    this.osobyNsubscribe = osoby.OdczytujOsoby$.subscribe
+    ( data => 
+     {
+       //console.log('data',data)
+       let tablica: number[] =[]
+       for (let index = 0; index < data.length; index++) 
+       { if (data[index].narosl == true)
+         { tablica = [...tablica, data[index].id] }  
+       }
+       this.tablicaNaroslOsoby = tablica;
+     } )
+
+   this.goscieNsubscribe = osoby.OdczytujGoscie$.subscribe
+    ( data => 
+      { 
+        let tablica: number[] =[]
+        for (let index = 0; index < data.length; index++) 
+        { if (data[index].narosl == true)
+        { tablica = [...tablica, data[index].id] }  
+      }
+      this.tablicaNaroslGoscie = tablica;
+      } )
+ }
+
 
   ngOnDestroy()
   {
@@ -158,6 +188,8 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     if(this.logowaniesubscribe) { this.logowaniesubscribe.unsubscribe()}   
     if(this.zalogowany) { this.zalogowany.unsubscribe()}   
     if(this.odbiorca) { this.odbiorca.unsubscribe()}   
+    if(this.osobyNsubscribe) { this.osobyNsubscribe.unsubscribe()}   
+    if(this.goscieNsubscribe) { this.goscieNsubscribe.unsubscribe()}   
   }
 
   ngAfterViewInit()
@@ -167,6 +199,21 @@ export class WiadomosciComponent implements OnDestroy, AfterViewInit {
     this.changeDetectorRef.detectChanges();
     this.VSVDialog.checkViewportSize()
   } 
+
+Narosl(autor: number, odbiorca: number): string
+{
+  if (autor == 13)
+  {
+    let tabela: number[] = this.tablicaNaroslOsoby.concat(this.tablicaNaroslGoscie);
+    if ( tabela.includes(odbiorca))
+    {return ""}
+    else
+    {return "(niewidoczna)"}
+  }
+  else
+  {return ''}
+  
+}
 
   PodzielWiadomosc(wiadomosc: string, dlugosc: number): string[]
   {

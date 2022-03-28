@@ -11,6 +11,9 @@ import * as moment from 'moment';
 export class OsobyService 
 {
     
+private osoby: Osoby[]=[];
+private goscie: Osoby[]=[];
+
 constructor(private funkcje: FunkcjeWspolneService, private komunikacja: KomunikacjaService, private http: HttpClient)
 {
     console.log('osoby con');
@@ -18,6 +21,10 @@ constructor(private funkcje: FunkcjeWspolneService, private komunikacja: Komunik
 }
 
 /* (start) osoby*/
+
+
+getOsoby() { return this.osoby}
+getGoscie() { return this.goscie}
 
 wczytajOsoby(licznik: number)
 {
@@ -89,11 +96,13 @@ private odczytaj_osoby(licznik : number)
         let wynik = JSON.parse(JSON.stringify(data));    
         if (wynik.wynik == true) 
         {
-          let osoby: Osoby[] = [];  
+          /*let osoby: Osoby[] = [];  
             for (let index = 0; index < wynik.osoby.length; index++) {
                 osoby = [...osoby, (wynik.osoby[index])];
             } 
-            this.OdczytujOsoby.next(osoby);
+          */  
+            this.osoby = wynik.osoby;
+            this.OdczytujOsoby.next(wynik.osoby);
             setTimeout(() => {this.odczytuj_osoby()}, 1000)
         }
         else
@@ -311,11 +320,14 @@ reset_osoby_all(licznik: number)
           let wynik = JSON.parse(JSON.stringify(data));    
           if (wynik.wynik == true) 
           {
+            /*
             let osoby: Osoby[] = [];  
               for (let index = 0; index < wynik.osoby.length; index++) {
                   osoby = [...osoby, (wynik.osoby[index])];
               } 
-              this.OdczytujGoscie.next(osoby);
+             */
+              this.goscie = wynik.osoby
+              this.OdczytujGoscie.next(wynik.osoby);
               //this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Wczytano Załoga 2')
               setTimeout(() => {this.odczytuj_goscie()}, 1000)
           }
