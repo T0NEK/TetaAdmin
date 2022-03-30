@@ -7,9 +7,9 @@ import { Injectable } from '@angular/core';
 
 export class KomunikacjaService 
 {
-  private httpURL_80 = 'http://localhost:80/TetaPhp/Admin/';
-  private httpURL_8080 = 'http://localhost:8080/TetaPhp/Admin/';
-  private httpURL_8080_1 = 'http://192.168.60.25:8080/TetaPhp/Admin/';
+  private httpHostName = window.location.hostname;
+  private httpURL_80 = 'http://'+ this.httpHostName + ':80/TetaPhp/Admin/';
+  private httpURL_8080 = 'http://'+ this.httpHostName + ':8080/TetaPhp/Admin/';
   private httpURL: any;
   
   constructor(private http: HttpClient) 
@@ -18,7 +18,6 @@ export class KomunikacjaService
     this.httpURL = 'error';
     this.sprawdz_port(this.httpURL_80);
     this.sprawdz_port(this.httpURL_8080);
-    this.sprawdz_port(this.httpURL_8080_1);
   }
 
 

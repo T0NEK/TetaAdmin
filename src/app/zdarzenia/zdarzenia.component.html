@@ -1,5 +1,5 @@
   <mat-card class="mat-card">
-    <mat-card-title>Sygnał teta</mat-card-title>
+    <mat-card-title><span [ngClass]="{'text-danger': sygnalteta}">Sygnał teta - {{sygnalteta ? 'Załączony' : 'Wyłączony'}}</span></mat-card-title>
     <mat-card-subtitle>
       [Załączenie]: zalogowani nie mogą wykonać żadnego polecenia (działa jak wyloguj w Użytkownicy)
                     wylogowani dopiero po zalogowaniu      

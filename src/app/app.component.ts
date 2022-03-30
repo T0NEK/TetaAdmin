@@ -36,6 +36,7 @@ export class AppComponent
 
 constructor(private window: Window)
   {
+    //console.log(window.location.hostname)
     this.wysokoscAll = window.innerHeight - 10;
     this.szerokoscAll = window.innerWidth - 2
     this.wysokoscNawigacja = (this.wysokoscAll - this.wysokoscInfo - this.wysokoscDialogMin);
