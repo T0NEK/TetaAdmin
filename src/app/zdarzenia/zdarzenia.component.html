@@ -6,8 +6,8 @@
     </mat-card-subtitle>
     <mat-card-actions align="end">
       <div class="example-button-row">
-        <button type="button" class="btn btn-danger" (click)="setTeta(true)"> Załącz </button>
-        <button type="button" class="btn btn-success" (click)="setTeta(false)"> Wyłącz </button>  
+        <button type="button" class="btn btn-danger" (click)="setTeta(true)" [disabled]="sygnalteta"> Załącz </button>
+        <button type="button" class="btn btn-success" (click)="setTeta(false)" [disabled]="!sygnalteta"> Wyłącz </button>  
       </div> 
      </mat-card-actions>
   </mat-card>

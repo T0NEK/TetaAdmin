@@ -22,6 +22,9 @@ constructor(private funkcje: FunkcjeWspolneService, private komunikacja: Komunik
 
 /* (start) osoby*/
 
+private SygnalTeta = new Subject<any>();
+SygnalTeta$ = this.SygnalTeta.asObservable()
+
 
 getOsoby() { return this.osoby}
 getGoscie() { return this.goscie}
@@ -33,9 +36,9 @@ wczytajOsoby(licznik: number)
     //this.odczytaj_inni(licznik)
 }
 
-resetOsoby()
+resetOsoby(czas: string)
 {
-  this.reset_osoby_all(5)
+  this.reset_osoby_all(5, czas)
 }
 
 private OdczytajOsoby = new Subject<any>();
@@ -120,7 +123,7 @@ private odczytaj_osoby(licznik : number)
   }
 
 
-reset_osoby_all(licznik: number)
+reset_osoby_all(licznik: number, czas: string)
 {
   const httpOptions = {
     headers: new HttpHeaders({
@@ -130,7 +133,7 @@ reset_osoby_all(licznik: number)
     })
   };
   
-  var data = JSON.stringify({"czas": moment().format('YYYY-MM-DD HH:mm:ss')})  
+  var data = JSON.stringify({"czas": czas})  
 
 
   if (licznik == 0) 
@@ -151,13 +154,13 @@ reset_osoby_all(licznik: number)
               else
               {
                 this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd Reset - ponawiam: ' + licznik); 
-                setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
+                setTimeout(() => {this.reset_osoby_all(--licznik, czas)}, 1000) 
               }
                 },
       error => {
 //console.log(error)         
                 this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia dla Reset - ponawiam: ' + licznik); 
-                setTimeout(() => {this.reset_osoby_all(--licznik)}, 1000) 
+                setTimeout(() => {this.reset_osoby_all(--licznik, czas)}, 1000) 
                }
                )      
     }
@@ -178,7 +181,10 @@ reset_osoby_all(licznik: number)
 //console.log(data)        
 
    if (licznik == 0) 
-    { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Załoga'); }
+    { 
+      this.SygnalTeta.next({"wynik":false, "id":0})
+      this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Załoga'); 
+    }
     else
     {
     this.http.post(this.komunikacja.getURL() + 'osoby/', data, httpOptions).subscribe( 
@@ -189,6 +195,7 @@ reset_osoby_all(licznik: number)
               if (wynik.wynik == true) 
               {
                 //this.changeCzasDedala( wynik.czas );
+                this.SygnalTeta.next({"wynik":true, "id":0})
                 this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + '] dla Załoga"') 
                 //this.odczytaj_osoby(5);
               }
@@ -223,6 +230,7 @@ reset_osoby_all(licznik: number)
 
    if (licznik == 0) 
     { 
+      this.SygnalTeta.next({"wynik":false, "id":dane.id})
       this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"'); 
       this.odczytaj_osoby(5);    
     }
@@ -236,6 +244,7 @@ reset_osoby_all(licznik: number)
               if (wynik.wynik == true) 
               {
                 //this.changeCzasDedala( wynik.czas );
+                this.SygnalTeta.next({"wynik":true, "id":dane.id})
                 this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"') 
               }
               else
@@ -361,7 +370,9 @@ reset_osoby_all(licznik: number)
   //console.log(data)        
   
      if (licznik == 0) 
-      { this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Osoby Dodatkowe'); }
+      { 
+        this.SygnalTeta.next({"wynik":false, "id":0})
+        this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla Osoby Dodatkowe'); }
       else
       {
       this.http.post(this.komunikacja.getURL() + 'goscie/', data, httpOptions).subscribe( 
@@ -372,6 +383,7 @@ reset_osoby_all(licznik: number)
                 if (wynik.wynik == true) 
                 {
                   //this.changeCzasDedala( wynik.czas );
+                  this.SygnalTeta.next({"wynik":true, "id":0})
                   this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') +'] dla Osoby Dodatkowe"') 
                   //this.odczytaj_goscie(licznik);
                 }
@@ -406,6 +418,7 @@ reset_osoby_all(licznik: number)
   
      if (licznik == 0) 
       { 
+        this.SygnalTeta.next({"wynik":false, "id":dane.id})
         this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ ZAPISAĆ "zmiana: [' + zmiana + '] dla: ' + dane.imie + ' ' + dane.nazwisko + '"'); 
         //this.odczytaj_goscie(5);    
       }
@@ -419,6 +432,7 @@ reset_osoby_all(licznik: number)
                 if (wynik.wynik == true) 
                 {
                   //this.changeCzasDedala( wynik.czas );
+                  this.SygnalTeta.next({"wynik":true, "id":dane.id})
                   this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zapisano "zmiana: [' + zmiana + (stan ? ' = on':' = off') + ']  dla: ' + dane.imie + ' ' + dane.nazwisko + '"') 
                 }
                 else

@@ -1,9 +1,18 @@
 <div class="ustawienia" [ngStyle]="{'width': width, 'min-width': width}">
-<mat-card  class="example-mat-card">
+    <mat-card  class="example-mat-card">
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Osoby</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Blokada poleceń</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Blokada logowania</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Widoczność HAN</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Widoczność AKIDO</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Widoczność RAJEH</div>
+        <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">Widoczność NAROŚL</div>
+    </mat-card>    
+    <mat-card  class="example-mat-card">
     <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">ZAŁOGA</div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
-        <button type="button" class="btn btn-danger" (click)="setZaloga('logowanie', false)"> Wyloguj </button>
-        <button type="button" class="btn btn-success" (click)="setZaloga('logowanie', true)"> Zaloguj </button>  
+        <button type="button" class="btn btn-danger" (click)="setZaloga('polecenia', false)"> Zablokuj </button>
+        <button type="button" class="btn btn-success" (click)="setZaloga('polecenia', true)"> Odblokuj </button>  
     </div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
         <button type="button" class="btn btn-danger" (click)="setZaloga('blokowanie', false)"> Zablokuj </button>
@@ -28,7 +37,7 @@
 </mat-card>
 <mat-card *ngFor="let item of tablicaosoby"  class="example-mat-card">
     <div class="obok text-success" [ngStyle]="{'width': width1, 'min-width': width1}">{{item.imie}} {{item.nazwisko}} <span class="male">({{item.funkcja}})</span></div>
-    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.zalogowany" (change)="setZalogaOne('logowanie', item, $event)"><span [ngClass]="{'text-success':item.zalogowany, 'text-danger':!item.zalogowany}">{{item.zalogowany ? "Zalogowany" : "Wylogowany"}}</span></mat-slide-toggle></div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.polecenia" (change)="setZalogaOne('polecenia', item, $event)"><span [ngClass]="{'text-success':item.polecenia, 'text-danger':!item.polecenia}">{{!item.polecenia ? "zablokowane" : "odblokowane"}}</span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.blokada" (change)="setZalogaOne('blokowanie', item, $event)"><span [ngClass]="{'text-success':item.blokada, 'text-danger':!item.blokada}">{{item.blokada ? "dostępny" : "zablokowany"}} </span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.hannah" (change)="setZalogaOne('hannah', item, $event)"><span [ngClass]="{'text-success':item.hannah, 'text-danger':!item.hannah}"> Han {{item.hannah ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.fiona" (change)="setZalogaOne('fiona', item, $event)"><span [ngClass]="{'text-success':item.fiona, 'text-danger':!item.fiona}"> Akido {{item.fiona ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
@@ -39,8 +48,8 @@
 <mat-card  class="example-mat-card">
     <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">OSOBY DODATKOWE</div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
-        <button type="button" class="btn btn-danger" (click)="setGoscie('logowanie', false)"> Wyloguj </button>
-        <button type="button" class="btn btn-success" (click)="setGoscie('logowanie', true)"> Zaloguj </button>  
+        <button type="button" class="btn btn-danger" (click)="setGoscie('polecenia', false)"> Zablokuj </button>
+        <button type="button" class="btn btn-success" (click)="setGoscie('polecenia', true)"> Odblokuj </button>  
     </div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}">
         <button type="button" class="btn btn-danger" (click)="setGoscie('blokowanie', false)"> Zablokuj </button>
@@ -65,7 +74,7 @@
 </mat-card>
 <mat-card *ngFor="let item of tablicagoscie"  class="example-mat-card">
     <div class="obok text-success" [ngStyle]="{'width': width1, 'min-width': width1}">{{item.imie}} {{item.nazwisko}} <span class="male">({{item.funkcja}})</span></div>
-    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.zalogowany" (change)="setGoscieOne('logowanie', item, $event)"><span [ngClass]="{'text-success':item.zalogowany, 'text-danger':!item.zalogowany}">{{item.zalogowany ? "Zalogowany" : "Wylogowany"}}</span></mat-slide-toggle></div>
+    <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.polecenia" (change)="setGoscieOne('polecenia', item, $event)"><span [ngClass]="{'text-success':item.polecenia, 'text-danger':!item.polecenia}">{{!item.polecenia ? "zablokowane" : "odblokowane"}}</span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.blokada" (change)="setGoscieOne('blokowanie', item, $event)"><span [ngClass]="{'text-success':item.blokada, 'text-danger':!item.blokada}">{{item.blokada ? "dostępny" : "zablokowany"}} </span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.hannah" (change)="setGoscieOne('hannah', item, $event)" *ngIf="item.id != 9"><span [ngClass]="{'text-success':item.hannah, 'text-danger':!item.hannah}"> Han {{item.hannah ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>
     <div class="obok" [ngStyle]="{'width': width1, 'min-width': width1}"><mat-slide-toggle [(ngModel)]="item.fiona" (change)="setGoscieOne('fiona', item, $event)" *ngIf="item.id != 7"><span [ngClass]="{'text-success':item.fiona, 'text-danger':!item.fiona}"> Akido {{item.fiona ? "" : "nie"}}widoczny</span></mat-slide-toggle></div>

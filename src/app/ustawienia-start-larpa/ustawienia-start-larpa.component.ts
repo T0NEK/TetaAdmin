@@ -53,7 +53,7 @@ stop()
 
 reset()
   {
-    this.osoby.resetOsoby()
+    this.osoby.resetOsoby(this.czasy.getCzasDedala())
   }
 
 }

@@ -32,6 +32,9 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
      ( data => 
       {
         //console.log('data',data)
+      
+        this.tablicaosoby = data;
+        /*
         for (let index = 0; index < data.length; index++) 
         {
           if (this.tablicaosoby.length == 0)
@@ -52,9 +55,8 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
             if (data[index].rajeh != this.tablicaosoby[index].rajeh) {this.tablicaosoby[index].rajeh = data[index].rajeh; }
             if (data[index].narosl != this.tablicaosoby[index].narosl) {this.tablicaosoby[index].narosl = data[index].narosl; }
           }
-          
         }
-        
+        */
       } )
 
     this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe

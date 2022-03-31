@@ -37,6 +37,7 @@ export interface OsobyBaza
 
   export interface Osoby extends OsobyBaza
   {
+     polecenia: boolean;
      blokada: boolean;
      hannah: boolean;
      fiona: boolean;
