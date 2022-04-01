@@ -53,6 +53,7 @@ private odczytaj_osoby(licznik : number)
     {
     this.http.get(this.komunikacja.getURL() + 'osoby/').subscribe( 
       data =>  {
+  //console.log(data)          
         let wynik = JSON.parse(JSON.stringify(data));    
         if (wynik.wynik == true) 
         {
@@ -83,6 +84,7 @@ private odczytaj_osoby(licznik : number)
                         
                },
       error => {
+    console.log(error)  
                 this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd połączenia Załoga  - ponawiam:' + licznik);
                 setTimeout(() => {this.odczytaj_osoby(--licznik)}, 1000)
                }

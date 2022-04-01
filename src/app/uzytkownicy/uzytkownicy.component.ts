@@ -17,7 +17,7 @@ export class UzytkownicyComponent implements OnInit, OnDestroy
   private gosciesubscribe = new Subscription();
   tablicaosoby: Osoby[] = [];
   tablicagoscie: Osoby[] = [];
-  zalogowany = true;
+  //zalogowany = true;
   width: any;
   width1: any;
 

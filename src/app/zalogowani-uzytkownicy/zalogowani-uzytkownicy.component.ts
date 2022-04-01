@@ -45,7 +45,8 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
         this.tablicaosobyOn.forEach(
             element => 
               { 
-                let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
+                let ele = element;
+                //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "idlogowania": element.idlogowania, "czaslogowania": el "", "wybrany": false};
                 tab = [...tab, ele]
               }
             ); 
@@ -68,8 +69,8 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
        this.tablicaosobyOff.forEach(
            element => 
              { 
-               let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
-               tab = [...tab, ele]
+               //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
+               tab = [...tab, element]
              }
            ); 
        this.tablicaWybrany = [...this.tablicaWybrany, {tab}]
@@ -92,8 +93,8 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
           this.tablicaosobyInni.forEach(
               element => 
                 { 
-                  let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
-                  tab = [...tab, ele]
+                  //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
+                  tab = [...tab, element]
                 }
               ); 
           this.tablicaWybrany = [...this.tablicaWybrany, {tab}]

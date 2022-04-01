@@ -8,7 +8,7 @@
 {
     display: block;
 }
-button
+.button2
 {
   padding: 1px 3px 1px 3px;
   margin: 0px 6px 6px 0px;
@@ -27,7 +27,6 @@ button
 }
 .mat-card:hover
 {
-    background: rgb(42, 42, 42);  
     border: 1px solid yellow;
 }
 .mat-card-subtitle
@@ -43,5 +42,21 @@ button
 {
   font-size: 12px;
 }
-
-
+button
+{
+  padding: 1px 3px 1px 3px;
+  width: 100px;
+  height: 26px;
+}
+.example-mat-card
+{
+    background: black;
+    color: lightgreen;
+    border: 0px solid silver;
+    padding: 3px;
+}
+.example-mat-card:hover
+{
+ 
+  border: 0px solid yellow;
+}

@@ -45,7 +45,25 @@ export class CzasService implements OnDestroy
         }    
       else
       {
-        this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Połączenie z MySql: OK');
+        this.sprawdzRejestruj(5)
+      }  
+    }
+  }
+
+  sprawdzRejestruj(licznik : number)
+  {
+    if (licznik == 0) 
+    { this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Problem z rejestracją stanowiska'); }
+    else
+    {
+      if (this.komunikacja.getIdHost() == 0) 
+        {
+          this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Rejestruję stanowisko');
+          setTimeout(()=> { this.sprawdzRejestruj(--licznik) },1000)
+        }    
+      else
+      {
+        this.funkcje.addLiniaKomunikatuInfo(this.funkcje.getDedal().osoba,'Zarejestrowano stanowisko');
         this.odczytaj_startstop(10);
         this.taktujCzas();
         this.odczytaj_czas_startu(10);

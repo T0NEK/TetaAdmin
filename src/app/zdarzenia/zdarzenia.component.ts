@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Subject, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { Osoby } from '../definicje';
@@ -14,22 +15,35 @@ export class ZdarzeniaComponent implements OnDestroy{
 
   width: any;
   width1: any;
+  width2: any;
   tablicaosobyZapis: Osoby[] = [];
   tablicagoscieZapis: Osoby[] = [];
   sygnalteta: boolean = false;
   private tetasubscribe = new Subscription();
+  private osobysubscribe = new Subscription();
+  private gosciesubscribe = new Subscription();
+  tablicaosoby: Osoby[] = [];
+  tablicagoscie: Osoby[] = [];
   
   
   constructor(private all: AppComponent, private osoby: OsobyService, private funkcje: FunkcjeWspolneService) 
   {
     this.width = all.szerokoscAll -  all.szerokoscZalogowani - 10 + 'px';
-    this.width1 = ((all.szerokoscAll - all.szerokoscZalogowani - 30) / 7) + 'px';
+    this.width1 = ((all.szerokoscAll - all.szerokoscZalogowani - 30)  / 7) + 'px';
+    this.width2 = ((all.szerokoscAll - all.szerokoscZalogowani - 30) / 2) + 'px';
+    this.osobysubscribe = osoby.OdczytujOsoby$.subscribe
+     ( data => { this.tablicaosoby = data;  } )
+
+    this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe
+     ( data => { this.tablicagoscie = data; } )
  
   }
 
 ngOnDestroy()
   {
-    if(this.tetasubscribe) { this.tetasubscribe.unsubscribe()}     
+    if(this.tetasubscribe) { this.tetasubscribe.unsubscribe()}    
+    if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
+    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}    
   }
 
 
@@ -56,6 +70,7 @@ setTeta(stan: boolean)
           { 
             this.sygnalteta = stan; 
             this.tetasubscribe.unsubscribe();
+            this.funkcje.setZmianyZakladek(8,true);
             this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'Załączony: SYGNAŁ TETA');
           }
          else
@@ -85,6 +100,7 @@ setTeta(stan: boolean)
           { 
             this.sygnalteta = stan; 
             this.tetasubscribe.unsubscribe();
+            this.funkcje.setZmianyZakladek(8,false);
             this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'Wyłączony: SYGNAŁ TETA');
           }
          else
@@ -115,5 +131,25 @@ setTeta(stan: boolean)
   }
 }
 
+
+setZaloga(czynnosc: string, stan: boolean)
+{
+  this.osoby.zapisz_osoby_all( 5, czynnosc, stan);
+}
+
+setGoscie(czynnosc: string, stan: boolean)
+{
+  this.osoby.zapisz_goscie_all( 5, czynnosc, stan);
+}
+
+setZalogaOne(czynnosc: string, kto: any, stan: boolean)
+{
+ this.osoby.zapisz_osoby( 5, czynnosc, kto, stan);
+}
+
+setGoscieOne(czynnosc: string, kto: any, stan: boolean)
+{
+ this.osoby.zapisz_goscie( 5, czynnosc, kto, stan);
+}
 
 }

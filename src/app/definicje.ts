@@ -33,6 +33,10 @@ export interface OsobyBaza
    nazwisko: string;
    funkcja: string;
    zalogowany: boolean;
+   czaslogowania: string;
+   idhosta: number
+   nazwahosta: string;
+   iphosta: string;   
 } 
 
   export interface Osoby extends OsobyBaza
@@ -43,7 +47,7 @@ export interface OsobyBaza
      fiona: boolean;
      rajeh: boolean;
      narosl : boolean;
-  } 
+  }
   
   export interface Osoby2 extends OsobyBaza
   {

@@ -57,7 +57,7 @@
     </ng-template>
   </li>
   <li [ngbNavItem]="8">
-    <a ngbNavLink>Zdarzenia</a>
+    <a ngbNavLink [ngClass]="{'zalaczone' : zakladka[8]}">Zdarzenia</a>
     <ng-template ngbNavContent>
       <app-zdarzenia>
         

@@ -1,14 +1,48 @@
   <mat-card class="mat-card">
     <mat-card-title><span [ngClass]="{'text-danger': sygnalteta}">Sygnał teta - {{sygnalteta ? 'Załączony' : 'Wyłączony'}}</span></mat-card-title>
     <mat-card-subtitle>
-      [Załączenie]: zalogowani nie mogą wykonać żadnego polecenia (działa jak wyloguj w Użytkownicy)
+      [Załączenie]: zalogowani nie mogą wykonać żadnego polecenia (działa jak polecenia w Użytkownicy)
                     wylogowani dopiero po zalogowaniu      
     </mat-card-subtitle>
     <mat-card-actions align="end">
       <div class="example-button-row">
-        <button type="button" class="btn btn-danger" (click)="setTeta(true)" [disabled]="sygnalteta"> Załącz </button>
-        <button type="button" class="btn btn-success" (click)="setTeta(false)" [disabled]="!sygnalteta"> Wyłącz </button>  
+        <button type="button" class="btn btn-danger button2" (click)="setTeta(true)" [disabled]="sygnalteta"> Załącz </button>
+        <button type="button" class="btn btn-success button2" (click)="setTeta(false)" [disabled]="!sygnalteta"> Wyłącz </button>  
       </div> 
      </mat-card-actions>
   </mat-card>
   
+<mat-card class="mat-card">
+<div>
+<mat-card  class="example-mat-card" [ngStyle]="{'width': width, 'min-width': width}">
+  <div class="obok" [ngStyle]="{'width': width2, 'min-width': width2}">
+    <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">ZAŁOGA</div>
+    <button type="button" class="btn btn-danger" (click)="setZaloga('logowanie', true)"> Wyloguj </button>  
+  </div>
+  <div class="obok" [ngStyle]="{'width': width2, 'min-width': width2}">
+    <div class="obok text-white" [ngStyle]="{'width': width1, 'min-width': width1}">OSOBY DODATKOWE</div>
+    <button type="button" class="btn btn-danger" (click)="setGoscie('logowanie', false)"> Wyloguj </button>
+  </div>
+</mat-card>  
+</div>
+
+<div class="obok">
+<mat-card *ngFor="let item of tablicaosoby"  class="example-mat-card" [ngStyle]="{'width': width2, 'min-width': width2}">
+  <div class="obok text-success" [ngStyle]="{'width': width1, 'min-width': width1}">{{item.imie}} {{item.nazwisko}} <span class="male">({{item.funkcja}})</span></div>
+  <div class="obok" *ngIf="item.zalogowany">
+    <button type="button" class="btn btn-danger obok" (click)="setZalogaOne('logowanie', item, false)"> Wyloguj </button>
+    <div class="obok text-success">&nbsp; od: {{item.czaslogowania}} na: {{item.iphosta}} <span class="male"> ({{item.nazwahosta}})</span></div>
+  </div>
+</mat-card>
+</div>
+<div class="obok">
+<mat-card *ngFor="let item of tablicagoscie"  class="example-mat-card" [ngStyle]="{'width': width2, 'min-width': width2}">
+    <div class="obok text-success" [ngStyle]="{'width': width1, 'min-width': width1}">{{item.imie}} {{item.nazwisko}} <span class="male">({{item.funkcja}})</span></div>
+    <div class="obok" >
+      <button type="button" class="btn btn-success" (click)="setZalogaOne('logowanie', item, true)" *ngIf="!item.zalogowany"> Zaloguj </button>
+      <button type="button" class="btn btn-danger" (click)="setZalogaOne('logowanie', item, false)" *ngIf="item.zalogowany"> Wyloguj </button>
+      <div class="obok text-success" *ngIf="item.zalogowany">&nbsp; od: {{item.czaslogowania}} na: {{item.iphosta}} <span class="male"> ({{item.nazwahosta}})</span></div>
+    </div>
+  </mat-card>  
+</div>  
+</mat-card>

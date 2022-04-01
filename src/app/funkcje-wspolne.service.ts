@@ -26,6 +26,14 @@ constructor()
 
 
 
+private ZmianyZakladek = new Subject<any>();
+ZmianyZakladek$ = this.ZmianyZakladek.asObservable()
+setZmianyZakladek(zakladka: number, stan: boolean)
+{
+this.ZmianyZakladek.next({"zakladka": zakladka, "stan": stan})
+}
+
+
 getKolor() : Kolory { return this.kolory }; 
 
 getDedal() { return this.dedal };
