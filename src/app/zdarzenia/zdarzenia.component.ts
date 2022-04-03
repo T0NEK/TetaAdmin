@@ -2,8 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Subject, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
+import { CzasService } from '../czas.service';
 import { Osoby } from '../definicje';
 import { FunkcjeWspolneService } from '../funkcje-wspolne.service';
+import { KomunikacjaService } from '../komunikacja.service';
 import { OsobyService } from '../osoby.service';
 
 @Component({
@@ -22,11 +24,12 @@ export class ZdarzeniaComponent implements OnDestroy{
   private tetasubscribe = new Subscription();
   private osobysubscribe = new Subscription();
   private gosciesubscribe = new Subscription();
+  private logowaniesubscribe = new Subscription();
   tablicaosoby: Osoby[] = [];
   tablicagoscie: Osoby[] = [];
   
   
-  constructor(private all: AppComponent, private osoby: OsobyService, private funkcje: FunkcjeWspolneService) 
+  constructor(private all: AppComponent, private osoby: OsobyService, private funkcje: FunkcjeWspolneService, private komunikacja: KomunikacjaService, private czasy : CzasService) 
   {
     this.width = all.szerokoscAll -  all.szerokoscZalogowani - 10 + 'px';
     this.width1 = ((all.szerokoscAll - all.szerokoscZalogowani - 30)  / 7) + 'px';
@@ -37,13 +40,23 @@ export class ZdarzeniaComponent implements OnDestroy{
     this.gosciesubscribe = osoby.OdczytujGoscie$.subscribe
      ( data => { this.tablicagoscie = data; } )
  
+     this.logowaniesubscribe = komunikacja.logowanieUsera$.subscribe
+     ( data => 
+      { 
+        if (data.stan)
+        { this.funkcje.addLiniaKomunikatuInfo(funkcje.getDedal().osoba, data.error) }
+        else
+        { this.funkcje.addLiniaKomunikatuAlert(funkcje.getDedal().osoba, data.error) }
+      } )
+ 
   }
 
 ngOnDestroy()
   {
     if(this.tetasubscribe) { this.tetasubscribe.unsubscribe()}    
     if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
-    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}    
+    if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}  
+    if(this.logowaniesubscribe) { this.tetasubscribe.unsubscribe()}      
   }
 
 
@@ -132,24 +145,33 @@ setTeta(stan: boolean)
 }
 
 
-setZaloga(czynnosc: string, stan: boolean)
+setZaloga()
 {
-  this.osoby.zapisz_osoby_all( 5, czynnosc, stan);
+ for (let index = 0; index < this.tablicaosoby.length; index++) 
+ {
+   if (this.tablicaosoby[index].zalogowany)
+   {
+    this.komunikacja.Zaloguj(this.tablicaosoby[index].id, false, this.czasy.getCzasDedala());    
+   }
+ } 
 }
 
-setGoscie(czynnosc: string, stan: boolean)
+setGoscie()
 {
-  this.osoby.zapisz_goscie_all( 5, czynnosc, stan);
+ for (let index = 0; index < this.tablicagoscie.length; index++) 
+ {
+   if (this.tablicagoscie[index].zalogowany)
+   {
+    this.komunikacja.Zaloguj(this.tablicagoscie[index].id, false, this.czasy.getCzasDedala());    
+   }
+ } 
 }
 
-setZalogaOne(czynnosc: string, kto: any, stan: boolean)
+
+setOne(kto: any, stan: boolean)
 {
- this.osoby.zapisz_osoby( 5, czynnosc, kto, stan);
+ this.komunikacja.Zaloguj(kto, stan, this.czasy.getCzasDedala());
 }
 
-setGoscieOne(czynnosc: string, kto: any, stan: boolean)
-{
- this.osoby.zapisz_goscie( 5, czynnosc, kto, stan);
-}
 
 }

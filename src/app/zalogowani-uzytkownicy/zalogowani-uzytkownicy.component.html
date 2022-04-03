@@ -2,7 +2,7 @@
   <div class="btn btn-primary" >Załoga On</div>
   <div class="odstep"></div>
   <div *ngFor="let item of tablicaosobyOn, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success':item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[0].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[0].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(0,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male">&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
+    <div [class]="{'text-success':item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[0].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[0].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(0,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male"><span [class]="{'text-danger':!item.polecenia, 'text-info':item.polecenia}">&nbsp;P</span>-<span [class]="{'text-danger':!item.blokada, 'text-info':item.blokada}">L</span>&nbsp;<span [class]="{'text-danger':!item.fiona, 'text-info':item.fiona}">&nbsp;A</span>-<span [class]="{'text-danger':!item.hannah, 'text-info':item.hannah}">H</span>-<span [class]="{'text-danger':!item.rajeh, 'text-info':item.rajeh}">R</span>&nbsp;&nbsp;<span [class]="{'text-danger':!item.narosl, 'text-info':item.narosl}">N</span>&nbsp;({{item.funkcja}})</span></span></div>
   </div>
   <div class="odstepmin"></div>
   <div class="btn zmien btn-warning"  (click)="WybranyW(0,true)">Wszyscy</div>&nbsp;
@@ -11,7 +11,7 @@
   <div class="btn btn-primary" >Załoga Off</div>
   <div class="odstep"></div>
   <div *ngFor="let item of tablicaosobyOff, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[1].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[1].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(1,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[1].tab[i].wybrany), 'niewybrany' : (!(tablicaWybrany[1].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(1,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male"><span [class]="{'text-danger':!item.polecenia, 'text-info':item.polecenia}">&nbsp;P</span>-<span [class]="{'text-danger':!item.blokada, 'text-info':item.blokada}">L</span>&nbsp;<span [class]="{'text-danger':!item.fiona, 'text-info':item.fiona}">&nbsp;A</span>-<span [class]="{'text-danger':!item.hannah, 'text-info':item.hannah}">H</span>-<span [class]="{'text-danger':!item.rajeh, 'text-info':item.rajeh}">R</span>&nbsp;&nbsp;<span [class]="{'text-danger':!item.narosl, 'text-info':item.narosl}">N</span>&nbsp;({{item.funkcja}})</span></span></div>
   </div>
   <div class="odstepmin"></div>
   <div class="btn zmien btn-warning"  (click)="WybranyW(1,true)">Wszyscy</div>&nbsp;
@@ -20,7 +20,7 @@
   <div class="btn btn-primary" >Dodatkowe</div>
   <div class="odstep"></div>
   <div *ngFor="let item of tablicaosobyInni, let i = index"  class="example-mat-card">
-    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[2].tab[i].wybrany ), 'niewybrany' : (!(tablicaWybrany[2].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(2,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;&nbsp;({{item.funkcja}})</span></span></div>
+    <div [class]="{'text-success' : item.zalogowany, 'text-muted' : !item.zalogowany, 'wybrany' : (tablicaWybrany[2].tab[i].wybrany ), 'niewybrany' : (!(tablicaWybrany[2].tab[i].wybrany))}" ><span class="kursor" (click)="Wybrany(2,i)">&nbsp;<span class="liniakomend">{{item.imie}}</span>&nbsp;<span class="liniakomend">{{item.nazwisko}}</span><span class="male" >&nbsp;({{item.funkcja}})</span></span></div>
   </div>
   <div class="odstepmin"></div>
   <div class="btn zmien btn-warning"  (click)="WybranyW(2,true)">Wszyscy</div>&nbsp;

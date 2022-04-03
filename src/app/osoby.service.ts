@@ -26,6 +26,15 @@ private SygnalTeta = new Subject<any>();
 SygnalTeta$ = this.SygnalTeta.asObservable()
 
 
+private ZmienKontekst = new Subject<any>();
+ZmienKontekst$ = this.ZmienKontekst.asObservable()
+
+setZmienKontekst(id: number, stan: boolean)
+{
+  this.ZmienKontekst.next({"id": id, "stan": stan})
+}
+
+
 getOsoby() { return this.osoby}
 getGoscie() { return this.goscie}
 

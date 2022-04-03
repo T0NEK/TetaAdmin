@@ -320,9 +320,10 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
 }
 
  
-  Przelacz(wszystkie: number, all: boolean)
+  Przelacz(wszystkie: number, all: boolean, wybrany: number = -1, stan: boolean = false )
   {
-    if (wszystkie == -1)
+  //console.log(wszystkie, all, wybrany, stan)
+  if (wszystkie == -1)
     {
       this.tablicaosoby.forEach((element, index) => 
         { 
@@ -338,9 +339,22 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
       this.tablicaosoby[wszystkie].wybrany = !all;
       this.tablicaosobywybrane[wszystkie] = (!all ? (1*this.tablicaosoby[wszystkie].id) : -1);
     }
+  if (wybrany != -1)
+  {
+    this.tablicaosoby[wybrany].wybrany = stan;
+    this.tablicaosobywybrane[wybrany] = (stan ? (1*this.tablicaosoby[wybrany].id) : -1);
+  }
   this.tablicawiadomosci = this.AktualizujWybraneOsoby(this.tablicawiadomosciorg);
-  //this.AktualizujPrzeczytane(this.tablicawiadomosci);
   this.funkcje.odbiorca(this.tablicaosoby)
+  }
+
+  PrzelaczIdOsoba(id: number): number
+  {
+    let numer: number = 0;
+    for (let index = 0; index < this.tablicaosoby.length; index++) 
+    { if (this.tablicaosoby[index].id == id) 
+      { numer = index; break; } };
+    return numer;
   }
 
   onClick(kto: string)
@@ -359,6 +373,16 @@ AktualizujWybraneOsoby(tabela: Wiadomosci[]): Wiadomosci[]
     this.changeDetectorRef.detectChanges();
     this.VSVDialog.checkViewportSize()
     this.VSVDialog.scrollToIndex((count), 'smooth'); 
+  }
+
+  Odpowiedz(autor: number, odbiorca: number)
+  {
+    //console.log(autor, odbiorca)
+    //console.log(autor, osoba)
+    this.osoby.setZmienKontekst(odbiorca, true)
+    this.Przelacz(-1, false, this.PrzelaczIdOsoba(autor), true);
+    
+
   }
   
 }

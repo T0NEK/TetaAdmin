@@ -61,6 +61,7 @@ constructor(private funkcje: FunkcjeWspolneService, private all: AppComponent, p
     { 
       this.odbiorcy = '';
       this.ilosc = 0;
+      //console.log(data)
       for (let element of data)
       {
         if ((element.wybrany)&&(element.id != this.funkcje.getZalogowany().zalogowany)) 

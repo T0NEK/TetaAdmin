@@ -29,7 +29,7 @@ export class AppComponent
   public szerokoscOsoby = 340;
   public wysokoscTematy = 180;
   public wysokoscWersje = 140;
-  public szerokoscZalogowani = 280;
+  public szerokoscZalogowani = 290;
   public szerokoscWiadOsoby = 190;
   
 

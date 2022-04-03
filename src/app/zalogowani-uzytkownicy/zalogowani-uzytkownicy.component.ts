@@ -18,6 +18,7 @@ export class ZalogowaniUzytkownicyComponent implements OnDestroy {
   private osobysubscribe = new Subscription();
   private gosciesubscribe = new Subscription();
   private innisubscribe = new Subscription();
+  private kontekstsubscribe = new Subscription();
   tablicaosobyOn: Osoby[] = [];
   tablicaosobyOff: Osoby[] = [];
   tablicaosobyInni: Osoby[] = [];
@@ -42,14 +43,7 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
       { 
         this.tablicaosobyOn = data;
         let tab: Osoby2[] = []; 
-        this.tablicaosobyOn.forEach(
-            element => 
-              { 
-                let ele = element;
-                //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "idlogowania": element.idlogowania, "czaslogowania": el "", "wybrany": false};
-                tab = [...tab, ele]
-              }
-            ); 
+        this.tablicaosobyOn.forEach( element => { tab = [...tab, element] } ); 
         this.tablicaWybrany = [...this.tablicaWybrany, {tab}]
         }
     )
@@ -66,13 +60,7 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
      { 
        this.tablicaosobyOff = data;
        let tab: Osoby2[] = []; 
-       this.tablicaosobyOff.forEach(
-           element => 
-             { 
-               //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
-               tab = [...tab, element]
-             }
-           ); 
+       this.tablicaosobyOff.forEach( element =>  {  tab = [...tab, element] }); 
        this.tablicaWybrany = [...this.tablicaWybrany, {tab}]
        }
    )
@@ -90,13 +78,7 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
         { 
           this.tablicaosobyInni = data;
           let tab: Osoby2[] = []; 
-          this.tablicaosobyInni.forEach(
-              element => 
-                { 
-                  //let ele: Osoby2 = {"id":element.id, "imie": element.imie, "nazwisko": element.nazwisko, "funkcja": element.funkcja, "zalogowany": false, "wybrany": false};
-                  tab = [...tab, element]
-                }
-              ); 
+          this.tablicaosobyInni.forEach( element =>  { tab = [...tab, element] } ); 
           this.tablicaWybrany = [...this.tablicaWybrany, {tab}]
           }
       )  
@@ -106,6 +88,14 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
       { 
         this.tablicaosobyInni = data; 
       } )
+
+    this.innisubscribe = osoby.ZmienKontekst$.subscribe
+      ( data => 
+        { 
+          let wynik: any = this.Zmieniany(data.id) 
+          this.WybranyW(-1, false, wynik.tabela, wynik.indeks)
+        } )
+
   }
 
   ngOnDestroy()
@@ -116,6 +106,7 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
     if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
     if(this.gosciesubscribe) { this.gosciesubscribe.unsubscribe()}   
     if(this.innisubscribe) { this.innisubscribe.unsubscribe()}   
+    if(this.kontekstsubscribe) { this.kontekstsubscribe.unsubscribe()}   
   }
 
   Wybrany(id: number, i: number)
@@ -146,7 +137,28 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
     return wynik
   }
   
-  WybranyW(id: number, all: boolean)
+  Zmieniany(id: number):any
+  {
+    //console.log(id)
+    let indeks: number = -1;
+    let tabela: number = -1;
+    for (let index = 0; index < this.tablicaWybrany.length; index++) 
+      {
+        for (let index2 = 0; index2 < this.tablicaWybrany[index].tab.length; index2++) 
+        { if (this.tablicaWybrany[index].tab[index2].id == id) 
+          { 
+            indeks = index2;
+            tabela = index;
+            break;
+          }  
+        }
+        if (tabela != -1) {break;}
+      }
+      //console.log("tabela", tabela, "indeks", indeks)  
+    return {"tabela": tabela, "indeks": indeks}
+  }
+
+  WybranyW(id: number, all: boolean, tabela: number = -1, indeks: number = -1)
   {
     if (id == -1)
     {
@@ -160,8 +172,8 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
         for (let index = 0; index < this.tablicaWybrany.length; index++) 
         this.tablicaWybrany[index].tab.forEach(element => { if (element.wybrany) { this.wybrany-- } element.wybrany = false; });
       } 
-        let zalogowany = this.SzukajOsoby(this.tablicaWybrany) 
-        this.funkcje.setZalogowany(zalogowany, this.nadawcy) 
+    let zalogowany = this.SzukajOsoby(this.tablicaWybrany) 
+    this.funkcje.setZalogowany(zalogowany, this.nadawcy) 
     }
     else
     {
@@ -171,6 +183,13 @@ constructor(private all: AppComponent, private osoby: OsobyService, private funk
       { this.tablicaWybrany[id].tab.forEach(element => { if (element.wybrany) { this.wybrany-- } element.wybrany = false; }) }
     let zalogowany = this.SzukajOsoby(this.tablicaWybrany) 
     this.funkcje.setZalogowany(zalogowany, this.nadawcy) 
+    }
+    if (tabela != -1)
+    {
+      this.wybrany++; 
+      this.tablicaWybrany[tabela].tab[indeks].wybrany = true;
+      let zalogowany = this.SzukajOsoby(this.tablicaWybrany) 
+      this.funkcje.setZalogowany(zalogowany, this.nadawcy)        
     }
   }
 
