@@ -171,3 +171,35 @@ export interface Tresc
      wyslana: boolean;
      admin: boolean;
  }
+
+ export interface Modul
+  {
+    id: number;  
+    nazwa :string;
+    symbol: string;
+    stan: number;
+    czasbadania: string
+    opis: string;
+  }
+
+export interface Zespol
+  {
+    id: number;  
+    nazwa :string;
+    symbol: string;
+    idmodul: string;
+    stan: number;
+    czaswykonania: number;
+    czasreset: number;
+    czasnaprawa: number;
+    elementy: number;
+    stanwynik: string;
+    naprawaporeset: number;
+    imie: string; 
+    nazwisko: string;
+    czasbadania: string;
+    czaszakonczenia: string;
+    opis: string;
+    modulSymbol: string;
+    modulNazwa: string;
+  }

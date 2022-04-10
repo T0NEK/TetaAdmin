@@ -1,3 +1,40 @@
-<p>
-  testy works!
-</p>
+<div class="row">
+  <div>  
+    <cdk-virtual-scroll-viewport #scrollViewportModoly appendOnly [itemSize]="32"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
+      <div *cdkVirtualFor="let item of tablicazawartosci, let i = index">
+        <div class="example-item-detail" (click)="Wybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(item.id==wybrane)), 'text-primary': (item.id==wybrane)}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+        <div class="example-item-detail2"></div>
+      </div>
+      <!--
+      <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
+      <div class="example-item-detail2"></div>
+      -->  
+    </cdk-virtual-scroll-viewport>
+</div>
+
+<div class="opcje" [ngStyle]="{'height': height, 'width': width2}">
+  <mat-card> 
+    <mat-card-title>Wybrany Moduł: <span>"{{wybranymodul.nazwa}}"</span> </mat-card-title> 
+    <mat-card-subtitle>symbol: <span>"{{wybranymodul.symbol}}"</span> </mat-card-subtitle> 
+  </mat-card> 
+  <mat-card> 
+    <mat-card-title>Zespoły znajdujące się w Module</mat-card-title>
+      <div class="br"></div>  
+      <div>  
+        <cdk-virtual-scroll-viewport #scrollViewportZespoly appendOnly itemSize="72"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width2}" autosize>
+          <div *cdkVirtualFor="let item of tablicazespoly, let i = index">
+            <div class="example-item-detail" (click)="WybranyZespol(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+            <div class="example-item-detail1">Ostatnie badanie: <span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">{{item.czasbadania}}</span> Wykonał:<span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">  {{item.imie}} {{item.nazwisko}}</span> Ilość uszkodzeń<span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}"><span [ngClass]="{'text-danger':(item.uszkodzeniailosc!=0)}"> {{item.uszkodzeniailosc}}</span></span></div>
+            <div class="example-item-detail1"><span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}"> {{item.stanText}}</span></div>
+            <div class="example-item-detail2"></div>
+          </div>
+          <!--
+          <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
+          <div class="example-item-detail2"></div>
+          -->  
+        </cdk-virtual-scroll-viewport>
+      </div>
+    
+  </mat-card>
+</div>
+</div>

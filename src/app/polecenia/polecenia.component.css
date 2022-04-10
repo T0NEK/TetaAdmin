@@ -2,6 +2,7 @@
 {
     color: lightgreen;
     cursor: crosshair;
+    white-space: pre;
 }
 div.row
 {
@@ -48,6 +49,10 @@ button
     line-height: 10px;
     font-size: 20px;
     padding-bottom: 8px;
+}
+.kursor
+{
+  cursor: pointer;
 }
 mat-card-actions
 {

@@ -1,0 +1,101 @@
+:host
+{
+    color: lightgreen;
+    cursor: crosshair;
+    white-space: pre;
+}
+div.row
+{
+    margin: 0;
+}
+.opcje
+{
+    color: green;
+    background: black;
+    padding: 5px;
+}
+span
+{
+    color: lightgreen;
+}
+mat-card
+{
+    color: green;
+    background: black;
+    border: 1px solid blue;
+    padding: 5px;
+}
+mat-card-title
+{
+    font-size: 18px;
+    font-weight: normal;
+    padding: 5px;
+}
+mat-card-subtitle
+{
+    color: green;
+    font-size: 18px;
+    font-weight: normal;
+    padding-left: 73px;
+}
+mat-card-content
+{
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 30px;
+}
+button
+{
+    line-height: 10px;
+    font-size: 20px;
+    padding-bottom: 8px;
+}
+.kursor
+{
+  cursor: pointer;
+}
+mat-card-actions
+{
+    padding-left: 30px;
+}
+.example-viewport
+  {
+    width: 100%;
+    max-width: 100%;
+  }
+  .example-item
+  {
+    height: 26px;
+  }
+  .example-item-detail 
+  {
+    height: 20px;
+    padding-left: 5px;
+  }
+  .example-item-detail1
+  {
+    padding-left: 25px;
+  }  
+  .example-item-detail2
+  {
+    height: 6px;
+  }  
+.example-margin {
+    margin: 0 10px;
+  }  
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar
+{
+  background-color: lightgreen ;
+}
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb 
+{
+  background-color:  green;
+}
+::ng-deep .mat-slide-toggle-thumb
+{
+  background-color:  red;
+}
+::ng-deep .mat-slide-toggle-bar 
+{
+  background-color:  rgb(255, 155, 155);
+}

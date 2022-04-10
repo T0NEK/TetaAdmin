@@ -1,8 +1,8 @@
 <div class="row">
     <div>  
       <cdk-virtual-scroll-viewport #scrollViewportOsoby appendOnly itemSize="56"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width1}" autosize>
-        <div *cdkVirtualFor="let item of tablicaall " [ngClass]="{'text-primary': !(item.id==wlasciciel), '':(item.id==wlasciciel)}" (click)="WybranaOsoba(item.id)">
-          <div class="example-item-detail" ><span class="kursor">{{item.imie}} {{item.nazwisko}}</span></div>
+        <div *cdkVirtualFor="let item of tablicaall " [ngClass]="{'text-primary': !(item.id==wlasciciel), '':(item.id==wlasciciel)}" >
+          <div class="example-item-detail" (click)="WybranaOsoba(item.id)"><span class="kursor">{{item.imie}} {{item.nazwisko}}</span></div>
           <div class="example-item-detail1">({{item.funkcja}}) <span *ngIf="item.udost.length != 0" (click)="Udostepnienie(item)" [ngClass]="{'text-danger': (!(item.id==wlasciciel)&&(item.udost.idudo==0)&&(item.udost.autor!=item.udost.idosoby)), '':(item.id==wlasciciel), ' kursor': (((item.id!=wlasciciel)&&(item.id != item.udost.autor)) )}">{{((item.id==wlasciciel)&&(item.id == item.udost.autor)) ? 'własna' : (item.udost.autor==item.udost.idosoby ? 'autor' : item.udost.stanudo)}}</span></div>
           <div class="example-item-detail2"></div>
         </div>

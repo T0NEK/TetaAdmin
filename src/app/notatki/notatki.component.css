@@ -2,6 +2,7 @@
 {
     color: lightgreen;
     cursor: crosshair;
+    white-space: pre;
 }
 div.row
 {

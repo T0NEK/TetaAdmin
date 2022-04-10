@@ -22,12 +22,13 @@ export class AppComponent
   public wysokoscPrzewijaj = 30;
   public wysokoscDialogMin = 140;
   public wysokoscLinia = 42;
+  public wysokoscTematy = 180;
   public szerokoscAll: any;
   public szerokoscInput: any;
   public szerokoscNawigacja: any;
   public szerokoscPolecenia = 240;
+  public szerokoscModoly = 340;
   public szerokoscOsoby = 340;
-  public wysokoscTematy = 180;
   public wysokoscWersje = 140;
   public szerokoscZalogowani = 290;
   public szerokoscWiadOsoby = 190;

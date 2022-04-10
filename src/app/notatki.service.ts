@@ -38,7 +38,7 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": get, "stan": stan, "id": id })  
+  var data = JSON.stringify({"kierunek": get, "stan": stan, "id": id, "idtablica": 0 })  
   
   if (licznik == 0) 
   {
@@ -112,7 +112,7 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": get, "stan": stan, "tytul": tytul, "idnotatka": idnotatka, "wersja": wersja, "czas": czas })  
+  var data = JSON.stringify({"kierunek": get, "stan": stan, "tytul": tytul, "idnotatka": idnotatka, "wersja": wersja, "czas": czas, "idtablica": 0 })  
   
   if (licznik == 0) 
   {
@@ -154,10 +154,11 @@ Wczytajnotatki(stan: number)
 
   ZmienUdoNotatki(idnotatki: number, idosoby: number, autor: number, wlasciciel: number)
   {
+    //console.log(idnotatki, idosoby,autor, wlasciciel)
     if ((autor == idosoby)||(wlasciciel==idosoby))
     { this.odczytaj_udo_notatki(5, idnotatki, 0, "getudo", ''); }
     else
-    { this.odczytaj_udo_notatki(5, idnotatki, idosoby, "setudo", '') }
+    { this.odczytaj_udo_notatki(5, idnotatki, idosoby, "udonot", '') }
   }
   
   private OdczytajUdoNotatki = new Subject<any>();
@@ -172,7 +173,7 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki, "stan": idosoby })  
+  var data = JSON.stringify({"kierunek": get, "idnotatki": idnotatki, "stan": idosoby, "idtablica": 0 })  
   
   if (licznik == 0) 
   {
@@ -184,7 +185,7 @@ Wczytajnotatki(stan: number)
       --licznik;
       this.http.post(this.komunikacja.getURL() + 'notatki/', data, httpOptions).subscribe( 
         data =>  {
-          //console.log(data)
+          console.log(data)
                 let wynik = JSON.parse(JSON.stringify(data));
                 if (wynik.wynik == true) 
                 {
@@ -216,7 +217,7 @@ Wczytajnotatki(stan: number)
                 }
                   },
         error => {
-          //console.log(error)
+          console.log(error)
                   this.funkcje.addLiniaKomunikatuAlert(this.funkcje.getDedal().osoba,'Błąd udostępnień - ponawiam: ' + licznik);
                   setTimeout(() => {this.odczytaj_udo_notatki(licznik, idnotatki, idosoby, get, 'error')}, 1000) 
                 }
@@ -296,7 +297,7 @@ Wczytajnotatki(stan: number)
       })
     };
     
-  var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": idnotatki})  
+  var data = JSON.stringify({"kierunek": "get",  "stan": stan, "notatka": idnotatki, "idtablica": 0})  
   if (licznik == 0) 
   {
     this.funkcje.addLiniaKomunikatuKrytyczny(this.funkcje.getDedal().osoba,'NIE UDAŁO SIĘ WCZYTAĆ Treści: ' + powod);
