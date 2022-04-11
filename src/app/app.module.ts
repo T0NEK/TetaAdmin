@@ -33,6 +33,9 @@ import { ZalogowaniUzytkownicyComponent } from './zalogowani-uzytkownicy/zalogow
 import { LiniaKomendComponent } from './linia-komend/linia-komend.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ZdarzeniaComponent } from './zdarzenia/zdarzenia.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select'; 
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -72,7 +75,10 @@ import { ZdarzeniaComponent } from './zdarzenia/zdarzenia.component';
     MatButtonModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatMenuModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,7 +2,7 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportModoly appendOnly [itemSize]="32"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
       <div *cdkVirtualFor="let item of tablicazawartosci, let i = index">
-        <div class="example-item-detail" (click)="Wybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(item.id==wybrane)), 'text-primary': (item.id==wybrane)}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+        <div class="example-item-detail" (click)="Wybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(ModulWybrany(item.id))), 'text-primary': (ModulWybrany(item.id))}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
         <div class="example-item-detail2"></div>
       </div>
       <!--
@@ -14,8 +14,8 @@
 
 <div class="opcje" [ngStyle]="{'height': height, 'width': width2}">
   <mat-card> 
-    <mat-card-title>Wybrany Moduł: <span>"{{wybranymodul.nazwa}}"</span> </mat-card-title> 
-    <mat-card-subtitle>symbol: <span>"{{wybranymodul.symbol}}"</span> </mat-card-subtitle> 
+    <mat-card-title>Wybrany Moduł: <span>"{{Nazwa()}}"</span> </mat-card-title> 
+    <mat-card-subtitle>symbol: <span>"{{Symbol()}}"</span> </mat-card-subtitle> 
   </mat-card> 
   <mat-card> 
     <mat-card-title>Zespoły znajdujące się w Module</mat-card-title>
@@ -36,5 +36,33 @@
       </div>
     
   </mat-card>
+  <mat-card> 
+    <mat-card-title>Uszkodzenia w Zespole:</mat-card-title>
+      <div class="br"></div>  
+      <div>  
+        <cdk-virtual-scroll-viewport #scrollViewportUszkodzenia appendOnly itemSize="72"  class="example-viewport" [ngStyle]="{'height': height2, 'width': width2}" autosize>
+          <div *cdkVirtualFor="let item of tablicauszkodzenia, let i = index">
+            <div class="example-item-detail">Uszkodzenie: "<span class='text-primary kursor'>{{item.nazwauszkdzenia}}</span>", stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastan}}</span><button mat-icon-button [matMenuTriggerFor]="menuStan" aria-label="Example icon-button with a menu"><mat-icon>more_vert</mat-icon>
+              <mat-menu #menuStan="matMenu" >
+                <button mat-menu-item *ngFor="let item1 of listastan">
+                    <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stan',item1.id,item.id)">{{item1.nazwa}}</span>
+                </button>
+              </mat-menu>
+            </button>
+            </div>
+            <div class="example-item-detail">   Po resecie: <span class='text-primary kursor'>{{item.nazwaporeset}}</span>, stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastanporeset}}</span></div>
+            <div class="example-item-detail">  Po naprawie: <span class='text-primary kursor'>{{item.nazwaporeset}}</span>, stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastanponaprawa}}</span></div>
+            <div class="example-item-detail2"></div>
+          </div>
+          <!--
+          <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
+          <div class="example-item-detail2"></div>
+          -->  
+        </cdk-virtual-scroll-viewport>
+      </div>
+    
+  </mat-card>
 </div>
 </div>
+
+

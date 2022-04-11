@@ -18,6 +18,28 @@ span
 {
     color: lightgreen;
 }
+
+::ng-deep .ng-tns-c196-0
+{
+  width: 600px;
+  max-width: 600px;
+}
+::ng-deep .mat-menu-panel
+{
+  color: green;
+  background: black;
+}
+.mat-menu-item
+{
+  background: black;
+  height: 28px;
+}
+
+::ng-deep .mat-icon-button
+{
+  height: 20px;
+  width: 10px;
+}
 mat-card
 {
     color: green;
