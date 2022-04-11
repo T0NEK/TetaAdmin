@@ -19,26 +19,22 @@ span
     color: lightgreen;
 }
 
-::ng-deep .ng-tns-c196-0
-{
-  width: 600px;
-  max-width: 600px;
-}
 ::ng-deep .mat-menu-panel
 {
   color: green;
   background: black;
+  padding: 0 10px!important;
+  max-width: 100%!important;
 }
 .mat-menu-item
 {
   background: black;
   height: 28px;
 }
-
 ::ng-deep .mat-icon-button
 {
   height: 20px;
-  width: 10px;
+  width: 20px;
 }
 mat-card
 {
@@ -68,9 +64,10 @@ mat-card-content
 }
 button
 {
-    line-height: 10px;
-    font-size: 20px;
-    padding-bottom: 8px;
+    line-height: 6px;
+    font-size: 18px;
+    padding-bottom: 4px;
+    width: auto;
 }
 .kursor
 {

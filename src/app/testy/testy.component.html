@@ -2,13 +2,9 @@
   <div>  
     <cdk-virtual-scroll-viewport #scrollViewportModoly appendOnly [itemSize]="32"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
       <div *cdkVirtualFor="let item of tablicazawartosci, let i = index">
-        <div class="example-item-detail" (click)="Wybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(ModulWybrany(item.id))), 'text-primary': (ModulWybrany(item.id))}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+        <div class="example-item-detail" (click)="ZmienWybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(ModulWybrany(item.id))), 'text-primary': (ModulWybrany(item.id))}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
         <div class="example-item-detail2"></div>
       </div>
-      <!--
-      <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
-      <div class="example-item-detail2"></div>
-      -->  
     </cdk-virtual-scroll-viewport>
 </div>
 
@@ -23,15 +19,32 @@
       <div>  
         <cdk-virtual-scroll-viewport #scrollViewportZespoly appendOnly itemSize="72"  class="example-viewport" [ngStyle]="{'height': height1, 'width': width2}" autosize>
           <div *cdkVirtualFor="let item of tablicazespoly, let i = index">
-            <div class="example-item-detail" (click)="WybranyZespol(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
-            <div class="example-item-detail1">Ostatnie badanie: <span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">{{item.czasbadania}}</span> Wykonał:<span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}">  {{item.imie}} {{item.nazwisko}}</span> Ilość uszkodzeń<span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}"><span [ngClass]="{'text-danger':(item.uszkodzeniailosc!=0)}"> {{item.uszkodzeniailosc}}</span></span></div>
-            <div class="example-item-detail1"><span [ngClass]="{'text-success':(!(item.id==wybranyzespol)), 'text-primary': (item.id==wybranyzespol)}"> {{item.stanText}}</span></div>
+            <div class="example-item-detail" (click)="WybranyZespol(i)"><span class="kursor" [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+            <div class="example-item-detail1">Ostatni test: <span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasbadania}} (<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}"> {{item.stanText}}</span>)</span>; wykonał:<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">  {{item.imie}} {{item.nazwisko}}</span>; wykrytych uszkodzeń<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}"><span [ngClass]="{'text-danger':(item.uszkodzeniailosc!=0)}"> {{item.uszkodzeniailosc}}</span></span> (jest: <span [ngClass]="{'text-danger':(item.jestuszkodzen!=0)}">{{item.jestuszkodzen}})</span></div>
+            <div class="example-item-detail1">czasy wykonania (około) testu: <button mat-icon-button [matMenuTriggerFor]="menuNazwa" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czaswykonania}}</span>
+              <mat-menu #menuNazwa="matMenu" >
+                <button mat-menu-item *ngFor="let item1 of listaczasy">
+                    <span (click)="ZmienDane('czaswykonania',item1,item.id)">{{item1}}</span>
+                </button>
+              </mat-menu>
+            </button> [s], resetu: <button mat-icon-button [matMenuTriggerFor]="menuNazwa" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasreset}}</span><mat-menu #menuNazwa="matMenu" >
+                <button mat-menu-item *ngFor="let item1 of listaczasy">
+                    <span (click)="ZmienDane('czasreset',item1,item.id)">{{item1}}</span>
+                </button>
+              </mat-menu>
+            </button> [s], naprawy: <button mat-icon-button [matMenuTriggerFor]="menuNazwa" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasnaprawa}}</span><mat-menu #menuNazwa="matMenu" >
+              <button mat-menu-item *ngFor="let item1 of listaczasy">
+                  <span (click)="ZmienDane('czasnaprawa',item1,item.id)">{{item1}}</span>
+              </button>
+            </mat-menu>
+          </button> [s] i ilość elementów: <button mat-icon-button [matMenuTriggerFor]="menuNazwa" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.elementy}} [sztuk]</span><mat-menu #menuNazwa="matMenu" >
+            <button mat-menu-item *ngFor="let item1 of listaczasy">
+                <span (click)="ZmienDane('elementy',item1,item.id)">{{item1}}</span>
+            </button>
+          </mat-menu>
+        </button></div>
             <div class="example-item-detail2"></div>
           </div>
-          <!--
-          <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
-          <div class="example-item-detail2"></div>
-          -->  
         </cdk-virtual-scroll-viewport>
       </div>
     
@@ -42,7 +55,14 @@
       <div>  
         <cdk-virtual-scroll-viewport #scrollViewportUszkodzenia appendOnly itemSize="72"  class="example-viewport" [ngStyle]="{'height': height2, 'width': width2}" autosize>
           <div *cdkVirtualFor="let item of tablicauszkodzenia, let i = index">
-            <div class="example-item-detail">Uszkodzenie: "<span class='text-primary kursor'>{{item.nazwauszkdzenia}}</span>", stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastan}}</span><button mat-icon-button [matMenuTriggerFor]="menuStan" aria-label="Example icon-button with a menu"><mat-icon>more_vert</mat-icon>
+            <div class="example-item-detail">{{i+1}}. Uszkodzenie: 
+              <button mat-icon-button [matMenuTriggerFor]="menuNazwa" aria-label="Example icon-button with a menu"><span class='text-primary kursor'>{{item.nazwauszkdzenia}}</span>
+              <mat-menu #menuNazwa="matMenu" >
+                <button mat-menu-item *ngFor="let item1 of listauszkodzenia">
+                    <span (click)="ZmienStan('nazwa',item1.id,item.id)">{{item1.nazwa}}</span>
+                </button>
+              </mat-menu>
+            </button>; stan:<button mat-icon-button [matMenuTriggerFor]="menuStan" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastan}}</span>
               <mat-menu #menuStan="matMenu" >
                 <button mat-menu-item *ngFor="let item1 of listastan">
                     <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stan',item1.id,item.id)">{{item1.nazwa}}</span>
@@ -50,14 +70,57 @@
               </mat-menu>
             </button>
             </div>
-            <div class="example-item-detail">   Po resecie: <span class='text-primary kursor'>{{item.nazwaporeset}}</span>, stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastanporeset}}</span></div>
-            <div class="example-item-detail">  Po naprawie: <span class='text-primary kursor'>{{item.nazwaporeset}}</span>, stan:<span class="kursor" [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastanponaprawa}}</span></div>
+            
+              <div class="example-item-detail" style="padding-left: 38px;"> Po resecie: 
+                <button mat-icon-button [matMenuTriggerFor]="menuCoPR" aria-label="Example icon-button with a menu"><span class='text-primary kursor'>{{item.poreset == 1 ? 'zmien' : 'nie nie rób'}}</span>
+                  <mat-menu #menuCoPR="matMenu" >
+                    <button mat-menu-item><span (click)="ZmienStan('poreset', 0, item.id)">nie nie rób</span></button>
+                    <button mat-menu-item><span (click)="ZmienStan('poreset', 1, item.id)">zmien</span></button>
+                  </mat-menu>
+                  </button><span *ngIf="item.poreset == 1"> na:
+                  <button mat-icon-button [matMenuTriggerFor]="menuNazwaPR" aria-label="Example icon-button with a menu"><span class='text-primary kursor'> {{item.nazwaporeset}}</span>
+                  <mat-menu #menuNazwaPR="matMenu" >
+                    <button mat-menu-item *ngFor="let item1 of listauszkodzenia">
+                        <span (click)="ZmienStan('nazwaporeset',item1.id,item.id)">{{item1.nazwa}}</span>
+                    </button></mat-menu>
+                  </button>; stan:
+                  <button mat-icon-button [matMenuTriggerFor]="menuStanPR" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstanporeset!=1)}"> {{item.nazwastanporeset}}</span>
+                    <mat-menu #menuStanPR="matMenu" >
+                      <button mat-menu-item *ngFor="let item1 of listastan">
+                          <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stanporeset',item1.id,item.id)">{{item1.nazwa}}</span>
+                      </button>
+                    </mat-menu>
+                  </button>
+                  </span>
+              </div>
+            
+              <div class="example-item-detail" style="padding-left: 27px;">Po naprawie: 
+                <button mat-icon-button [matMenuTriggerFor]="menuCoPN" aria-label="Example icon-button with a menu">
+                  <span class='text-primary kursor'>{{item.ponaprawa == 1 ? 'zmien' : 'nie nie rób'}}</span>
+                  <mat-menu #menuCoPN="matMenu">
+                    <button mat-menu-item><span (click)="ZmienStan('ponaprawa', 0, item.id)">nic nie rób</span></button>
+                    <button mat-menu-item><span (click)="ZmienStan('ponaprawa', 1, item.id)">zmien</span></button>
+                  </mat-menu>
+                  </button><span *ngIf="item.ponaprawa == 1"> na:
+                <button mat-icon-button [matMenuTriggerFor]="menuNazwaPN" aria-label="Example icon-button with a menu"><span class='text-primary kursor'> {{item.nazwaponaprawa}}</span>
+                <mat-menu #menuNazwaPN="matMenu" >
+                  <button mat-menu-item *ngFor="let item1 of listauszkodzenia">
+                      <span (click)="ZmienStan('nazwaponaprawa',item1.id,item.id)">{{item1.nazwa}}</span>
+                  </button></mat-menu>
+                </button>; stan:
+                <button mat-icon-button [matMenuTriggerFor]="menuStanPN" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstanponaprawa!=1)}"> {{item.nazwastanponaprawa}}</span>
+                  <mat-menu #menuStanPN="matMenu" >
+                    <button mat-menu-item *ngFor="let item1 of listastan">
+                        <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stanponaprawa',item1.id,item.id)">{{item1.nazwa}}</span>
+                    </button>
+                  </mat-menu>
+                </button>
+              </span>
+            </div>
+
             <div class="example-item-detail2"></div>
           </div>
-          <!--
-          <div class="example-item-detail" (click)="Wybrany(0,-1)"><span class="kursor" >[Nowy Moduł]</span></div>
-          <div class="example-item-detail2"></div>
-          -->  
+        
         </cdk-virtual-scroll-viewport>
       </div>
     

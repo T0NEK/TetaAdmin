@@ -22,6 +22,7 @@ export class TestyComponent {
     private zakladkadialogusubscribe = new Subscription();
     private listasubscribe = new Subscription();
     private stanysubscribe = new Subscription();
+    private danesubscribe = new Subscription();
     @ViewChild('scrollViewportModoly')  VSVDialogModoly!: CdkVirtualScrollViewport;
     @ViewChild('scrollViewportZespoly')  VSVDialogZesply!: CdkVirtualScrollViewport;
     @ViewChild('scrollViewportUszkodzenia')  VSVDialogUszkodzenia!: CdkVirtualScrollViewport;
@@ -30,6 +31,7 @@ export class TestyComponent {
     tablicauszkodzenia: any[] = [];  
     listauszkodzenia: any[] = [];
     listastan: any[] = [];
+    listaczasy: number[] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
     height: any;
     height1: any;
     height2: any;
@@ -65,7 +67,10 @@ export class TestyComponent {
             {
                 this.VSVDialogModoly.checkViewportSize();
                 this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
-                this.WybranyZespol(this.tablicazespoly[this.wybranyzespol].id, this.wybranyzespol)           
+                if (this.tablicazespoly.length > 0)
+                {
+                this.WybranyZespol(this.wybranyzespol)           
+                }
             }
             uszkodzenia.WczytajListy('uszkodzenia')
             uszkodzenia.WczytajListy('stan')
@@ -81,7 +86,7 @@ export class TestyComponent {
             //console.log( this.wybrane)
             //console.log( this.tablicazawartosci[this.wybrane].id)
             this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
-            this.WybranyZespol(this.tablicazespoly[this.wybranyzespol].id, this.wybranyzespol)           
+            this.WybranyZespol(this.wybranyzespol)           
           }  
         }
       );   
@@ -90,8 +95,16 @@ export class TestyComponent {
       ( data => 
         { 
             this.tablicazawartosci = data; 
+            this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
         }
       );   
+
+      this.danesubscribe = zespoly.OdczytajDane$.subscribe
+      ( data => 
+        { 
+          this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
+        }
+      );
 
       this.tablicazespolowscisubscribe = zespoly.OdczytajZespoly$.subscribe
       ( data => 
@@ -100,10 +113,17 @@ export class TestyComponent {
             { 
               this.tablicazespoly = data.zespoly; 
               this.tablicauszkodzenia = [];
+              if (this.tablicazespoly.length > 0)
+              {
+              this.WybranyZespol(this.wybranyzespol)           
+              }
               this.VSVDialogZesply.checkViewportSize();
             }
             else
-            { this.tablicazespoly = []}
+            {
+              this.tablicazespoly = []
+              this.tablicauszkodzenia = [];
+            }
         }
       );   
      
@@ -123,6 +143,7 @@ export class TestyComponent {
       this.listasubscribe = uszkodzenia.OdczytajListy$.subscribe
       ( data => 
         { 
+    //console.log(data)
             if (data.stan)
             { 
               switch (data.rodzaj) {
@@ -151,6 +172,7 @@ export class TestyComponent {
     if (this.zakladkadialogusubscribe) {this.zakladkadialogusubscribe.unsubscribe(); }
     if (this.listasubscribe) {this.listasubscribe.unsubscribe(); }
     if (this.stanysubscribe) {this.stanysubscribe.unsubscribe(); }
+    if (this.danesubscribe) {this.danesubscribe.unsubscribe(); }
     }
   
 ModulWybrany(id: number)
@@ -167,11 +189,6 @@ Symbol()
   return (this.tablicazawartosci.length > 0 ? this.tablicazawartosci[this.wybranymodul].symbol : '')
 }
 
-
-Wybrany(event: any, i: number)
-    {
-      this.ZmienWybrany(event, i)
-    }
   
 ZmienWybrany(modulid: number, i : number)
     {
@@ -181,18 +198,25 @@ ZmienWybrany(modulid: number, i : number)
       //this.wybraneosoby = this.wybranymodul.osoby;
     }
   
-WybranyZespol(zespol: any, i: number)
+WybranyZespol(i: number)
     {
       this.wybranyzespol = i;
-      this.uszkodzenia.WczytajUszkodzenia(this.tablicazespoly[this.wybranyzespol].id, zespol)
+      this.uszkodzenia.WczytajUszkodzenia(this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[i].id)
       //console.log(this.wybrane, zespol)
     }
   
 ZmienStan(rodzaj: string, stan: number, uszkodzenie: number)
 {
   this.uszkodzenia.ZapiszStan(rodzaj,this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[this.wybranyzespol].id, stan, uszkodzenie)
-  console.log(stan, uszkodzenie)
+  //console.log(rodzaj,this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[this.wybranyzespol].id, stan, uszkodzenie)
 }
-     
+
+ZmienDane(rodzaj: string, stan: number, zespol: number)
+{
+  this.zespoly.ZapiszDane(rodzaj, zespol, stan)
+  //console.log(rodzaj, stan, zespol)
+}
+
+
   }
   
