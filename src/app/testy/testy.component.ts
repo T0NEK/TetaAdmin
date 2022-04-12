@@ -31,7 +31,7 @@ export class TestyComponent {
     tablicauszkodzenia: any[] = [];  
     listauszkodzenia: any[] = [];
     listastan: any[] = [];
-    listaczasy: number[] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
+    listaczasy: number[] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,70,80,90,100,120,140,160,180,200,240,280,320]
     height: any;
     height1: any;
     height2: any;
@@ -204,15 +204,26 @@ WybranyZespol(i: number)
       this.uszkodzenia.WczytajUszkodzenia(this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[i].id)
       //console.log(this.wybrane, zespol)
     }
-  
+ 
+
+
 ZmienStan(rodzaj: string, stan: number, uszkodzenie: number)
 {
   this.uszkodzenia.ZapiszStan(rodzaj,this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[this.wybranyzespol].id, stan, uszkodzenie)
   //console.log(rodzaj,this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[this.wybranyzespol].id, stan, uszkodzenie)
 }
 
+Random(min: number, max: number)
+  {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }    
+
+
 ZmienDane(rodzaj: string, stan: number, zespol: number)
 {
+  if ( stan > 199 ) { stan = stan - 20 + this.Random(1,40) }
+  else if ( stan > 99 ) { stan = stan - 10 + this.Random(1,20) } 
+       else if ( stan > 65 ) { stan = stan - 5 + this.Random(1,10) }    
   this.zespoly.ZapiszDane(rodzaj, zespol, stan)
   //console.log(rodzaj, stan, zespol)
 }
