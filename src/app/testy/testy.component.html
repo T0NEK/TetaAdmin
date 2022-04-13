@@ -29,23 +29,23 @@
                 </mat-menu>
               </button>
                [dni]) ; wykonał:<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">  {{item.imie}} {{item.nazwisko}}</span>; wykrytych uszkodzeń<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}"><span [ngClass]="{'text-danger':(item.uszkodzeniailosc!=0)}"> {{item.uszkodzeniailosc}}</span></span> (jest: <span [ngClass]="{'text-danger':(item.jestuszkodzen!=0)}">{{item.jestuszkodzen}})</span></div>
-            <div class="example-item-detail1">czasy wykonania (około) testu: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDT" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czaswykonania}}</span>
+            <div class="example-item-detail1">przybliżone czasy wykonania testu: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDT" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{FormatCzas(item.czaswykonania)}}</span>
               <mat-menu #menuNazwaDT="matMenu" >
-                <button mat-menu-item *ngFor="let item1 of listaczasy">
-                    <span (click)="ZmienDane('czaswykonania',item1,item.id)">{{item1}}</span>
+                <button mat-menu-item *ngFor="let item1 of listaczasyT,let i = index">
+                    <span (click)="ZmienDane('czaswykonania',i,item.id)">{{item1}}</span>
                 </button>
               </mat-menu>
-            </button> [s], resetu: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDR" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasreset}}</span><mat-menu #menuNazwaDR="matMenu" >
-                <button mat-menu-item *ngFor="let item1 of listaczasy">
-                    <span (click)="ZmienDane('czasreset',item1,item.id)">{{item1}}</span>
+            </button> , resetu: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDR" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{FormatCzas(item.czasreset)}}</span><mat-menu #menuNazwaDR="matMenu" >
+                <button mat-menu-item *ngFor="let item1 of listaczasyT,let i = index">
+                    <span (click)="ZmienDane('czasreset',i,item.id)">{{item1}}</span>
                 </button>
               </mat-menu>
-            </button> [s], naprawy: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDN" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasnaprawa}}</span><mat-menu #menuNazwaDN="matMenu" >
-              <button mat-menu-item *ngFor="let item1 of listaczasy">
-                  <span (click)="ZmienDane('czasnaprawa',item1,item.id)">{{item1}}</span>
+            </button> , naprawy: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDN" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{FormatCzas(item.czasnaprawa)}}</span><mat-menu #menuNazwaDN="matMenu" >
+              <button mat-menu-item *ngFor="let item1 of listaczasyT,let i = index">
+                  <span (click)="ZmienDane('czasnaprawa',i,item.id)">{{item1}}</span>
               </button>
             </mat-menu>
-          </button> [s] i ilość elementów: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDE" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.elementy}} [sztuk]</span><mat-menu #menuNazwaDE="matMenu" >
+          </button> i ilość elementów: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDE" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.elementy}} sztuk</span><mat-menu #menuNazwaDE="matMenu" >
             <button mat-menu-item *ngFor="let item1 of listaczasy">
                 <span (click)="ZmienDane('elementy',item1,item.id)">{{item1}}</span>
             </button>
@@ -70,7 +70,7 @@
                     <span (click)="ZmienStan('nazwa',item1.id,item.id)">{{item1.nazwa}}</span>
                 </button>
               </mat-menu>
-            </button>; stan:<button mat-icon-button [matMenuTriggerFor]="menuStan" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastan}}</span>
+            </button>; stan: <button mat-icon-button [matMenuTriggerFor]="menuStan" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstan!=1)}"> {{item.nazwastan}}</span>
               <mat-menu #menuStan="matMenu" >
                 <button mat-menu-item *ngFor="let item1 of listastan">
                     <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stan',item1.id,item.id)">{{item1.nazwa}}</span>
@@ -91,7 +91,7 @@
                     <button mat-menu-item *ngFor="let item1 of listauszkodzenia">
                         <span (click)="ZmienStan('nazwaporeset',item1.id,item.id)">{{item1.nazwa}}</span>
                     </button></mat-menu>
-                  </button>; stan:
+                  </button>; stan: 
                   <button mat-icon-button [matMenuTriggerFor]="menuStanPR" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstanporeset!=1)}"> {{item.nazwastanporeset}}</span>
                     <mat-menu #menuStanPR="matMenu" >
                       <button mat-menu-item *ngFor="let item1 of listastan">
@@ -115,8 +115,7 @@
                   <button mat-menu-item *ngFor="let item1 of listauszkodzenia">
                       <span (click)="ZmienStan('nazwaponaprawa',item1.id,item.id)">{{item1.nazwa}}</span>
                   </button></mat-menu>
-                </button>; stan:
-                <button mat-icon-button [matMenuTriggerFor]="menuStanPN" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstanponaprawa!=1)}"> {{item.nazwastanponaprawa}}</span>
+                </button>; stan: <button mat-icon-button [matMenuTriggerFor]="menuStanPN" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-danger':(item.idstanponaprawa!=1)}"> {{item.nazwastanponaprawa}}</span>
                   <mat-menu #menuStanPN="matMenu" >
                     <button mat-menu-item *ngFor="let item1 of listastan">
                         <span [ngClass]="{'text-danger':(item1.stan!=1)}" (click)="ZmienStan('stanponaprawa',item1.id,item.id)">{{item1.nazwa}}</span>

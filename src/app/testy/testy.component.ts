@@ -1,4 +1,4 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
@@ -32,6 +32,9 @@ export class TestyComponent {
     listauszkodzenia: any[] = [];
     listastan: any[] = [];
     listaczasy: number[] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,70,80,90,100,120,140,160,180,200,240,280,320]
+    listaczasyN: number[] = [1,	2,	3,	4,	5,	6,	7,	8,	9,	10,	15,	20,	25,	30,	35,	40,	45,	50,	55,	60,	120,	180,	240,	300,	360,	420,	480,	540,	600,	900,	1200,	1500,	1800,	2100,	2400,	2700,	3000,	3300,	3600,	5400,	7200,	9000,	10800,	12600,	14400,	16200,	18000,	19800,	21600, 23400];
+    listaczasyT: string[] = ['1 s',	'2 s',	'3 s',	'4 s',	'5 s',	'6 s',	'7 s',	'8 s',	'9 s',	'10 s',	'15 s',	'20 s',	'25 s',	'30 s',	'35 s',	'40 s',	'45 s',	'50 s',	'55 s',	'60 s',	'2 m',	'3 m',	'4 m',	'5 m',	'6 m',	'7 m',	'8 m',	'9 m',	'10 m',	'15 m',	'20 m',	'25 m',	'30 m',	'35 m',	'40 m',	'45 m',	'50 m',	'55 m',	'60 m',	'1.5 h',	'2 h',	'2.5 h',	'3 h',	'3.5 h',	'4 h',	'4.5 h',	'5 h',	'5.5 h',	'6 h'];
+
     height: any;
     height1: any;
     height2: any;
@@ -219,15 +222,23 @@ Random(min: number, max: number)
   }    
 
 
+  
 ZmienDane(rodzaj: string, stan: number, zespol: number)
 {
-  if ( stan > 199 ) { stan = stan - 20 + this.Random(1,40) }
-  else if ( stan > 99 ) { stan = stan - 10 + this.Random(1,20) } 
-       else if ( stan > 65 ) { stan = stan - 5 + this.Random(1,10) }    
-  this.zespoly.ZapiszDane(rodzaj, zespol, stan)
+  let wartosc = this.listaczasyN[stan];
+  if (wartosc > 10)
+  { wartosc = Math.trunc(this.Random((this.listaczasyN[stan]+this.listaczasyN[stan-1])/2,(this.listaczasyN[stan+1]+this.listaczasyN[stan])/2)); }
+  this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
   //console.log(rodzaj, stan, zespol)
 }
 
+FormatCzas(czassekund: number):string
+{
+  let godziny = Math.trunc(czassekund / 3600);
+  let minuty = Math.trunc((czassekund - godziny * 3600) / 60);
+  let sekundy = Math.trunc(czassekund - godziny * 3600 - minuty * 60); 
+  return (godziny != 0 ? godziny.toString() + 'h' : '') + (minuty != 0 ? minuty.toString() + 'm' : '') + (sekundy != 0 ? sekundy.toString() + 's' : ''); 
+}
 
   }
   
