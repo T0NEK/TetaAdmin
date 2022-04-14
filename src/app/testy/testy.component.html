@@ -77,6 +77,8 @@
                 </button>
               </mat-menu>
             </button>
+            <span class="text-success" *ngIf="item.reset != '0'">; reset od {{FormatCzas(item.sekreset)}}<span class='text-primary kursor' (click)="ZmienStan('reset', 0, item.id)"> skasuj</span></span>
+            <span class="text-success" *ngIf="item.naprawa != '0'">; naprawa od {{FormatCzas(item.seknaprawa)}}<span class='text-primary kursor' (click)="ZmienStan('naprawa', 0, item.id)"> skasuj</span></span>
             </div>
             
               <div class="example-item-detail" style="padding-left: 38px;"> Po resecie: 
