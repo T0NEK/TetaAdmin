@@ -1,0 +1,105 @@
+:host
+{
+    color: lightgreen;
+    cursor: crosshair;
+    white-space: pre;
+}
+div.row
+{
+    margin: 0;
+}
+.kursor 
+{
+    cursor: pointer;
+}
+.male
+{
+    font-size: 14px;
+}
+::ng-deep .mat-slide-toggle.mat-disabled .mat-slide-toggle-label,
+::ng-deep .mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container
+{
+    cursor: pointer;
+}
+.example-item
+  {
+    height: 24px;
+  }
+.example-margin 
+  {
+    margin: 0 10px;
+  }
+  .example-item-detail1 
+  {
+    height: 24px;
+    font-size: 18px;
+    padding-left: 35px;
+    padding-top: 5px;
+  }
+  .example-item-detail2
+  {
+    height: 24px;
+    font-size: 20px;
+    padding-left: 5px;
+  }  
+  span
+{
+    color: lightgreen;
+}
+  ::ng-deep .mat-menu-panel
+  {
+    color: green;
+    background: black;
+    padding: 0 10px!important;
+    max-width: 100%!important;
+  }
+  .mat-menu-item
+  {
+    background: black;
+    height: 28px;
+  }
+  ::ng-deep .mat-icon-button
+  {
+    height: 20px;
+    width: 20px;
+  }
+  mat-card
+  {
+      color: green;
+      background: black;
+      border: 1px solid blue;
+      padding: 5px;
+  }
+  mat-card-title
+  {
+      font-size: 18px;
+      font-weight: normal;
+      padding: 5px;
+  }
+  mat-card-subtitle
+  {
+      color: green;
+      font-size: 18px;
+      font-weight: normal;
+      padding-left: 73px;
+  }
+  mat-card-content
+  {
+      font-size: 20px;
+      font-weight: bold;
+      padding-left: 30px;
+  }
+  button
+  {
+      line-height: 6px;
+      font-size: 18px;
+      padding-bottom: 4px;
+      width: auto;
+  }
+  mat-card-actions
+{
+    padding-left: 30px;
+}
+  
+
+  

@@ -7,6 +7,7 @@ import { FunkcjeWspolneService } from './funkcje-wspolne.service';
 import { OsobyService } from './osoby.service';
 import { PoleceniaService } from './polecenia.service';
 import { ModulyService } from './moduly.service';
+import { PoleceniadedalService } from './poleceniadedal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ import { ModulyService } from './moduly.service';
 export class CzasService implements OnDestroy
 {
 
-  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService, private osoby: OsobyService, private polecenia: PoleceniaService, private modoly: ModulyService) 
+  constructor(private http: HttpClient, @Inject(LOCALE_ID) private locate : string, private komunikacja: KomunikacjaService, private funkcje: FunkcjeWspolneService, private osoby: OsobyService, private polecenia: PoleceniaService, private modoly: ModulyService, private poleceniadedal: PoleceniadedalService) 
   {
   //console.log('czas con'); 
   this.sprawdzSQL(5);  
@@ -72,6 +73,8 @@ export class CzasService implements OnDestroy
         this.osoby.wczytajOsoby(5);
         this.polecenia.WczytajPolecenia(5)
         this.modoly.Wczytajmoduly(5);
+        this.poleceniadedal.wczytajOsoby(5);
+        this.poleceniadedal.wczytujPolecenia();
       }  
     }
   }

@@ -36,10 +36,11 @@ import { ZdarzeniaComponent } from './zdarzenia/zdarzenia.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select'; 
 import { MatMenuModule } from '@angular/material/menu';
+import { PoleceniadedalComponent } from './poleceniadedal/poleceniadedal.component';
 
 
 @NgModule({
-  declarations: [																	
+  declarations: [																		
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -56,7 +57,8 @@ import { MatMenuModule } from '@angular/material/menu';
       PoleceniaComponent,
       ZalogowaniUzytkownicyComponent,
       LiniaKomendComponent,
-      ZdarzeniaComponent
+      ZdarzeniaComponent,
+      PoleceniadedalComponent
    ],
   imports: [
     BrowserModule,

@@ -1,0 +1,61 @@
+<div class="row" >
+  <div>
+    <div [ngStyle]="{'width': width, 'min-width': width, 'height': height, 'min-height': height}">
+      <div *ngFor="let item of tablicaosoby; let i = index"  class="example-mat-card, text-success">
+        <mat-slide-toggle (toggleChange)="Przelacz(i,item.wybrany)" [(ngModel)]="item.wybrany" ><span [ngClass]="{'text-warning': PolecenieIlosc(item.id,i) != 0}">{{item.imie}}&nbsp;{{item.nazwisko}}</span></mat-slide-toggle>
+      </div>
+  <div class="example-item-detail2"></div>
+  <div class="text-primary"> Czas Wykonania:</div>
+  <button mat-icon-button [matMenuTriggerFor]="menuNazwaCW" aria-label="Example icon-button with a menu"><span>&nbsp;&nbsp;{{FormatCzas(czaswykonania)}}</span>
+        <mat-menu #menuNazwaCW="matMenu" >
+          <button mat-menu-item *ngFor="let item1 of listaczasyT,let i = index">
+              <span (click)="ZmienDane(i)">{{item1}}</span>
+          </button>
+        
+        </mat-menu>
+      </button>
+  </div>
+  <div>
+    <mat-slide-toggle (toggleChange)="Przewijaj()" [(ngModel)]="checked" (change)="onClick('slide-toggle')"><span [ngClass]="{'text-success':checked, 'text-danger':!checked}">{{ checked ? "przewijaj" : "nie przewijaj"}}</span></mat-slide-toggle>
+  </div>
+  </div>
+  
+  <div>
+    <cdk-virtual-scroll-viewport #scrollViewportDedal appendOnly [itemSize]="44" minBufferPx="200" maxBufferPx="400" class="example-viewport" [ngStyle]="{'width': width1, 'min-width': width1,'height': height}" autosize>
+      <div *cdkVirtualFor="let item of tablicapolecenia, let i=index"  class="example-item, text-success" >
+        <div class="example-item-detail1 kursor" (click)="Zaznacz(item)"><span [ngClass]="ZaznaczoneWS(item)">{{item.czaswykonania}}</span> <span [ngClass]="ZaznaczoneWP(item)"> {{item.osobaText}}</span> (z terminala {{item.terminal}}) polecenie: <span [ngClass]="ZaznaczoneWP(item)"><span>{{Polecenie(item)}}</span></span>
+        </div>
+        <div class="example-item-detail2">
+          <span *ngIf="item.odpowiedz">
+          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nieznane polecenie','info')">[nie znane]</span></span>
+          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'odmowa wykonania','info')">  [odmowa]</span></span>
+          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nie masz uprawnień','info')">  [brak uprawnień]</span></span>
+          <span><span class="text-light kursor" (click)="Odpowiedz(item,i,'potrzebuję dodatkowe dane:','modul')">  [moduł]</span></span>
+          <span><span class="text-danger kursor" (click)="Odpowiedz(item,i,'nie znaleziono modułu','info')">  [-brak]</span></span>
+          <span><span class="text-light kursor" (click)="Odpowiedz(item,i,'potrzebuję dodatkowe dane:','zespol')">  [zespół]</span></span>
+          <span><span class="text-danger kursor" (click)="Odpowiedz(item,i,'nie znaleziono zespołu','info')">  [-brak]</span></span>
+          <span><span class="text-light kursor" (click)="Odpowiedz(item,i,'potrzebuję dodatkowe dane:','element')">  [element]</span></span>
+          <span><span class="text-danger kursor" (click)="Odpowiedz(item,i,'nie znaleziono elementu','info')">  [-brak]</span></span>
+          <span><span class="text-success kursor" (click)="OdpowiedzOK(item,i,'wykonuję','info')">  [wykonaj OK w: {{FormatCzas(czaswykonania)}}]</span></span>
+          <span><span class="text-danger kursor" (click)="OdpowiedzERROR(item,i,'wykonuję','info')">  [wykonaj ERROR w: {{FormatCzas(czaswykonania)}}]</span></span>
+          </span>
+          <span class="text-primary" *ngIf="!item.odpowiedz">odpowiedż: {{item.odpowiedzText}} ({{item.odpowiedzTresc}})</span>
+          
+          <span *ngIf="item.wykonane">
+            <span class="text-primary kursor" (click)="Odpowiedz(item.id,i,'błąd wykonania','blad')">  [błąd]</span>
+          </span>
+          
+        </div>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  
+  </div>
+  
+  <div>
+  <app-linia-komend class="linia-komend"  [ngStyle]="{'height': wysokoscLinia +'px', 'max-height': wysokoscLinia +'px'}">
+  </app-linia-komend>
+  </div>
+  </div>
+  
+  
+  

@@ -64,6 +64,14 @@
       </app-zdarzenia>
     </ng-template>
   </li>
+  <li [ngbNavItem]="9">
+    <a ngbNavLink [ngClass]="{'zalaczone' : zakladka[9]}">Polecenia Dedala</a>
+    <ng-template ngbNavContent>
+      <app-poleceniadedal>
+        
+      </app-poleceniadedal>
+    </ng-template>
+  </li>
 </ul>
 
 
