@@ -21,13 +21,14 @@
   </div>
   
   <div>
-    <cdk-virtual-scroll-viewport #scrollViewportDedal appendOnly [itemSize]="44" minBufferPx="200" maxBufferPx="400" class="example-viewport" [ngStyle]="{'width': width1, 'min-width': width1,'height': height}" autosize>
+    <cdk-virtual-scroll-viewport #scrollViewportDedal appendOnly [itemSize]="64" minBufferPx="200" maxBufferPx="400" class="example-viewport" [ngStyle]="{'width': width1, 'min-width': width1,'height': height}" autosize>
       <div *cdkVirtualFor="let item of tablicapolecenia, let i=index"  class="example-item, text-success" >
-        <div class="example-item-detail1 kursor" (click)="Zaznacz(item)"><span [ngClass]="ZaznaczoneWS(item)">{{item.czaswykonania}}</span> <span [ngClass]="ZaznaczoneWP(item)"> {{item.osobaText}}</span> (z terminala {{item.terminal}}) polecenie: <span [ngClass]="ZaznaczoneWP(item)"><span>{{Polecenie(item)}}</span></span>
+        <div class="example-item-detail1 kursor" (click)="Zaznacz(item)"><span [ngClass]="ZaznaczoneWS(item)">{{item.czaswykonania}}</span> <span [ngClass]="ZaznaczoneWP(item)"> {{item.osobaText}}</span> (z: {{item.terminal}}) polecenie: <span [ngClass]="ZaznaczoneWP(item)"><span>{{Polecenie(item)}}</span></span>
         </div>
         <div class="example-item-detail2">
           <span *ngIf="item.odpowiedz">
-          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nieznane polecenie','info')">[nie znane]</span></span>
+          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nieznane polecenie','info')"> [nieznane]</span></span>
+          <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nie rozumiem','info')"> [nie rozumiem]</span></span>
           <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'odmowa wykonania','info')">  [odmowa]</span></span>
           <span><span class="text-primary kursor" (click)="Odpowiedz(item,i,'nie masz uprawnień','info')">  [brak uprawnień]</span></span>
           <span><span class="text-light kursor" (click)="Odpowiedz(item,i,'potrzebuję dodatkowe dane:','modul')">  [moduł]</span></span>
@@ -36,15 +37,16 @@
           <span><span class="text-danger kursor" (click)="Odpowiedz(item,i,'nie znaleziono zespołu','info')">  [-brak]</span></span>
           <span><span class="text-light kursor" (click)="Odpowiedz(item,i,'potrzebuję dodatkowe dane:','element')">  [element]</span></span>
           <span><span class="text-danger kursor" (click)="Odpowiedz(item,i,'nie znaleziono elementu','info')">  [-brak]</span></span>
-          <span><span class="text-success kursor" (click)="OdpowiedzOK(item,i,'wykonuję','info')">  [wykonaj OK w: {{FormatCzas(czaswykonania)}}]</span></span>
-          <span><span class="text-danger kursor" (click)="OdpowiedzERROR(item,i,'wykonuję','info')">  [wykonaj ERROR w: {{FormatCzas(czaswykonania)}}]</span></span>
           </span>
           <span class="text-primary" *ngIf="!item.odpowiedz">odpowiedż: {{item.odpowiedzText}} ({{item.odpowiedzTresc}})</span>
-          
-          <span *ngIf="item.wykonane">
-            <span class="text-primary kursor" (click)="Odpowiedz(item.id,i,'błąd wykonania','blad')">  [błąd]</span>
+        </div>
+        <div class="example-item-detail2">
+          <span *ngIf="item.odpowiedz">
+          <span><span class="text-success kursor" (click)="Odpowiedz(item,i,'wykonuję','info')">  [wykonuję]</span></span>
+          <span><span class="text-success kursor" (click)="OdpowiedzOK(item,i,'wykonuję','info')">  [OK po: {{FormatCzas(czaswykonania)}}]</span></span>
+          <span><span class="text-danger kursor" (click)="OdpowiedzERROR1(item,i,'wykonuję','info')">  [problem po: {{FormatCzas(czaswykonania)}}]</span></span>
+          <span><span class="text-danger kursor" (click)="OdpowiedzERROR2(item,i,'wykonuję','info')">  [niepowodzenie po: {{FormatCzas(czaswykonania)}}]</span></span>
           </span>
-          
         </div>
       </div>
     </cdk-virtual-scroll-viewport>
@@ -52,8 +54,8 @@
   </div>
   
   <div>
-  <app-linia-komend class="linia-komend"  [ngStyle]="{'height': wysokoscLinia +'px', 'max-height': wysokoscLinia +'px'}">
-  </app-linia-komend>
+  <app-linia-polecen class="linia-komend"  [ngStyle]="{'height': wysokoscLinia +'px', 'max-height': wysokoscLinia +'px'}">
+  </app-linia-polecen>
   </div>
   </div>
   

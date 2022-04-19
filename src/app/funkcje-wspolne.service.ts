@@ -69,6 +69,14 @@ setZalogowany(zalogowany: any, nadawcy: any)
   this.Odbiorca.next(tabelaosoby)
  }
 
+ private OdbiorcaPolecenia = new Subject<any>();
+ OdbiorcaPolecenia$ = this.OdbiorcaPolecenia.asObservable();
+ odbiorcapolecenia(item: any)
+ {
+  this.OdbiorcaPolecenia.next(item)
+ }
+
+
 
  private ZakladkaDialogu = new Subject<any>();
  ZakladkaDialogu$ = this.ZakladkaDialogu.asObservable();

@@ -37,10 +37,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select'; 
 import { MatMenuModule } from '@angular/material/menu';
 import { PoleceniadedalComponent } from './poleceniadedal/poleceniadedal.component';
+import { LiniaPolecenComponent } from './linia-polecen/linia-polecen.component';
 
 
 @NgModule({
-  declarations: [																		
+  declarations: [																			
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -58,7 +59,8 @@ import { PoleceniadedalComponent } from './poleceniadedal/poleceniadedal.compone
       ZalogowaniUzytkownicyComponent,
       LiniaKomendComponent,
       ZdarzeniaComponent,
-      PoleceniadedalComponent
+      PoleceniadedalComponent,
+      LiniaPolecenComponent
    ],
   imports: [
     BrowserModule,

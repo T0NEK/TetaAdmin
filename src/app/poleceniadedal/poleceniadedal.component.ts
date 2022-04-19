@@ -100,17 +100,23 @@ export class PoleceniadedalComponent implements OnDestroy, AfterViewInit {
           {
             if (data[index].odpowiedz)
             {
+              if (1*data[index].osoba == 0)  
+              {
+                aktywny = true;
+              }
+              else
+              {
               for (let index2 = 0; index2 < this.tablicaosobyaktywne.length; index2++) 
               {
                 //console.log(this.tablicaosoby[index2].id, data[index].osoba)
-                if (1*this.tablicaosoby[index2].id == 1*data[index].osoba)  
+                if (1*data[index].osoba == 1*this.tablicaosoby[index2].id)  
                 {
                  this.tablicaosobyaktywne[index2] = 1*this.tablicaosobyaktywne[index2] + 1;
                  aktywny = true;
                  break;
                 }
               }
-
+              }
             }
           }
         if (aktywny) { this.funkcje.setZmianyZakladek(9,true)} else { this.funkcje.setZmianyZakladek(9,false)}  
@@ -148,13 +154,28 @@ this.poleceniadedal.ZapiszOdpowiedz(item.poleceniepierwsze, item.czaspierwsze, i
 
 OdpowiedzOK(item: any, i: number, tekst: string, polecenie: string)
 {
-this.Odpowiedz(item, i, tekst + ' , czas ~ ' + this.FormatCzas(this.czaswykonania) , polecenie)
+this.Odpowiedz(item, i, tekst + ' , czas ~ ' + this.FormatCzas(this.czaswykonania) , polecenie);
+setTimeout(() =>  {
+                  this.poleceniadedal.ZapiszOdpowiedz(item.poleceniepierwsze, item.czaspierwsze, item.id, 'info', this.czas.getCzasDedala(), item.osoba, item.osobaText, item.terminal, 'polecenie zakończono prawidłowo')
+                  }, this.czaswykonania*1000);
 }
 
-OdpowiedzERROR(item: any, i: number, tekst: string, polecenie: string)
+OdpowiedzERROR1(item: any, i: number, tekst: string, polecenie: string)
 {
-this.Odpowiedz(item, i, tekst + ' , czas ~ ' + this.FormatCzas(this.czaswykonania) , polecenie)
+this.Odpowiedz(item, i, tekst + ' , czas ~ ' + this.FormatCzas(this.czaswykonania) , polecenie);
+setTimeout(() =>  {
+  this.poleceniadedal.ZapiszOdpowiedz(item.poleceniepierwsze, item.czaspierwsze, item.id, 'info', this.czas.getCzasDedala(), item.osoba, item.osobaText, item.terminal, 'problem z wykonaniem polecenia')
+  }, this.czaswykonania*1000);
 }
+
+OdpowiedzERROR2(item: any, i: number, tekst: string, polecenie: string)
+{
+this.Odpowiedz(item, i, tekst + ' , czas ~ ' + this.FormatCzas(this.czaswykonania) , polecenie);
+setTimeout(() =>  {
+  this.poleceniadedal.ZapiszOdpowiedz(item.poleceniepierwsze, item.czaspierwsze, item.id, 'info', this.czas.getCzasDedala(), item.osoba, item.osobaText, item.terminal, 'wykonanie polecenia zakończone niepowodzeniem')
+  }, this.czaswykonania*1000);
+}
+
 
 Przelacz(wszystkie: number, all: boolean)
   {
@@ -214,7 +235,8 @@ Przelacz(wszystkie: number, all: boolean)
 
   Zaznacz(item: any)
   {
-    this.zaznaczonePolecenie = item.poleceniepierwsze+item.czaspierwsze
+    this.zaznaczonePolecenie = item.poleceniepierwsze+item.czaspierwsze;
+    this.funkcje.odbiorcapolecenia(item);
   }
 
   PolecenieIlosc(id: number, i: number)
