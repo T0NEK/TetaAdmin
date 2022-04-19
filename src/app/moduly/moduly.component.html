@@ -1,0 +1,33 @@
+<div class="row">
+  <div>  
+    <cdk-virtual-scroll-viewport #scrollViewportModoly appendOnly [itemSize]="32"  class="example-viewport" [ngStyle]="{'height': height, 'width': width1}" autosize>
+      <div *cdkVirtualFor="let item of tablicazawartosci, let i = index">
+        <div class="example-item-detail" (click)="ZmienWybrany(item.id, i)"><span class="kursor" [ngClass]="{'text-success':(!(ModulWybrany(item.id))), 'text-primary': (ModulWybrany(item.id))}">{{item.nazwa}}</span><span class="kursor"> ({{item.symbol}})</span></div>
+        <div class="example-item-detail2"></div>
+      </div>
+    </cdk-virtual-scroll-viewport>
+</div>
+
+<div class="opcje" [ngStyle]="{'height': height, 'width': width2}">
+  <mat-card> 
+    <mat-card-title>Wybrany Moduł: <span>"{{Nazwa()}}"</span> </mat-card-title> 
+    <mat-card-subtitle>symbol: <span>"{{Symbol()}}"</span> </mat-card-subtitle> 
+  </mat-card> 
+  <mat-card> 
+    <mat-card-title> czy dostępny dla poszczególnych użytkowników:  </mat-card-title>
+  <mat-card-subtitle>
+   <div *ngFor="let item of tablicaosoby">{{item.imie}} {{item.nazwisko}} ({{item.funkcja}})
+    <button  mat-button [class]="item.dos ? 'text-success' : 'text-danger'" (click)="ZmienOsoba(item.id, !item.dos)" >{{(item.dos ? 'Tak' : 'Nie')}}</button>
+   </div>
+  </mat-card-subtitle>
+  <mat-card-actions> 
+    <button  mat-button class="text-success" (click)="ZmienOsoby(true)"> TAK </button> 
+    <button  mat-button class="text-danger" (click)="ZmienOsoby(false)"> NIE </button> 
+  </mat-card-actions> 
+    
+  </mat-card>
+  
+</div>
+</div>
+
+

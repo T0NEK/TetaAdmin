@@ -46,8 +46,8 @@
               </button>
             </mat-menu>
           </button> i ilość elementów: <button mat-icon-button [matMenuTriggerFor]="menuNazwaDE" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.elementy}} sztuk</span><mat-menu #menuNazwaDE="matMenu" >
-            <button mat-menu-item *ngFor="let item1 of listaczasy">
-                <span (click)="ZmienDane('elementy',item1,item.id)">{{item1}}</span>
+            <button mat-menu-item *ngFor="let item1 of listaczasy,let i = index">
+                <span (click)="ZmienDane('elementy',i,item.id)">{{item1}}</span>
             </button>
           </mat-menu>
         </button></div>

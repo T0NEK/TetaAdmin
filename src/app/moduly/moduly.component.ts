@@ -9,12 +9,14 @@ import { UszkodzeniaService } from '../uszkodzenia.service';
 import { ZespolyService } from '../zespoly.service';
 
 @Component({
-  selector: 'app-testy',
-  templateUrl: './testy.component.html',
-  styleUrls: ['./testy.component.css']
+  selector: 'app-moduly',
+  templateUrl: './moduly.component.html',
+  styleUrls: ['./moduly.component.css']
 })
+export class ModulyComponent 
+ {
 
-export class TestyComponent {
+    private osobysubscribe = new Subscription();
 
     private tablicazawartoscisubscribe = new Subscription();
     private tablicazespolowscisubscribe = new Subscription();
@@ -44,13 +46,14 @@ export class TestyComponent {
     //wybranymodul: Modul;
     wybranymodul: number;
     wybranyzespol : number;
+    tablicaosoby: any[] = [];
     
     constructor(private all: AppComponent, private moduly: ModulyService, private funkcje: FunkcjeWspolneService, private changeDetectorRef: ChangeDetectorRef, private zespoly: ZespolyService, private uszkodzenia: UszkodzeniaService)
     { 
   
       this.height = (all.wysokoscNawigacja - 42) + 'px';
-      this.height1 = '430px';
-      this.height2 = (all.wysokoscNawigacja - 42 - 430-50 - 70 - 50) + 'px';
+      this.height1 = '300px';
+      this.height2 = (all.wysokoscNawigacja - 42 - 400-50 - 70 - 50) + 'px';
       this.width1 = all.szerokoscModoly + 'px';
       this.width2 = all.szerokoscNawigacja - all.szerokoscModoly + 'px';
       //this.wybrane = 0;
@@ -64,7 +67,7 @@ export class TestyComponent {
          {
           //console.log(this.VSVDialogPolecenia._totalContentHeight)  
              
-           if (data == 5)
+           if (data == 10)
            {
             if (this.tablicazawartosci.length > 0)
             {
@@ -72,7 +75,7 @@ export class TestyComponent {
                 this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
                 if (this.tablicazespoly.length > 0)
                 {
-                this.WybranyZespol(this.wybranyzespol)           
+                //this.WybranyZespol(this.wybranyzespol)           
                 }
             }
             uszkodzenia.WczytajListy('uszkodzenia')
@@ -81,18 +84,14 @@ export class TestyComponent {
          }
       )
 
-      this.stanysubscribe = uszkodzenia.OdczytajStan$.subscribe
+      this.osobysubscribe = moduly.OdczytajModulyUprawnienia$.subscribe
       ( data => 
         { 
-          if (data.stan)
-          { 
-            //console.log( this.wybrane)
-            //console.log( this.tablicazawartosci[this.wybrane].id)
-            this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
-            this.WybranyZespol(this.wybranyzespol)           
-          }  
-        }
-      );   
+          //console.log(data)
+          this.tablicaosoby = data;   
+        } 
+      )
+
      
       this.tablicazawartoscisubscribe = moduly.OdczytajModuly$.subscribe
       ( data => 
@@ -102,73 +101,18 @@ export class TestyComponent {
         }
       );   
 
-      this.danesubscribe = zespoly.OdczytajDane$.subscribe
-      ( data => 
-        { 
-          this.ZmienWybrany(this.tablicazawartosci[this.wybranymodul].id, this.wybranymodul) 
-        }
-      );
-
-      this.tablicazespolowscisubscribe = zespoly.OdczytajZespoly$.subscribe
-      ( data => 
-        { 
-            if (data.stan)
-            { 
-              this.tablicazespoly = data.zespoly; 
-              this.tablicauszkodzenia = [];
-              if (this.tablicazespoly.length > 0)
-              {
-              this.WybranyZespol(this.wybranyzespol)           
-              }
-              this.VSVDialogZesply.checkViewportSize();
-            }
-            else
-            {
-              this.tablicazespoly = []
-              this.tablicauszkodzenia = [];
-            }
-        }
-      );   
      
-      this.tablicazespolowscisubscribe = uszkodzenia.OdczytajUszkodzenia$.subscribe
-      ( data => 
-        { 
-            if (data.stan)
-            { 
-              this.tablicauszkodzenia = data.uszkodzenia; 
-              this.VSVDialogUszkodzenia.checkViewportSize();
-            }
-            else
-            { this.tablicauszkodzenia = []}
-        }
-      );   
-
-      this.listasubscribe = uszkodzenia.OdczytajListy$.subscribe
-      ( data => 
-        { 
-    //console.log(data)
-            if (data.stan)
-            { 
-              switch (data.rodzaj) {
-                case 'uszkodzenia': this.listauszkodzenia = data.lista; break;
-                case 'stan': this.listastan = data.lista; break;
-              }
-            }
-            else
-            {
-            switch (data.rodzaj) {
-              case 'uszkodzenia': this.listauszkodzenia = []; break;
-              case 'stan': this.listastan = []; break;
-              }
-            }  
-
-        }
-      );   
+     
+     
+     
+     
 
     }
   
     ngOnDestroy()
     {
+    if(this.osobysubscribe) { this.osobysubscribe.unsubscribe()}   
+
     if (this.tablicazawartoscisubscribe) {this.tablicazawartoscisubscribe.unsubscribe();}
     if (this.tablicazespolowscisubscribe) {this.tablicazespolowscisubscribe.unsubscribe(); }
     if (this.tablicauszkodzeniascisubscribe) {this.tablicauszkodzeniascisubscribe.unsubscribe(); }
@@ -197,7 +141,8 @@ ZmienWybrany(modulid: number, i : number)
     {
       //this.wybrane = modulid;
       this.wybranymodul = i;
-      this.zespoly.Wczytajzespol(modulid)
+      this.moduly.WczytajmodulyUprawnienia(modulid)
+      //this.zespoly.Wczytajzespol(modulid)
       //this.wybraneosoby = this.wybranymodul.osoby;
     }
   
@@ -225,21 +170,11 @@ Random(min: number, max: number)
   
 ZmienDane(rodzaj: string, stan: number, zespol: number)
 {
-  if (rodzaj == 'elementy')
-  {
-    let listaczasyplus = [...this.listaczasy,360]
-    let wartosc = listaczasyplus[stan];
-    if (wartosc > 10)
-    { wartosc = Math.trunc(this.Random((listaczasyplus[stan]+listaczasyplus[stan-1])/2,(listaczasyplus[stan+1]+listaczasyplus[stan])/2)); }
-    this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
-  }
-  else
-  {
-    let wartosc = this.listaczasyN[stan];
-    if (wartosc > 10)
-    { wartosc = Math.trunc(this.Random((this.listaczasyN[stan]+this.listaczasyN[stan-1])/2,(this.listaczasyN[stan+1]+this.listaczasyN[stan])/2)); }
-    this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
-  }
+  let wartosc = this.listaczasyN[stan];
+  if (wartosc > 10)
+  { wartosc = Math.trunc(this.Random((this.listaczasyN[stan]+this.listaczasyN[stan-1])/2,(this.listaczasyN[stan+1]+this.listaczasyN[stan])/2)); }
+  this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
+  //console.log(rodzaj, stan, zespol)
 }
 
 FormatCzas(czassekund: number):string
@@ -250,5 +185,19 @@ FormatCzas(czassekund: number):string
   return (godziny != 0 ? godziny.toString() + 'h' : '') + (minuty != 0 ? minuty.toString() + 'm' : '') + (sekundy != 0 ? sekundy.toString() + 's' : ''); 
 }
 
+
+
+ZmienOsoba(id : number, dos: any)
+  {
+    this.moduly.ZmienmodulyUprawnienia(this.tablicazawartosci[this.wybranymodul].id, id, dos)
+  }
+
+ZmienOsoby(dos: any)
+  {
+    //console.log(this.tablicazawartosci[this.wybranymodul].id, 0, dos)
+    this.moduly.ZmienmodulyUprawnienia(this.tablicazawartosci[this.wybranymodul].id, 0, dos)
+  }
+
+  
   }
   

@@ -26,10 +26,10 @@ export class PoleceniadedalComponent implements OnDestroy, AfterViewInit {
   private poleceniasubscribe = new Subscription();
   private odpowiedzsubscribe = new Subscription();
   
-  private zalogowany = new Subscription();
-  private odbiorca = new Subscription();
-  private osobyNsubscribe = new Subscription();
-  private goscieNsubscribe = new Subscription();
+  //private zalogowany = new Subscription();
+  //private odbiorca = new Subscription();
+  //private osobyNsubscribe = new Subscription();
+  //private goscieNsubscribe = new Subscription();
   tablicaosoby: any[] = [];
   tablicaosobywybrane: number[] = [];
   tablicaosobyaktywne: number[] = [];
@@ -133,10 +133,10 @@ export class PoleceniadedalComponent implements OnDestroy, AfterViewInit {
     if(this.poleceniasubscribe) { this.poleceniasubscribe.unsubscribe()}   
     if(this.odpowiedzsubscribe) { this.odpowiedzsubscribe.unsubscribe()}
 
-    if(this.zalogowany) { this.zalogowany.unsubscribe()}   
-    if(this.odbiorca) { this.odbiorca.unsubscribe()}   
-    if(this.osobyNsubscribe) { this.osobyNsubscribe.unsubscribe()}   
-    if(this.goscieNsubscribe) { this.goscieNsubscribe.unsubscribe()}   
+    //if(this.zalogowany) { this.zalogowany.unsubscribe()}   
+    //if(this.odbiorca) { this.odbiorca.unsubscribe()}   
+    //if(this.osobyNsubscribe) { this.osobyNsubscribe.unsubscribe()}   
+    //if(this.goscieNsubscribe) { this.goscieNsubscribe.unsubscribe()}   
   }
 
   ngAfterViewInit()

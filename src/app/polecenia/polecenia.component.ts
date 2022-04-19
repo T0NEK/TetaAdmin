@@ -33,6 +33,7 @@ export class PoleceniaComponent implements OnDestroy {
     this.wybrane = '';
     this.wybraneosoby = [...this.wybraneosoby,{"id":0,"imie":"","nazwisko":"","funkcja":"","dos":false}];
     this.wybranepolecenie = {"czas":0,"dzialania":"","id":0,"komunikat":"","nazwa":"","nazwaOrg":"","podstawowe":false,"polecenie":0,"wylogowany":false,"zalogowany":false,"osoby": this.wybraneosoby}
+    
     this.zakladkadialogusubscribe = funkcje.ZakladkaDialogu$.subscribe
     (
        data =>

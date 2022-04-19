@@ -38,10 +38,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { PoleceniadedalComponent } from './poleceniadedal/poleceniadedal.component';
 import { LiniaPolecenComponent } from './linia-polecen/linia-polecen.component';
+import { ModulyComponent } from './moduly/moduly.component';
 
 
 @NgModule({
-  declarations: [																			
+  declarations: [																				
     AppComponent,
       InformacjeComponent,
       NawigacjaComponent,
@@ -60,7 +61,8 @@ import { LiniaPolecenComponent } from './linia-polecen/linia-polecen.component';
       LiniaKomendComponent,
       ZdarzeniaComponent,
       PoleceniadedalComponent,
-      LiniaPolecenComponent
+      LiniaPolecenComponent,
+      ModulyComponent
    ],
   imports: [
     BrowserModule,
