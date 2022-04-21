@@ -118,7 +118,7 @@ export class TestyComponent {
               this.tablicauszkodzenia = [];
               if (this.tablicazespoly.length > 0)
               {
-              this.WybranyZespol(this.wybranyzespol)           
+                this.WybranyZespol(this.wybranyzespol)           
               }
               this.VSVDialogZesply.checkViewportSize();
             }
@@ -204,7 +204,9 @@ ZmienWybrany(modulid: number, i : number)
 WybranyZespol(i: number)
     {
       this.wybranyzespol = i;
-      this.uszkodzenia.WczytajUszkodzenia(this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[i].id)
+      if ( this.wybranyzespol > (this.tablicazespoly.length -1) )
+      { this.wybranyzespol = this.tablicazespoly.length -1; }
+      this.uszkodzenia.WczytajUszkodzenia(this.tablicazawartosci[this.wybranymodul].id, this.tablicazespoly[this.wybranyzespol].id)
       //console.log(this.wybrane, zespol)
     }
  
@@ -225,22 +227,21 @@ Random(min: number, max: number)
   
 ZmienDane(rodzaj: string, stan: number, zespol: number)
 {
-  if (rodzaj == 'elementy')
-  {
+    let wartosc = this.listaczasyN[stan];
+    if (wartosc > 10)
+    { wartosc = Math.trunc(this.Random((this.listaczasyN[stan]+this.listaczasyN[stan-1])/2,(this.listaczasyN[stan+1]+this.listaczasyN[stan])/2)); }
+    this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
+}
+
+ZmienDaneSztuk(rodzaj: string, stan: number, zespol: number)
+{
     let listaczasyplus = [...this.listaczasy,360]
     let wartosc = listaczasyplus[stan];
     if (wartosc > 10)
     { wartosc = Math.trunc(this.Random((listaczasyplus[stan]+listaczasyplus[stan-1])/2,(listaczasyplus[stan+1]+listaczasyplus[stan])/2)); }
     this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
-  }
-  else
-  {
-    let wartosc = this.listaczasyN[stan];
-    if (wartosc > 10)
-    { wartosc = Math.trunc(this.Random((this.listaczasyN[stan]+this.listaczasyN[stan-1])/2,(this.listaczasyN[stan+1]+this.listaczasyN[stan])/2)); }
-    this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
-  }
 }
+
 
 FormatCzas(czassekund: number):string
 {
