@@ -23,8 +23,8 @@
             <div class="example-item-detail1">Ostatni test: <span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.czasbadania}} (<span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}"> {{item.stanText}}</span>)</span>(ważny:
               <button mat-icon-button [matMenuTriggerFor]="menuNazwaDP" aria-label="Example icon-button with a menu"><span [ngClass]="{'text-success':(!(i==wybranyzespol)), 'text-primary': (i==wybranyzespol)}">{{item.przedawnienie}}</span>
                 <mat-menu #menuNazwaDP="matMenu" >
-                  <button mat-menu-item *ngFor="let item1 of listaczasy">
-                      <span (click)="ZmienDaneSztuk('przedawnienie',item1,item.id)">{{item1}}</span>
+                  <button mat-menu-item *ngFor="let item1 of listaczasy,let i = index">
+                      <span (click)="ZmienDaneSztuk('przedawnienie',i,item.id)">{{item1}}</span>
                   </button>
                 </mat-menu>
               </button>

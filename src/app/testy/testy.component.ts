@@ -235,9 +235,9 @@ ZmienDane(rodzaj: string, stan: number, zespol: number)
 
 ZmienDaneSztuk(rodzaj: string, stan: number, zespol: number)
 {
-    let listaczasyplus = [...this.listaczasy,360]
+    let listaczasyplus = [...this.listaczasy,380]
     let wartosc = listaczasyplus[stan];
-    if (wartosc > 10)
+    if (wartosc > 65)
     { wartosc = Math.trunc(this.Random((listaczasyplus[stan]+listaczasyplus[stan-1])/2,(listaczasyplus[stan+1]+listaczasyplus[stan])/2)); }
     this.zespoly.ZapiszDane(rodzaj, zespol, wartosc)
 }
